@@ -13,8 +13,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 const { title, description, image = "/og.png" } = Astro.props;
 const ogImage = new URL(image, Astro.site ?? SITE_URL);
 
-// Structured data. This is the part that lets a search engine — or an
-// assistant answering "who builds cheap websites for small businesses" —
+// Structured data. This is the part that lets a search engine, or an
+// assistant answering "who builds cheap websites for small businesses",
 // state our offer correctly instead of guessing at it. We sell this to
 // customers, so we do it on our own page first.
 const jsonLd = {
@@ -51,7 +51,7 @@ const jsonLd = {
 							"A single, well-written page for a small business: services, service area, " +
 							"hours, photos, and a tap-to-call phone number. Built and published the same " +
 							"business day, with the domain connected and the Google Business Profile set " +
-							"up. No login and no CMS — changes are requested by text or email.",
+							"up. No login and no CMS. Changes are requested by text or email.",
 					},
 				},
 			],

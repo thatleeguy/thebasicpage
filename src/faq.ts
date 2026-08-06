@@ -1,6 +1,6 @@
 // One source of truth for the questions section. This array renders the FAQ
 // on the page *and* generates the FAQPage structured data in <head>, so the
-// two can never drift apart — which matters, because the whole argument of
+// two can never drift apart, which matters, because the whole argument of
 // this site is that machines should be able to read a page correctly.
 
 export type Faq = { q: string; a: string };
@@ -16,7 +16,7 @@ export const FAQS: Faq[] = [
 	},
 	{
 		q: "Who owns it? What happens if I fire you?",
-		a: "You own it. The domain goes in your name on day one — your name, your email, your card if you want it that way. If you leave, we send you the whole page as files and help you move it somewhere else. No hostage situation, and no “let me schedule a call to discuss that”.",
+		a: "You own it. The domain is registered in your name, with your email on it, and we look after the renewals so you never have to think about it. If you leave, we hand over the domain and send you the whole page as files, and we’ll help you move it somewhere else. No hostage situation, and no “let me schedule a call to discuss that”.",
 	},
 	{
 		q: "What’s the catch at $499?",
@@ -32,11 +32,11 @@ export const FAQS: Faq[] = [
 	},
 	{
 		q: "Do I have to be on a monthly plan?",
-		a: "No. Paying $499 and never speaking to us again is a perfectly acceptable outcome. Hosting stays on us. Your domain renews at whatever your registrar charges — about $15 a year, paid by you, to them, not to us.",
+		a: "Yes, and $19 a month is the floor. It isn’t an upsell, it’s what keeps the page online: hosting, your SSL certificate and your domain renewal, plus a human who answers when you text. We’d rather charge $19 and genuinely look after it than charge nothing and have your site quietly expire in year three, which is exactly how most cheap websites die. Your first month is on us, there’s no contract, and you can cancel by text.",
 	},
 	{
 		q: "How do I pay?",
-		a: "After. We build it, you look at it, and you pay the $499 once it’s live and you’re happy. Card, e-transfer, or a cheque like it’s 1997. No deposit, no retainer, no net-30 invoice.",
+		a: "Up front, once, and that’s the end of it. After the nine questions we send a single invoice for the $499, and we start the moment it’s paid. Card, e-transfer, or a cheque like it’s 1997. There’s no deposit followed by a balance you didn’t expect, no retainer, no net-30, and no hourly creep. The $499 is the whole number.",
 	},
 	{
 		q: "What if you disappear?",

@@ -1,5 +1,5 @@
 /* ==========================================================================
-   The Basic Page — one page, one column, one pen.
+   The Basic Page. One page, one column, one pen.
    Everything on this site is drawn with the same sky-blue ink. If you are
    adding something new and reaching for a colour that isn't in the tokens
    below, the answer is almost always "use the blue".
@@ -37,9 +37,9 @@
 :root {
 	/* Paper */
 	--paper: #ffffff;
-	--tint: #f1f8fe; /* receipt band — alternating rows, quiet panels */
+	--tint: #f1f8fe; /* receipt band: alternating rows, quiet panels */
 
-	/* Sky — the only hue on the page */
+	/* Sky, the only hue on the page */
 	--sky-100: #e0f2fe;
 	--sky-200: #bae6fd; /* hairlines, dotted leaders, scallops */
 	--sky-300: #7dd3fc;
@@ -49,7 +49,7 @@
 	--sky-700: #0369a1; /* blue that is safe as small text on white (5.9:1) */
 	--sky-800: #075985;
 
-	/* Ink. Blue-black, never pure black — it keeps the page feeling bright.
+	/* Ink. Blue-black, never pure black, which keeps the page feeling bright.
 	   This exact value is load-bearing: it is the lightest, bluest ink that
 	   still clears WCAG AA as body copy on the bright --sky-400 bands
 	   (5.2:1) as well as on white (11.2:1). Lighten it and the two blue
@@ -58,7 +58,7 @@
 	--ink-soft: #5a6b80; /* small print, captions (5.5:1 on white) */
 	--ink-faint: #94a3b8; /* struck-out text only, never load-bearing */
 
-	/* Warm accent. Strictly rationed — see the comment on .sticker. */
+	/* Warm accent. Strictly rationed. See the comment on .sticker. */
 	--lemon: #ffd166;
 
 	/* Fonts */
@@ -233,7 +233,7 @@ section {
 	margin-bottom: 0.875rem;
 }
 
-/* sky-800 on sky-400 is 3.5:1 — fine for a headline, not for 11px labels. */
+/* sky-800 on sky-400 is 3.5:1: fine for a headline, not for 11px labels. */
 .band .eyebrow {
 	color: var(--ink);
 }
@@ -421,7 +421,7 @@ section {
 	width: 100%;
 	padding: 1rem 1.25rem;
 	/* sky-700, not sky-500: white on sky-500 is only 2.8:1 and fails AA.
-	   This is the most saturated thing on the page, which is correct — it
+	   This is the most saturated thing on the page, which is correct, since it
 	   is also the most important. */
 	background: var(--sky-700);
 	color: #fff;
@@ -647,7 +647,7 @@ section {
    hung very slightly off-square so it reads as a physical object. */
 /* The scalloped edge is made of circles we KEEP, not circles we punch out.
    Punching half-discs out of a strip always leaves the material between them
-   as a full-height spike — shark teeth, not a torn receipt. Keeping the discs
+   as a full-height spike: shark teeth, not a torn receipt. Keeping the discs
    and cutting the gaps away gives round bumps with nothing sharp anywhere. */
 .receipt {
 	--tear: 11px;
@@ -689,7 +689,7 @@ section {
 	margin: 0.5rem 0 0.75rem;
 }
 
-/* No zebra striping inside the card — the blue is already the fill. */
+/* No zebra striping inside the card; the blue is already the fill. */
 .receipt .row,
 .receipt .rows > .row:nth-child(odd) {
 	padding-inline: 0;
@@ -790,11 +790,7 @@ section {
 	line-height: 1.5;
 }
 
-/* The $0 option is deliberately unstyled — no card, no border. It is the
-   most credible thing in the section precisely because it isn't sold. */
-.plan--none {
-	padding: 0.25rem 0.125rem;
-}
+/* Removed: there is no longer an unpriced tier. $19/month is the floor. */
 
 /* --- The one big number ----------------------------------------------- */
 
@@ -810,7 +806,7 @@ section {
 	font-weight: 800;
 	line-height: 0.86;
 	letter-spacing: -0.06em;
-	color: var(--sky-600); /* sky-500 lands at 2.8:1 — under even large-text AA */
+	color: var(--sky-600); /* sky-500 lands at 2.8:1, under even large-text AA */
 }
 
 .zero__label {
@@ -1137,7 +1133,7 @@ section {
 		animation: wiggle 520ms ease;
 	}
 
-	/* Scroll-driven. Progressive enhancement only — where this isn't
+	/* Scroll-driven. Progressive enhancement only. Where this isn't
 	   supported the page simply renders finished, which is fine.
 
 	   Two rules learned the hard way:

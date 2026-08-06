@@ -8,14 +8,14 @@ import { FAQS } from "../faq";
 
 const INCLUDED = [
 	["One page, written and designed for your business", "included"],
-	["Your own domain, connected and pointed properly", "included"],
-	["Hosting, on us, for as long as the page is up", "$0/mo"],
+	["A domain. We register one for you, or use the one you’ve got", "included"],
+	["Hosting and SSL, set up and looked after", "on your plan"],
 	["Your phone number as a big tap-to-call button", "included"],
 	["A tap-to-email button that goes straight to your inbox", "included"],
 	["Your hours, in the format Google actually reads", "included"],
 	["A map to your door", "included"],
 	["Up to 12 of your photos, cleaned up and resized", "included"],
-	["Your Google Business Profile set up — or the old one fixed", "included"],
+	["Your Google Business Profile set up, or the old one fixed", "included"],
 	["Submitted to Google and Bing so you turn up", "included"],
 	["Written in plain sentences, so assistants can read it", "included"],
 	["An SSL padlock, so it never says “Not secure”", "included"],
@@ -32,7 +32,7 @@ const EXCLUDED = [
 	["Ongoing SEO consulting", "no"],
 	["Us posting to your Instagram", "no"],
 	["A contract", "nothing to cancel"],
-	["Unlimited free changes forever", "see below"],
+	["Unlimited free changes forever", "on a plan"],
 ];
 
 const TRADES = [
@@ -53,11 +53,12 @@ const TRADES = [
 const TUESDAY = [
 	["9:14am", "You message us. We ask nine questions."],
 	["9:40am", "You send your hours and some photos. A voice memo is fine."],
+	["9:52am", "We send you one invoice. $499, the whole number, nothing added later."],
+	["10:06am", "You pay, and we crack on with it."],
 	["11:30am", "We send a link. It’s your actual page, on the actual internet."],
 	["1:05pm", "You reply: “make the phone number bigger and I hate that photo.”"],
 	["1:11pm", "Fixed."],
 	["4:20pm", "Your domain points at it. It’s live."],
-	["4:22pm", "You pay the $499. Now — not before."],
 	["5:58pm", "Somebody three streets over types “emergency plumber near me.”"],
 ];
 
@@ -68,7 +69,7 @@ const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a
 <!doctype html>
 <html lang="en-CA">
 	<head>
-		<BaseHead title={`${SITE_TITLE} — ${SITE_TAGLINE}`} description={SITE_DESCRIPTION} />
+		<BaseHead title={`${SITE_TITLE} · ${SITE_TAGLINE}`} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
 		<div class="sky-wash" aria-hidden="true"></div>
@@ -87,7 +88,7 @@ const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a
 
 				<p class="lede">
 					One page. Built by an actual person. On the internet before dinner. No logins, no
-					dashboard, no password to forget — when you want something changed, you text us, and we
+					dashboard, no password to forget. When you want something changed, you text us, and we
 					change it. That’s the whole product. 👋
 				</p>
 
@@ -285,8 +286,10 @@ const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a
 					by five. 🕔
 				</p>
 				<p style="margin-top:1.25rem">
-					<strong>You pay after you’ve seen it working.</strong> No deposit, no retainer. If you
-					don’t like it, you say so, and you owe us nothing.
+					<strong>One invoice, up front, and the number never moves.</strong> $499 is the whole
+					thing. No deposit followed by a balance you didn’t expect, no retainer, no hourly creep,
+					no “that’s out of scope” on Thursday. And if we don’t think we can have you live the same
+					day, we tell you that before you pay, not after.
 				</p>
 			</section>
 
@@ -306,7 +309,7 @@ const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a
 						new price list 📸<span class="bubble__time">8:02a</span>
 					</p>
 					<p class="bubble bubble--in">
-						got it — up in 20<span class="bubble__time">8:04a</span>
+						got it, up in 20<span class="bubble__time">8:04a</span>
 					</p>
 					<p class="bubble bubble--out">
 						also closed weds, family thing<span class="bubble__time">8:11a</span>
@@ -386,7 +389,7 @@ const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a
 			</section>
 
 			<!-- ============================================================
-			     9. Assistants — the one full-bleed blue landmark mid-page
+			     9. Assistants. The one full-bleed blue landmark mid-page.
 			     ============================================================ -->
 			<section class="band">
 				<div class="col">
@@ -400,9 +403,9 @@ const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a
 					<div class="mock">
 						<div class="mock__bar">Who’s a good dog groomer in Riverdale?</div>
 						<p class="mock__answer">
-							A few options nearby: <b>your business</b> — open Tue–Sat, does nervous rescues and
-							big dogs, walk-ins before 10am. Two others are listed but I can’t find their hours or
-							what they specialise in.
+							A few options nearby: <b>your business</b>, open Tue–Sat, does nervous rescues and big
+							dogs, walk-ins before 10am. Two others are listed but I can’t find their hours or what
+							they specialise in.
 						</p>
 					</div>
 
@@ -425,8 +428,8 @@ const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a
 						<p class="eyebrow" style="color:var(--sky-700)">The honest part</p>
 						<p style="font-size:1rem">
 							We can’t promise ChatGPT will recommend you. Nobody can, and anybody who says
-							otherwise is guessing at you. What we can promise is that you’ll be legible — which
-							is more than almost anyone in your trade can say today.
+							otherwise is guessing at you. What we can promise is that you’ll be legible, which is
+							more than almost anyone in your trade can say today.
 						</p>
 					</div>
 
@@ -442,10 +445,11 @@ const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a
 			     ============================================================ -->
 			<section class="col">
 				<span class="mark">🧰</span>
-				<h2>Changes, after the first 30 days.</h2>
+				<h2>Then $19 a month, and it’s looked after.</h2>
 				<p class="lede">
-					Your first month of changes is free. After that, pick one — or pick none. Picking none is
-					a real option, not a guilt trip.
+					Your first month is on us. After that, every page is on a plan, and $19 is the floor.
+					That’s deliberate: it means there is no page of ours sitting out there that nobody is
+					looking after, and nothing you have to renew, remember or administer yourself.
 				</p>
 
 				<div class="plans">
@@ -465,25 +469,13 @@ const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a
 							</div>
 						))
 					}
-
-					<div class="plan plan--none">
-						<div class="plan__top">
-							<span class="plan__name">No plan at all</span>
-							<span class="plan__dots"></span>
-							<span class="plan__price">$0<small>/month</small></span>
-						</div>
-						<p>
-							Also completely fine. Your page stays live and stays yours. Changes are ${PRICE.perChange}
-							each, whenever you happen to need one. If your hours and prices change twice a year,
-							pick this. Seriously.
-						</p>
-					</div>
 				</div>
 
 				<p class="fine" style="margin-top:1.5rem">
-					“Unlimited normal changes” means words, photos, hours, prices, adding a section. It does
-					not mean “build me a shop”. Ask for something big and we’ll quote you a number before we
-					touch anything. No contracts, and you can cancel by text in four words. 🙂
+					Most people take the $19 and never move off it. “Unlimited normal changes” means words,
+					photos, hours, prices, adding a section. It does not mean “build me a shop”. Ask for
+					something big and we’ll quote you a number before we touch anything. No contracts, and
+					you can cancel by text in four words. 🙂
 				</p>
 			</section>
 
@@ -504,10 +496,13 @@ const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a
 					you’ve heard of. We could have put some there. You’d never have known.
 				</p>
 				<p>
-					What we have instead is a price, a deadline, a list of what we don’t do, and the fact that
-					you pay nothing until the thing is live in front of you.
+					What we have instead is one price that never moves, a deadline we hold ourselves to, and a
+					list of what we don’t do that’s as long as the list of what we do.
 				</p>
-				<p>That’s a smaller risk than the $8,000 quote, and it takes about a day to find out.</p>
+				<p>
+					It’s $499 and about a day to find out. That’s a considerably smaller bet than the $8,000
+					quote sitting in your inbox.
+				</p>
 			</section>
 
 			<!-- ============================================================
