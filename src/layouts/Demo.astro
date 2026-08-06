@@ -1,0 +1,161 @@
+---
+// Shell for the /demo/* pages.
+//
+// These are sample sites for FICTIONAL businesses, used to show prospects what
+// they get for $499. They deliberately do NOT import the main site's global.css
+// or BaseHead: a demo that looks like The Basic Page is useless, because the
+// whole point is that your page looks like yours. Each demo carries its own
+// type, palette and styles.
+//
+// Every demo shows a banner saying it is a demo and the business isn't real.
+// That bar is not decoration. It keeps an indexed page from reading as a real
+// company, and it doubles as the route back to the thing we're actually selling.
+import { CONTACT, PRICE, SITE_TITLE } from "../consts";
+
+interface Props {
+	title: string;
+	description: string;
+	/** Fictional business shown in the demo. */
+	business: string;
+	/** Drives the accent of the demo bar so it sits with each design. */
+	theme: "realestate" | "mortgage";
+}
+
+const { title, description, business, theme } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en-CA" data-demo={theme}>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width,initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="canonical" href={canonicalURL} />
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content={new URL("/og.png", Astro.site)} />
+		<meta name="theme-color" content="#ffffff" />
+		<slot name="head" />
+	</head>
+	<body>
+		<div class="demobar">
+			<span class="demobar__dot" aria-hidden="true"></span>
+			<p>
+				<strong>Demo.</strong> {business} isn’t a real company. This is an example of a ${PRICE.build}
+				page from <a href="/">{SITE_TITLE}</a>.
+			</p>
+			<a class="demobar__cta" href={`mailto:${CONTACT.email}`}>Get one like this</a>
+		</div>
+
+		<slot />
+
+		<footer class="demofoot">
+			<p>
+				A sample page by <a href="/">{SITE_TITLE}</a>. Yours would say your name, your services and
+				your phone number, and it would be live the same business day.
+			</p>
+			<p class="demofoot__price">
+				${PRICE.build} once, then $19 a month. <a href="/">See how it works</a>
+			</p>
+		</footer>
+
+		<style is:global>
+			/* Reset + the chrome that wraps every demo. The demo pages themselves
+			   own everything inside. */
+			*,
+			*::before,
+			*::after {
+				box-sizing: border-box;
+			}
+			* {
+				margin: 0;
+			}
+			html {
+				-webkit-text-size-adjust: 100%;
+				scroll-behavior: smooth;
+			}
+			@media (prefers-reduced-motion: reduce) {
+				html {
+					scroll-behavior: auto;
+				}
+			}
+			img,
+			svg {
+				display: block;
+				max-width: 100%;
+			}
+			body {
+				margin: 0;
+				overflow-x: hidden;
+			}
+
+			.demobar {
+				display: flex;
+				align-items: center;
+				gap: 0.75rem;
+				flex-wrap: wrap;
+				padding: 0.6rem 1.25rem;
+				background: #0b1220;
+				color: #e8eef7;
+				font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+				font-size: 0.8125rem;
+				line-height: 1.4;
+			}
+			.demobar p {
+				flex: 1 1 18rem;
+			}
+			.demobar strong {
+				color: #fff;
+			}
+			.demobar a {
+				color: #7dd3fc;
+			}
+			.demobar__dot {
+				width: 8px;
+				height: 8px;
+				border-radius: 100px;
+				background: #38bdf8;
+				flex: none;
+			}
+			.demobar__cta {
+				flex: none;
+				background: #38bdf8;
+				color: #0b1220 !important;
+				text-decoration: none;
+				font-weight: 600;
+				padding: 0.4rem 0.8rem;
+				border-radius: 100px;
+				white-space: nowrap;
+			}
+			.demobar__cta:hover {
+				background: #7dd3fc;
+			}
+
+			.demofoot {
+				background: #0b1220;
+				color: #93a4bd;
+				text-align: center;
+				padding: 3rem 1.25rem;
+				font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+				font-size: 0.9375rem;
+				line-height: 1.6;
+			}
+			.demofoot p {
+				max-width: 34rem;
+				margin-inline: auto;
+			}
+			.demofoot a {
+				color: #7dd3fc;
+			}
+			.demofoot__price {
+				margin-top: 0.75rem;
+				color: #fff;
+				font-weight: 600;
+			}
+		</style>
+	</body>
+</html>

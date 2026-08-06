@@ -1,0 +1,743 @@
+---
+import Demo from "../../layouts/Demo.astro";
+
+// Fictional. See the demo bar at the top of the page.
+const AGENT = "Marguerite Hollis";
+const BRAND = "Hollis & Co.";
+const AREA = "Bracebridge, Gravenhurst and the Muskoka Lakes";
+
+const LISTINGS = [
+	{
+		tag: "New",
+		price: "$1,285,000",
+		title: "Lakefront cottage, Peninsula Road",
+		meta: "4 bed · 2 bath · 180ft frontage",
+		tone: "a",
+	},
+	{
+		tag: "Coming soon",
+		price: "$749,000",
+		title: "Century home on Manitoba Street",
+		meta: "3 bed · 2 bath · walk to town",
+		tone: "b",
+	},
+	{
+		tag: "Sold",
+		price: "$612,000",
+		title: "Bungalow with workshop, Taylor Road",
+		meta: "3 bed · 1 bath · sold in 9 days",
+		tone: "c",
+	},
+];
+
+const STEPS = [
+	["We walk the house", "Before anything is listed I see it in person, in daylight, and tell you honestly what a buyer will notice first."],
+	["We price it on evidence", "You get the comparable sales I used, with the ones that hurt included, not just the flattering three."],
+	["We photograph it properly", "A real photographer, a weekday morning, and a floor plan. This is where most listings quietly lose money."],
+	["We go to market", "Portals, my list, and the twenty agents who actually sell in this area and answer their phones."],
+];
+---
+
+<Demo
+	title="Hollis & Co. · Muskoka real estate (demo site)"
+	description="Sample one-page website for a real estate agent, built by The Basic Page. Hollis & Co. is a fictional business used to demonstrate the design."
+	business="Hollis & Co."
+	theme="realestate"
+>
+	<Fragment slot="head">
+		<link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+	</Fragment>
+
+	<header class="nav">
+		<a class="nav__brand" href="#top">{BRAND}</a>
+		<nav class="nav__links">
+			<a href="#listings">Listings</a>
+			<a href="#approach">Approach</a>
+			<a href="#about">About</a>
+		</nav>
+		<a class="btn btn--sm" href="#list">Join the list</a>
+	</header>
+
+	<main id="top">
+		<section class="hero">
+			<div class="hero__text">
+				<p class="eyebrow">Broker · {AREA}</p>
+				<h1>The house you want probably isn’t online yet.</h1>
+				<p class="lede">
+					I sell twenty to thirty homes a year across Muskoka, and a good number of them change
+					hands before a sign ever goes up. Thursday mornings I send the list of what is coming.
+				</p>
+				<div class="hero__cta">
+					<a class="btn" href="#list">Get Thursday’s list</a>
+					<a class="btn btn--ghost" href="#listings">See current listings</a>
+				</div>
+				<p class="hero__note">Free. Roughly 400 words. Unsubscribe in one click.</p>
+			</div>
+			<div class="hero__photo photo photo--a" role="img" aria-label="Lakefront property at dusk"></div>
+		</section>
+
+		<!-- The primary call to action. -->
+		<section class="signup" id="list">
+			<div class="signup__inner">
+				<p class="eyebrow eyebrow--light">The Thursday List</p>
+				<h2>Coming-soon homes, a week before the portals get them.</h2>
+				<p class="lede">
+					Every Thursday at 7am: what is quietly coming to market, what actually sold and for how
+					much, and one honest note on where prices are going. Written by me, not by a marketing
+					company.
+				</p>
+
+				<form class="form" id="signup-form" novalidate>
+					<label class="sr-only" for="email">Email address</label>
+					<input
+						id="email"
+						name="email"
+						type="email"
+						inputmode="email"
+						autocomplete="email"
+						placeholder="you@example.com"
+						required
+					/>
+					<button class="btn btn--accent" type="submit">Send me the list</button>
+				</form>
+				<p class="form__msg" id="signup-msg" role="status" hidden></p>
+
+				<ul class="signup__proof">
+					<li><strong>1,400</strong> local subscribers</li>
+					<li><strong>Thursdays</strong> at 7am</li>
+					<li><strong>No</strong> spam, ever</li>
+				</ul>
+			</div>
+		</section>
+
+		<section class="wrap" id="listings">
+			<div class="sechead">
+				<h2>On the market now</h2>
+				<p>Updated the day anything changes. Text me for a private showing.</p>
+			</div>
+			<div class="cards">
+				{
+					LISTINGS.map((l) => (
+						<article class="card">
+							<div class={`photo photo--${l.tone}`} role="img" aria-label={l.title} />
+							<div class="card__body">
+								<span class={`chip chip--${l.tag === "Sold" ? "sold" : "live"}`}>{l.tag}</span>
+								<p class="card__price">{l.price}</p>
+								<h3>{l.title}</h3>
+								<p class="card__meta">{l.meta}</p>
+							</div>
+						</article>
+					))
+				}
+			</div>
+		</section>
+
+		<section class="stats">
+			<div class="wrap stats__grid">
+				<div><strong>18</strong><span>years in Muskoka</span></div>
+				<div><strong>$210m</strong><span>sold since 2009</span></div>
+				<div><strong>11 days</strong><span>median time to offer</span></div>
+				<div><strong>99.2%</strong><span>of asking, on average</span></div>
+			</div>
+		</section>
+
+		<section class="wrap" id="approach">
+			<div class="sechead">
+				<h2>How a sale actually goes</h2>
+				<p>No mystery, no jargon, and no pressure to sign anything on the first visit.</p>
+			</div>
+			<ol class="steps">
+				{
+					STEPS.map(([t, d], i) => (
+						<li>
+							<span class="steps__n">{String(i + 1).padStart(2, "0")}</span>
+							<div>
+								<h3>{t}</h3>
+								<p>{d}</p>
+							</div>
+						</li>
+					))
+				}
+			</ol>
+		</section>
+
+		<section class="wrap quote">
+			<blockquote>
+				<p>
+					“She told us not to list in November and to spend the winter fixing the deck instead. It
+					cost her a commission that year and made us about forty thousand dollars.”
+				</p>
+				<cite>Sample client note, shown for layout</cite>
+			</blockquote>
+		</section>
+
+		<section class="wrap about" id="about">
+			<div class="photo photo--portrait" role="img" aria-label="Portrait"></div>
+			<div>
+				<h2>{AGENT}</h2>
+				<p>
+					I have lived on this lake since I was nine and sold real estate here since 2009. I work
+					with about thirty families a year, which is deliberately fewer than I could, because I
+					would rather answer the phone myself.
+				</p>
+				<p>
+					If you are thinking about selling next spring, the useful conversation happens now, not in
+					April. That conversation is free and it does not obligate you to anything.
+				</p>
+				<p class="about__contact">
+					<a href="#list">Join the Thursday list</a> or call the office and ask for me.
+				</p>
+			</div>
+		</section>
+
+		<!-- Closing CTA. Same ask as the top of the page. -->
+		<section class="close">
+			<div class="close__inner">
+				<h2>Start with Thursday’s list.</h2>
+				<p>
+					Most people read it for a season or two before they ever call me. That is exactly how it
+					is meant to work.
+				</p>
+				<form class="form" id="close-form" novalidate>
+					<label class="sr-only" for="close-email">Email address</label>
+					<input
+						id="close-email"
+						type="email"
+						inputmode="email"
+						autocomplete="email"
+						placeholder="you@example.com"
+						required
+					/>
+					<button class="btn btn--accent" type="submit">Send me the list</button>
+				</form>
+				<p class="form__msg" id="close-msg" role="status" hidden></p>
+				<p class="close__sig">{AGENT}, Broker</p>
+			</div>
+		</section>
+	</main>
+
+	<style>
+		:root {
+			--bone: #f7f4ef;
+			--paper: #fffdfa;
+			--ink: #17140f;
+			--body: #4a4438;
+			--forest: #17362b;
+			--brass: #8a6224;
+			--line: #e2dbd0;
+		}
+
+		@font-face {
+			font-family: "Fraunces";
+			src: url("/fonts/fraunces.woff2") format("woff2");
+			font-weight: 500 700;
+			font-display: swap;
+		}
+		@font-face {
+			font-family: "DM Sans";
+			src: url("/fonts/dmsans.woff2") format("woff2");
+			font-weight: 400 700;
+			font-display: swap;
+		}
+
+		main,
+		.nav {
+			font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+			color: var(--body);
+			background: var(--bone);
+		}
+		main {
+			font-size: 1.0625rem;
+			line-height: 1.65;
+		}
+
+		h1,
+		h2,
+		h3 {
+			font-family: "Fraunces", Georgia, serif;
+			color: var(--ink);
+			font-weight: 600;
+			line-height: 1.08;
+			letter-spacing: -0.02em;
+			text-wrap: balance;
+		}
+		h1 {
+			font-size: clamp(2.5rem, 5.4vw, 4rem);
+			letter-spacing: -0.03em;
+		}
+		h2 {
+			font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+		}
+		h3 {
+			font-size: 1.1875rem;
+			line-height: 1.25;
+		}
+		p {
+			text-wrap: pretty;
+		}
+		p + p {
+			margin-top: 0.9em;
+		}
+		a {
+			color: var(--brass);
+		}
+
+		.wrap {
+			max-width: 68rem;
+			margin-inline: auto;
+			padding: clamp(3.5rem, 7vw, 6rem) 1.5rem;
+		}
+
+		.eyebrow {
+			font-size: 0.75rem;
+			letter-spacing: 0.18em;
+			text-transform: uppercase;
+			color: var(--brass);
+			margin-bottom: 1.25rem;
+		}
+		.eyebrow--light {
+			color: #c9a35f;
+		}
+
+		.lede {
+			font-size: 1.1875rem;
+			margin-top: 1.125rem;
+			max-width: 34rem;
+		}
+
+		/* --- Nav --- */
+		.nav {
+			display: flex;
+			align-items: center;
+			gap: 1.5rem;
+			padding: 1.125rem 1.5rem;
+			border-bottom: 1px solid var(--line);
+			background: var(--paper);
+		}
+		.nav__brand {
+			font-family: "Fraunces", Georgia, serif;
+			font-size: 1.25rem;
+			font-weight: 600;
+			color: var(--ink);
+			text-decoration: none;
+			letter-spacing: -0.01em;
+		}
+		.nav__links {
+			display: none;
+			gap: 1.5rem;
+			margin-left: auto;
+		}
+		.nav__links a {
+			color: var(--body);
+			text-decoration: none;
+			font-size: 0.9375rem;
+		}
+		.nav__links a:hover {
+			color: var(--ink);
+		}
+		@media (min-width: 48rem) {
+			.nav__links {
+				display: flex;
+			}
+		}
+		.nav .btn--sm {
+			margin-left: auto;
+		}
+		@media (min-width: 48rem) {
+			.nav .btn--sm {
+				margin-left: 0;
+			}
+		}
+
+		/* --- Buttons --- */
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			background: var(--forest);
+			color: #fff;
+			font-weight: 600;
+			font-size: 1rem;
+			padding: 0.9rem 1.5rem;
+			border: 1px solid var(--forest);
+			border-radius: 2px;
+			text-decoration: none;
+			transition: background 140ms ease;
+		}
+		.btn:hover {
+			background: #0e241c;
+			color: #fff;
+		}
+		.btn--sm {
+			padding: 0.55rem 1rem;
+			font-size: 0.875rem;
+		}
+		.btn--ghost {
+			background: transparent;
+			color: var(--ink);
+			border-color: #cfc6b8;
+		}
+		.btn--ghost:hover {
+			background: #ece6dc;
+			color: var(--ink);
+		}
+		.btn--accent {
+			background: #c9a35f;
+			border-color: #c9a35f;
+			color: #17140f;
+		}
+		.btn--accent:hover {
+			background: #d8b978;
+			color: #17140f;
+		}
+
+		/* --- Hero --- */
+		.hero {
+			display: grid;
+			gap: 2.5rem;
+			max-width: 68rem;
+			margin-inline: auto;
+			padding: clamp(3rem, 6vw, 5.5rem) 1.5rem;
+		}
+		@media (min-width: 56rem) {
+			.hero {
+				grid-template-columns: 1fr 0.85fr;
+				align-items: center;
+				gap: 3.5rem;
+			}
+		}
+		.hero__cta {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.75rem;
+			margin-top: 2rem;
+		}
+		.hero__note {
+			font-size: 0.875rem;
+			margin-top: 0.875rem;
+			color: #7a7263;
+		}
+		.hero__photo {
+			min-height: 22rem;
+			border-radius: 2px;
+		}
+
+		/* --- Photo placeholders ---
+		   Stand-ins for the client's real photographs. Built as gradients so the
+		   demo ships without stock imagery pretending to be somebody's listing. */
+		.photo {
+			position: relative;
+			background: #cfc6b8;
+			overflow: hidden;
+		}
+		.photo::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background-image: radial-gradient(rgb(255 255 255 / 0.16) 1px, transparent 1px);
+			background-size: 4px 4px;
+		}
+		.photo--a {
+			background:
+				linear-gradient(180deg, #2c4a5c 0%, #4d6f78 42%, #96a892 72%, #c2b79c 100%);
+		}
+		.photo--b {
+			background: linear-gradient(160deg, #6d5c48 0%, #a08768 55%, #cbbb9d 100%);
+		}
+		.photo--c {
+			background: linear-gradient(160deg, #3f5347 0%, #6f8570 55%, #adb79b 100%);
+		}
+		.photo--portrait {
+			background: linear-gradient(170deg, #52483c 0%, #8a7965 60%, #b8a894 100%);
+			min-height: 20rem;
+			border-radius: 2px;
+		}
+
+		/* --- Signup (primary CTA) --- */
+		.signup {
+			background: var(--forest);
+			color: #dfe6e0;
+		}
+		.signup__inner {
+			max-width: 44rem;
+			margin-inline: auto;
+			padding: clamp(3.5rem, 7vw, 5.5rem) 1.5rem;
+			text-align: center;
+		}
+		.signup h2 {
+			color: #fff;
+		}
+		.signup .lede {
+			margin-inline: auto;
+			color: #cfdbd2;
+		}
+		.form {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.625rem;
+			margin-top: 2rem;
+		}
+		.form input {
+			flex: 1 1 16rem;
+			font: inherit;
+			font-size: 1rem;
+			padding: 0.9rem 1rem;
+			border: 1px solid #37564a;
+			border-radius: 2px;
+			background: #0f2820;
+			color: #fff;
+		}
+		.form input::placeholder {
+			color: #7d968a;
+		}
+		.form input:focus-visible {
+			outline: 2px solid #c9a35f;
+			outline-offset: 1px;
+		}
+		.form .btn {
+			flex: 1 1 12rem;
+		}
+		.form__msg {
+			margin-top: 0.875rem;
+			font-size: 0.9375rem;
+			color: #d8b978;
+		}
+		.signup__proof {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 1.75rem;
+			list-style: none;
+			padding: 0;
+			margin-top: 2.25rem;
+			font-size: 0.875rem;
+			color: #a8bcb0;
+		}
+		.signup__proof strong {
+			color: #fff;
+			display: block;
+			font-size: 1.125rem;
+		}
+
+		/* --- Sections --- */
+		.sechead {
+			max-width: 34rem;
+			margin-bottom: 2.5rem;
+		}
+		.sechead p {
+			margin-top: 0.75rem;
+		}
+
+		.cards {
+			display: grid;
+			gap: 1.5rem;
+		}
+		@media (min-width: 46rem) {
+			.cards {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+		.card {
+			background: var(--paper);
+			border: 1px solid var(--line);
+			border-radius: 2px;
+			overflow: hidden;
+		}
+		.card .photo {
+			height: 12rem;
+		}
+		.card__body {
+			padding: 1.25rem;
+		}
+		.card__price {
+			font-family: "Fraunces", Georgia, serif;
+			font-size: 1.5rem;
+			color: var(--ink);
+			margin: 0.625rem 0 0.25rem;
+		}
+		.card__meta {
+			font-size: 0.9375rem;
+			margin-top: 0.5rem;
+			color: #7a7263;
+		}
+		.chip {
+			display: inline-block;
+			font-size: 0.6875rem;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			padding: 0.25rem 0.5rem;
+			border-radius: 2px;
+		}
+		.chip--live {
+			background: #e4ede6;
+			color: var(--forest);
+		}
+		.chip--sold {
+			background: #efe7d9;
+			color: #6b5220;
+		}
+
+		/* --- Stats --- */
+		.stats {
+			background: var(--paper);
+			border-block: 1px solid var(--line);
+		}
+		.stats__grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 2rem;
+			text-align: center;
+			padding-block: clamp(2.5rem, 5vw, 3.5rem);
+		}
+		@media (min-width: 46rem) {
+			.stats__grid {
+				grid-template-columns: repeat(4, 1fr);
+			}
+		}
+		.stats strong {
+			display: block;
+			font-family: "Fraunces", Georgia, serif;
+			font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+			color: var(--ink);
+			font-weight: 600;
+		}
+		.stats span {
+			font-size: 0.875rem;
+			color: #7a7263;
+		}
+
+		/* --- Steps --- */
+		.steps {
+			list-style: none;
+			padding: 0;
+			display: grid;
+			gap: 1.75rem;
+		}
+		@media (min-width: 46rem) {
+			.steps {
+				grid-template-columns: 1fr 1fr;
+				gap: 2.5rem 3rem;
+			}
+		}
+		.steps li {
+			display: flex;
+			gap: 1rem;
+		}
+		.steps__n {
+			font-family: "Fraunces", Georgia, serif;
+			font-size: 1.125rem;
+			color: var(--brass);
+			padding-top: 0.1rem;
+		}
+		.steps h3 {
+			margin-bottom: 0.375rem;
+		}
+
+		/* --- Quote --- */
+		.quote {
+			max-width: 46rem;
+			text-align: center;
+		}
+		.quote blockquote p {
+			font-family: "Fraunces", Georgia, serif;
+			font-size: clamp(1.375rem, 2.8vw, 1.875rem);
+			line-height: 1.35;
+			color: var(--ink);
+		}
+		.quote cite {
+			display: block;
+			margin-top: 1.25rem;
+			font-size: 0.8125rem;
+			font-style: normal;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: #8c8474;
+		}
+
+		/* --- About --- */
+		.about {
+			display: grid;
+			gap: 2.5rem;
+			align-items: center;
+		}
+		@media (min-width: 46rem) {
+			.about {
+				grid-template-columns: 0.7fr 1fr;
+				gap: 3.5rem;
+			}
+		}
+		.about h2 {
+			margin-bottom: 1rem;
+		}
+		.about__contact {
+			margin-top: 1.25rem;
+			font-weight: 600;
+		}
+
+		/* --- Close --- */
+		.close {
+			background: #0f251d;
+			color: #c3d2c9;
+		}
+		.close__inner {
+			max-width: 40rem;
+			margin-inline: auto;
+			padding: clamp(3.25rem, 6.5vw, 5rem) 1.5rem;
+			text-align: center;
+		}
+		.close h2 {
+			color: #fff;
+		}
+		.close p {
+			margin-top: 0.875rem;
+		}
+		.close .form input {
+			background: #08170f;
+			border-color: #2c463a;
+			color: #fff;
+		}
+		.close .form input::placeholder {
+			color: #7d968a;
+		}
+		.close__sig {
+			margin-top: 1.5rem;
+			font-size: 0.875rem;
+			color: #9bb0a3;
+		}
+
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+	</style>
+
+	<script is:inline>
+		// Demo only. A real build wires this to the client's mailing list.
+		(function () {
+			var pairs = [
+				["signup-form", "signup-msg"],
+				["close-form", "close-msg"],
+			];
+			pairs.forEach(function (p) {
+				var f = document.getElementById(p[0]);
+				var msg = document.getElementById(p[1]);
+				if (!f) return;
+				f.addEventListener("submit", function (e) {
+					e.preventDefault();
+					var input = f.querySelector("input");
+					var ok = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value.trim());
+					msg.hidden = false;
+					msg.textContent = ok
+						? "You are on the list. Thursday, 7am. (Demo form, nothing was sent.)"
+						: "That email does not look right. Have another go.";
+					if (ok) f.reset();
+				});
+			});
+		})();
+	</script>
+</Demo>

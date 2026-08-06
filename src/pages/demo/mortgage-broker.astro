@@ -1,0 +1,754 @@
+---
+import Demo from "../../layouts/Demo.astro";
+
+// Fictional. See the demo bar at the top of the page.
+const BROKER = "Priya Raman";
+const BRAND = "Northrock Mortgage";
+
+// Illustrative only, and labelled as such on the page. Nothing here is a quote
+// and nothing here is advice.
+const RATES = [
+	["5-year fixed", "4.79%", "down 0.10 this week"],
+	["3-year fixed", "4.94%", "unchanged"],
+	["5-year variable", "5.20%", "down 0.25 this week"],
+	["HELOC", "6.45%", "unchanged"],
+];
+
+const STEPS = [
+	["A 15 minute call", "What you earn, what you owe, what you are hoping to buy. No documents yet and no credit check."],
+	["We shop 40+ lenders", "Banks, credit unions and monoline lenders. They compete for you, which is the entire point of a broker."],
+	["You get the real numbers", "Rate, payment, penalty terms and what it costs to break the mortgage early, in writing, side by side."],
+	["We handle the paperwork", "We chase the lender, the lawyer and the appraiser so you are not forwarding PDFs at 11pm."],
+];
+
+const FAQ = [
+	["What does this cost me?", "Nothing on a standard residential mortgage. The lender pays the broker when the deal closes, and that is disclosed to you in writing before you sign anything."],
+	["Will shopping around hurt my credit score?", "No. We pull your credit once and present that single pull to lenders. Applying to five banks yourself is what causes five separate hits."],
+	["I am self-employed and the bank said no.", "That is roughly a third of our business. Lenders read self-employed income very differently from one another, and the bank that declined you is one opinion, not the market."],
+	["My renewal letter arrived. Should I just sign it?", "Get it checked first. A renewal offer is priced on the assumption you will not compare it, and comparing takes about ten minutes."],
+];
+---
+
+<Demo
+	title="Northrock Mortgage · Rate Watch (demo site)"
+	description="Sample one-page website for a mortgage broker, built by The Basic Page. Northrock Mortgage is a fictional business used to demonstrate the design."
+	business="Northrock Mortgage"
+	theme="mortgage"
+>
+	<Fragment slot="head">
+		<link rel="preload" href="/fonts/sora.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+	</Fragment>
+
+	<header class="nav">
+		<a class="nav__brand" href="#top">
+			<span class="nav__mark" aria-hidden="true"></span>
+			{BRAND}
+		</a>
+		<nav class="nav__links">
+			<a href="#rates">Rates</a>
+			<a href="#how">How it works</a>
+			<a href="#faq">Questions</a>
+		</nav>
+		<a class="btn btn--sm" href="#watch">Get rate alerts</a>
+	</header>
+
+	<main id="top">
+		<section class="hero">
+			<div class="hero__inner">
+				<p class="eyebrow">Licensed mortgage brokerage · Ontario</p>
+				<h1>Know the moment rates move, not three weeks later.</h1>
+				<p class="lede">
+					Most people find out their rate was beatable after they have already signed. Rate Watch is
+					a short Wednesday email with where fixed and variable actually landed this week, and
+					whether it is worth doing anything about it.
+				</p>
+
+				<form class="form form--hero" id="hero-form" novalidate>
+					<label class="sr-only" for="hero-email">Email address</label>
+					<input
+						id="hero-email"
+						type="email"
+						inputmode="email"
+						autocomplete="email"
+						placeholder="you@example.com"
+						required
+					/>
+					<button class="btn" type="submit">Get Rate Watch free</button>
+				</form>
+				<p class="form__msg" id="hero-msg" role="status" hidden></p>
+				<p class="hero__note">
+					Free, weekly, and about 300 words. 2,600 homeowners read it. Unsubscribe any time.
+				</p>
+			</div>
+		</section>
+
+		<section class="rates" id="rates">
+			<div class="wrap">
+				<div class="sechead sechead--split">
+					<div>
+						<h2>This week’s rates</h2>
+						<p>What we are actually placing deals at, updated every Wednesday morning.</p>
+					</div>
+					<a class="btn btn--ghost btn--sm" href="#watch">Email these to me weekly</a>
+				</div>
+
+				<table class="rtable">
+					<thead>
+						<tr>
+							<th scope="col">Product</th>
+							<th scope="col">Rate</th>
+							<th scope="col">Change</th>
+						</tr>
+					</thead>
+					<tbody>
+						{
+							RATES.map(([product, rate, change]) => (
+								<tr>
+									<th scope="row">{product}</th>
+									<td class="rtable__rate">{rate}</td>
+									<td class={change.startsWith("down") ? "is-down" : "is-flat"}>{change}</td>
+								</tr>
+							))
+						}
+					</tbody>
+				</table>
+				<p class="fine">
+					Sample figures shown to demonstrate the layout of this demo page. They are not a quote,
+					not an offer and not advice. A real rate depends on your file.
+				</p>
+			</div>
+		</section>
+
+		<!-- The primary call to action. -->
+		<section class="watch" id="watch">
+			<div class="watch__inner">
+				<p class="eyebrow eyebrow--light">Rate Watch · every Wednesday</p>
+				<h2>The email your bank would rather you did not read.</h2>
+				<p class="lede">
+					Where fixed and variable landed this week, in plain numbers. What it means for a renewal
+					coming up in the next twelve months. And a straight answer on whether locking in is worth
+					it right now, including the weeks when the answer is no.
+				</p>
+
+				<form class="form" id="watch-form" novalidate>
+					<label class="sr-only" for="watch-email">Email address</label>
+					<input
+						id="watch-email"
+						type="email"
+						inputmode="email"
+						autocomplete="email"
+						placeholder="you@example.com"
+						required
+					/>
+					<button class="btn btn--accent" type="submit">Send me Rate Watch</button>
+				</form>
+				<p class="form__msg" id="watch-msg" role="status" hidden></p>
+
+				<ul class="proof">
+					<li><strong>2,600</strong><span>subscribers</span></li>
+					<li><strong>Wednesdays</strong><span>7am, weekly</span></li>
+					<li><strong>300</strong><span>words, no fluff</span></li>
+					<li><strong>0</strong><span>sales calls</span></li>
+				</ul>
+			</div>
+		</section>
+
+		<section class="wrap" id="how">
+			<div class="sechead">
+				<h2>How a mortgage actually gets done</h2>
+				<p>Four steps. You do the first one and we do the rest.</p>
+			</div>
+			<ol class="steps">
+				{
+					STEPS.map(([t, d], i) => (
+						<li>
+							<span class="steps__n">{i + 1}</span>
+							<div>
+								<h3>{t}</h3>
+								<p>{d}</p>
+							</div>
+						</li>
+					))
+				}
+			</ol>
+		</section>
+
+		<section class="band">
+			<div class="wrap band__inner">
+				<div>
+					<h2>40+ lenders compete. You pick.</h2>
+					<p>
+						A bank can only offer you the bank’s products. We are paid by the lender on closing, so
+						a standard residential mortgage costs you nothing to arrange through us.
+					</p>
+				</div>
+				<ul class="ticks">
+					<li>Purchases, renewals and refinances</li>
+					<li>Self-employed and commission income</li>
+					<li>First-time buyers, start to finish</li>
+					<li>Renewal reviews before you sign</li>
+				</ul>
+			</div>
+		</section>
+
+		<section class="wrap" id="faq">
+			<div class="sechead">
+				<h2>Questions we get every week</h2>
+			</div>
+			<div class="faq">
+				{
+					FAQ.map(([q, a]) => (
+						<div class="faq__item">
+							<h3>{q}</h3>
+							<p>{a}</p>
+						</div>
+					))
+				}
+			</div>
+		</section>
+
+		<!-- Closing CTA. Same ask as the top of the page. -->
+		<section class="close">
+			<div class="close__inner">
+				<h2>Start with the email. Talk when you are ready.</h2>
+				<p>
+					Most people read Rate Watch for a few months before they ever call. That is exactly how it
+					is meant to work.
+				</p>
+				<form class="form" id="close-form" novalidate>
+					<label class="sr-only" for="close-email">Email address</label>
+					<input
+						id="close-email"
+						type="email"
+						inputmode="email"
+						autocomplete="email"
+						placeholder="you@example.com"
+						required
+					/>
+					<button class="btn btn--accent" type="submit">Get Rate Watch free</button>
+				</form>
+				<p class="form__msg" id="close-msg" role="status" hidden></p>
+				<p class="close__sig">{BROKER}, Principal Broker</p>
+			</div>
+		</section>
+	</main>
+
+	<style>
+		:root {
+			--navy: #0d2440;
+			--navy-deep: #081a30;
+			--teal: #0f7d78;
+			--teal-bright: #34c5b8;
+			--paper: #ffffff;
+			--mist: #f4f7fa;
+			--ink: #0d2440;
+			--body: #4a5b6f;
+			--line: #dfe6ee;
+		}
+
+		@font-face {
+			font-family: "Sora";
+			src: url("/fonts/sora.woff2") format("woff2");
+			font-weight: 400 700;
+			font-display: swap;
+		}
+		@font-face {
+			font-family: "DM Sans";
+			src: url("/fonts/dmsans.woff2") format("woff2");
+			font-weight: 400 700;
+			font-display: swap;
+		}
+
+		main,
+		.nav {
+			font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+			color: var(--body);
+			background: var(--paper);
+		}
+		main {
+			font-size: 1.0625rem;
+			line-height: 1.65;
+		}
+
+		h1,
+		h2,
+		h3 {
+			font-family: "Sora", ui-sans-serif, system-ui, sans-serif;
+			color: var(--ink);
+			font-weight: 600;
+			line-height: 1.14;
+			letter-spacing: -0.028em;
+			text-wrap: balance;
+		}
+		h1 {
+			font-size: clamp(2.25rem, 5vw, 3.5rem);
+			letter-spacing: -0.038em;
+		}
+		h2 {
+			font-size: clamp(1.75rem, 3.2vw, 2.375rem);
+		}
+		h3 {
+			font-size: 1.0625rem;
+			line-height: 1.35;
+		}
+		p {
+			text-wrap: pretty;
+		}
+		p + p {
+			margin-top: 0.9em;
+		}
+		a {
+			color: var(--teal);
+		}
+
+		.wrap {
+			max-width: 66rem;
+			margin-inline: auto;
+			padding: clamp(3.25rem, 6.5vw, 5.5rem) 1.5rem;
+		}
+
+		.eyebrow {
+			font-size: 0.75rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			color: var(--teal);
+			font-weight: 600;
+			margin-bottom: 1.125rem;
+		}
+		.eyebrow--light {
+			color: var(--teal-bright);
+		}
+		.lede {
+			font-size: 1.125rem;
+			margin-top: 1rem;
+			max-width: 38rem;
+		}
+		.fine {
+			font-size: 0.8125rem;
+			line-height: 1.5;
+			color: #7d8ca0;
+			margin-top: 1rem;
+			max-width: 42rem;
+		}
+
+		/* --- Nav --- */
+		.nav {
+			display: flex;
+			align-items: center;
+			gap: 1.5rem;
+			padding: 1rem 1.5rem;
+			border-bottom: 1px solid var(--line);
+		}
+		.nav__brand {
+			display: flex;
+			align-items: center;
+			gap: 0.625rem;
+			font-family: "Sora", sans-serif;
+			font-size: 1.0625rem;
+			font-weight: 600;
+			color: var(--ink);
+			text-decoration: none;
+			letter-spacing: -0.02em;
+		}
+		.nav__mark {
+			width: 20px;
+			height: 20px;
+			border-radius: 5px;
+			background: linear-gradient(140deg, var(--teal-bright), var(--teal));
+		}
+		.nav__links {
+			display: none;
+			gap: 1.5rem;
+			margin-left: auto;
+		}
+		.nav__links a {
+			color: var(--body);
+			text-decoration: none;
+			font-size: 0.9375rem;
+		}
+		.nav__links a:hover {
+			color: var(--ink);
+		}
+		@media (min-width: 48rem) {
+			.nav__links {
+				display: flex;
+			}
+		}
+		.nav .btn--sm {
+			margin-left: auto;
+		}
+		@media (min-width: 48rem) {
+			.nav .btn--sm {
+				margin-left: 0;
+			}
+		}
+
+		/* --- Buttons --- */
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			background: var(--teal);
+			color: #fff;
+			font-weight: 600;
+			font-size: 1rem;
+			padding: 0.9rem 1.5rem;
+			border: 1px solid transparent;
+			border-radius: 8px;
+			text-decoration: none;
+			cursor: pointer;
+			transition:
+				background 140ms ease,
+				transform 140ms ease;
+		}
+		.btn:hover {
+			background: #0b6360;
+			color: #fff;
+		}
+		.btn:active {
+			transform: translateY(1px);
+		}
+		.btn--sm {
+			padding: 0.5rem 0.9rem;
+			font-size: 0.875rem;
+		}
+		.btn--ghost {
+			background: transparent;
+			color: var(--ink);
+			border-color: var(--line);
+		}
+		.btn--ghost:hover {
+			background: var(--mist);
+			color: var(--ink);
+		}
+		.btn--accent {
+			background: var(--teal-bright);
+			color: #06231f;
+		}
+		.btn--accent:hover {
+			background: #5ad6cb;
+			color: #06231f;
+		}
+
+		/* --- Hero --- */
+		.hero {
+			background:
+				radial-gradient(60rem 30rem at 15% -10%, #e6f6f4 0%, transparent 60%),
+				linear-gradient(180deg, var(--mist), var(--paper));
+			border-bottom: 1px solid var(--line);
+		}
+		.hero__inner {
+			max-width: 66rem;
+			margin-inline: auto;
+			padding: clamp(3.25rem, 7vw, 6rem) 1.5rem;
+		}
+		.hero__note {
+			font-size: 0.875rem;
+			color: #7d8ca0;
+			margin-top: 0.875rem;
+		}
+		.form--hero {
+			max-width: 34rem;
+		}
+
+		/* --- Forms --- */
+		.form {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.625rem;
+			margin-top: 1.75rem;
+		}
+		.form input {
+			flex: 1 1 15rem;
+			font: inherit;
+			font-size: 1rem;
+			padding: 0.9rem 1rem;
+			border: 1px solid var(--line);
+			border-radius: 8px;
+			background: #fff;
+			color: var(--ink);
+		}
+		.form input::placeholder {
+			color: #93a2b4;
+		}
+		.form input:focus-visible {
+			outline: 2px solid var(--teal);
+			outline-offset: 1px;
+		}
+		.form__msg {
+			margin-top: 0.75rem;
+			font-size: 0.9375rem;
+			font-weight: 600;
+			color: var(--teal);
+		}
+
+		/* --- Rates --- */
+		.rates {
+			background: var(--paper);
+		}
+		.sechead {
+			max-width: 36rem;
+			margin-bottom: 2rem;
+		}
+		.sechead p {
+			margin-top: 0.625rem;
+		}
+		.sechead--split {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 1.25rem;
+			align-items: flex-end;
+			justify-content: space-between;
+			max-width: none;
+		}
+		.rtable {
+			width: 100%;
+			border-collapse: collapse;
+			text-align: left;
+		}
+		.rtable th,
+		.rtable td {
+			padding: 1rem 0.75rem;
+			border-bottom: 1px solid var(--line);
+		}
+		.rtable thead th {
+			font-family: "Sora", sans-serif;
+			font-size: 0.6875rem;
+			letter-spacing: 0.12em;
+			text-transform: uppercase;
+			color: #7d8ca0;
+			font-weight: 600;
+			border-bottom-color: #c9d5e2;
+		}
+		.rtable tbody th {
+			font-weight: 500;
+			color: var(--ink);
+			font-size: 1rem;
+		}
+		.rtable__rate {
+			font-family: "Sora", sans-serif;
+			font-size: 1.25rem;
+			font-weight: 600;
+			color: var(--ink);
+			font-variant-numeric: tabular-nums;
+		}
+		.rtable .is-down {
+			color: #0b7d55;
+			font-size: 0.9375rem;
+		}
+		.rtable .is-flat {
+			color: #7d8ca0;
+			font-size: 0.9375rem;
+		}
+
+		/* --- Rate Watch (primary CTA) --- */
+		.watch {
+			background:
+				radial-gradient(48rem 26rem at 80% 0%, #14405f 0%, transparent 65%),
+				var(--navy);
+			color: #c6d6e6;
+		}
+		.watch__inner {
+			max-width: 44rem;
+			margin-inline: auto;
+			padding: clamp(3.5rem, 7vw, 5.5rem) 1.5rem;
+		}
+		.watch h2 {
+			color: #fff;
+		}
+		.watch .lede {
+			color: #b8cbdd;
+		}
+		.watch .form input {
+			background: #06182c;
+			border-color: #23415f;
+			color: #fff;
+		}
+		.watch .form input::placeholder {
+			color: #6d87a3;
+		}
+		.watch .form__msg {
+			color: var(--teal-bright);
+		}
+		.proof {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 2rem;
+			list-style: none;
+			padding: 0;
+			margin-top: 2.25rem;
+		}
+		.proof strong {
+			display: block;
+			font-family: "Sora", sans-serif;
+			font-size: 1.375rem;
+			color: #fff;
+			font-weight: 600;
+		}
+		.proof span {
+			font-size: 0.8125rem;
+			color: #8fa8c0;
+		}
+
+		/* --- Steps --- */
+		.steps {
+			list-style: none;
+			padding: 0;
+			display: grid;
+			gap: 1.75rem;
+		}
+		@media (min-width: 46rem) {
+			.steps {
+				grid-template-columns: 1fr 1fr;
+				gap: 2.25rem 3rem;
+			}
+		}
+		.steps li {
+			display: flex;
+			gap: 1rem;
+		}
+		.steps__n {
+			flex: none;
+			width: 1.875rem;
+			height: 1.875rem;
+			border-radius: 8px;
+			background: #e2f2f0;
+			color: var(--teal);
+			font-family: "Sora", sans-serif;
+			font-weight: 600;
+			font-size: 0.9375rem;
+			display: grid;
+			place-items: center;
+		}
+		.steps h3 {
+			margin-bottom: 0.3rem;
+		}
+
+		/* --- Band --- */
+		.band {
+			background: var(--mist);
+			border-block: 1px solid var(--line);
+		}
+		.band__inner {
+			display: grid;
+			gap: 2rem;
+		}
+		@media (min-width: 46rem) {
+			.band__inner {
+				grid-template-columns: 1fr 1fr;
+				gap: 3rem;
+				align-items: center;
+			}
+		}
+		.band p {
+			margin-top: 0.875rem;
+		}
+		.ticks {
+			list-style: none;
+			padding: 0;
+			display: grid;
+			gap: 0.75rem;
+		}
+		.ticks li {
+			position: relative;
+			padding-left: 1.75rem;
+			font-size: 1rem;
+		}
+		.ticks li::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0.55em;
+			width: 0.75rem;
+			height: 0.4rem;
+			border-left: 2px solid var(--teal);
+			border-bottom: 2px solid var(--teal);
+			rotate: -45deg;
+		}
+
+		/* --- FAQ --- */
+		.faq {
+			display: grid;
+			gap: 1.5rem;
+		}
+		@media (min-width: 46rem) {
+			.faq {
+				grid-template-columns: 1fr 1fr;
+				gap: 2rem 3rem;
+			}
+		}
+		.faq__item h3 {
+			margin-bottom: 0.4rem;
+		}
+
+		/* --- Close --- */
+		.close {
+			background: var(--navy-deep);
+			color: #b8cbdd;
+		}
+		.close__inner {
+			max-width: 40rem;
+			margin-inline: auto;
+			padding: clamp(3.25rem, 6.5vw, 5rem) 1.5rem;
+			text-align: center;
+		}
+		.close h2 {
+			color: #fff;
+		}
+		.close p {
+			margin-top: 0.875rem;
+		}
+		.close .form input {
+			background: #041224;
+			border-color: #1e3a56;
+			color: #fff;
+		}
+		.close .form input::placeholder {
+			color: #6d87a3;
+		}
+		.close .form__msg {
+			color: var(--teal-bright);
+		}
+		.close__sig {
+			margin-top: 1.5rem;
+			font-size: 0.875rem;
+			color: #8fa8c0;
+		}
+
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+	</style>
+
+	<script is:inline>
+		// Demo only. A real build wires these to the client's mailing list.
+		(function () {
+			var pairs = [
+				["hero-form", "hero-msg"],
+				["watch-form", "watch-msg"],
+				["close-form", "close-msg"],
+			];
+			pairs.forEach(function (p) {
+				var f = document.getElementById(p[0]);
+				var msg = document.getElementById(p[1]);
+				if (!f) return;
+				f.addEventListener("submit", function (e) {
+					e.preventDefault();
+					var input = f.querySelector("input");
+					var ok = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value.trim());
+					msg.hidden = false;
+					msg.textContent = ok
+						? "You are subscribed. First issue lands Wednesday. (Demo form, nothing was sent.)"
+						: "That email does not look right. Have another go.";
+					if (ok) f.reset();
+				});
+			});
+		})();
+	</script>
+</Demo>
