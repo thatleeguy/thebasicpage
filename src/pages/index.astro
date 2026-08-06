@@ -1,5 +1,6 @@
 ---
 import BaseHead from "../components/BaseHead.astro";
+import Logo from "../components/Logo.astro";
 import { CONTACT, PLANS, PRICE, SITE_TITLE, SITE_TAGLINE, SITE_DESCRIPTION, telHref } from "../consts";
 import { FAQS } from "../faq";
 
@@ -80,7 +81,12 @@ const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a
 			     1. The offer, in one breath
 			     ============================================================ -->
 			<section class="col reveal" id="top">
-				<p class="eyebrow">The Basic Page · one page · $499</p>
+				<!-- Still no nav bar. This is the brand, not a menu: there is nowhere
+				     on this site to navigate to. -->
+				<div class="brandline">
+					<Logo size={26} wordmark />
+					<span class="brandline__meta">one page · ${PRICE.build}</span>
+				</div>
 
 				<h1>Message us this morning. Your website is live this&nbsp;<span class="swipe"
 						>afternoon</span
@@ -94,7 +100,10 @@ const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a
 
 				<div class="receipt">
 					<div class="receipt__head">
-						<span>🧾 The Basic Page</span>
+						<span class="receipt__brand">
+							<Logo size={15} />
+							The Basic Page
+						</span>
 						<span>Est. today</span>
 					</div>
 					<div class="receipt__price">${PRICE.build}</div>
@@ -569,7 +578,8 @@ const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a
 		</main>
 
 		<footer class="col center" style="padding-block:3.5rem 4rem">
-			<p class="fine">
+			<Logo size={30} class="footer-logo" />
+			<p class="fine" style="margin-top:1rem">
 				One page · no cookie banner, because we don’t track you · no newsletter, because we don’t
 				have one
 			</p>

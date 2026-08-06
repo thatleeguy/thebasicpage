@@ -11,6 +11,7 @@
 // That bar is not decoration. It keeps an indexed page from reading as a real
 // company, and it doubles as the route back to the thing we're actually selling.
 import { CONTACT, PRICE, SITE_TITLE } from "../consts";
+import Logo from "../components/Logo.astro";
 
 interface Props {
 	title: string;
@@ -43,7 +44,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 	</head>
 	<body>
 		<div class="demobar">
-			<span class="demobar__dot" aria-hidden="true"></span>
+			<Logo size={18} class="demobar__logo" />
 			<p>
 				<strong>Demo.</strong> {business} isn’t a real company. This is an example of a ${PRICE.build}
 				page from <a href="/">{SITE_TITLE}</a>.
@@ -114,11 +115,9 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 			.demobar a {
 				color: #7dd3fc;
 			}
-			.demobar__dot {
-				width: 8px;
-				height: 8px;
-				border-radius: 100px;
-				background: #38bdf8;
+			.demobar__logo {
+				color: #38bdf8;
+				--logo-knock: #0b1220;
 				flex: none;
 			}
 			.demobar__cta {

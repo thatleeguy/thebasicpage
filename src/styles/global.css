@@ -238,6 +238,46 @@ section {
 	color: var(--ink);
 }
 
+/* --- Brand line ------------------------------------------------------- */
+
+/* The logo sits where the eyebrow used to. It is deliberately not sticky and
+   deliberately not a nav: there is nowhere else on this site to go. */
+.brandline {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 0.5rem 0.875rem;
+	color: var(--sky-500);
+	--logo-knock: var(--paper);
+	margin-bottom: 1.75rem;
+}
+
+.brandline .logo__word {
+	color: var(--ink);
+}
+
+.brandline__meta {
+	font-family: var(--mono);
+	font-size: 0.6875rem;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--sky-700);
+}
+
+/* On the blue receipt card the mark inverts: ink page, card-blue knockout. */
+.receipt__brand {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	color: var(--ink);
+	--logo-knock: var(--sky-400);
+}
+
+.footer-logo {
+	color: var(--sky-500);
+	--logo-knock: var(--paper);
+}
+
 /* One emoji per section header. It is a mark, not decoration. */
 .mark {
 	display: block;
