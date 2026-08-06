@@ -1,50 +1,593 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import BaseHead from "../components/BaseHead.astro";
+import { CONTACT, PLANS, PRICE, SITE_TITLE, SITE_TAGLINE, SITE_DESCRIPTION, telHref } from "../consts";
+import { FAQS } from "../faq";
+
+// There is no nav bar on this page, on purpose. The first thing you see is
+// the headline. A nav on a one-page site is pure friction.
+
+const INCLUDED = [
+	["One page, written and designed for your business", "included"],
+	["Your own domain, connected and pointed properly", "included"],
+	["Hosting, on us, for as long as the page is up", "$0/mo"],
+	["Your phone number as a big tap-to-call button", "included"],
+	["A tap-to-email button that goes straight to your inbox", "included"],
+	["Your hours, in the format Google actually reads", "included"],
+	["A map to your door", "included"],
+	["Up to 12 of your photos, cleaned up and resized", "included"],
+	["Your Google Business Profile set up — or the old one fixed", "included"],
+	["Submitted to Google and Bing so you turn up", "included"],
+	["Written in plain sentences, so assistants can read it", "included"],
+	["An SSL padlock, so it never says “Not secure”", "included"],
+	["All of it in your name. The domain, the files, the lot.", "yours"],
+];
+
+const EXCLUDED = [
+	["A blog", "no"],
+	["An online store", "no"],
+	["A login for you", "on purpose"],
+	["Ten pages", "one page"],
+	["A phone app", "no"],
+	["A logo designed from scratch", "see below"],
+	["Ongoing SEO consulting", "no"],
+	["Us posting to your Instagram", "no"],
+	["A contract", "nothing to cancel"],
+	["Unlimited free changes forever", "see below"],
+];
+
+const TRADES = [
+	["Plumbers", "🚿"],
+	["Dog groomers", "🐩"],
+	["Dental clinics", "🦷"],
+	["Cafés", "☕️"],
+	["Contractors", "🔨"],
+	["Cleaners", "🧼"],
+	["Bookkeepers", "🧮"],
+	["Yoga studios", "🧘"],
+	["Landscapers", "🌿"],
+	["Food trucks", "🌮"],
+	["Therapists", "💬"],
+	["Electricians", "⚡️"],
+];
+
+const TUESDAY = [
+	["9:14am", "You message us. We ask nine questions."],
+	["9:40am", "You send your hours and some photos. A voice memo is fine."],
+	["11:30am", "We send a link. It’s your actual page, on the actual internet."],
+	["1:05pm", "You reply: “make the phone number bigger and I hate that photo.”"],
+	["1:11pm", "Fixed."],
+	["4:20pm", "Your domain points at it. It’s live."],
+	["4:22pm", "You pay the $499. Now — not before."],
+	["5:58pm", "Somebody three streets over types “emergency plumber near me.”"],
+];
+
+const hasPhone = CONTACT.phone.length > 0;
+const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a basic page")}`;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en-CA">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={`${SITE_TITLE} — ${SITE_TAGLINE}`} description={SITE_DESCRIPTION} />
 	</head>
 	<body>
-		<Header />
+		<div class="sky-wash" aria-hidden="true"></div>
+		<div class="grain" aria-hidden="true"></div>
+
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to <a href="https://docs.astro.build/"
-					>read the docs
-				</a> or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out <a
-					href="https://github.com/Charca/astro-blog-template"
-					>astro-blog-template
-				</a> by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+			<!-- ============================================================
+			     1. The offer, in one breath
+			     ============================================================ -->
+			<section class="col reveal" id="top">
+				<p class="eyebrow">The Basic Page · one page · $499</p>
+
+				<h1>Message us this morning. Your website is live this&nbsp;<span class="swipe"
+						>afternoon</span
+					>.</h1>
+
+				<p class="lede">
+					One page. Built by an actual person. On the internet before dinner. No logins, no
+					dashboard, no password to forget — when you want something changed, you text us, and we
+					change it. That’s the whole product. 👋
+				</p>
+
+				<div class="receipt">
+					<div class="receipt__head">
+						<span>🧾 The Basic Page</span>
+						<span>Est. today</span>
+					</div>
+					<div class="receipt__price">${PRICE.build}</div>
+					<ul class="rows" style="margin-top:0">
+						<li class="row">
+							<span class="row__label">Build</span>
+							<span class="row__dots"></span>
+							<span class="row__value">${PRICE.build} once</span>
+						</li>
+						<li class="row">
+							<span class="row__label">Timeline</span>
+							<span class="row__dots"></span>
+							<span class="row__value">today</span>
+						</li>
+						<li class="row">
+							<span class="row__label">Pages</span>
+							<span class="row__dots"></span>
+							<span class="row__value">1</span>
+						</li>
+					</ul>
+				</div>
+
+				<div class={`btns${hasPhone ? " btns--two" : ""}`}>
+					{
+						hasPhone && (
+							<a class="btn" href={telHref(CONTACT.phone)}>
+								📱 Text {CONTACT.phone}
+								<span class="btn__sub">or just call</span>
+							</a>
+						)
+					}
+					<a class="btn" href={mailto}>
+						✉️ {CONTACT.email}
+						<span class="btn__sub">two sentences is enough</span>
+					</a>
+				</div>
+
+				<p class="fine" style="margin-top:1rem">
+					Real humans, and we usually reply in under ten minutes. You’re reading one of these pages
+					right now, by the way. This is the whole website.
+				</p>
+			</section>
+
+			<!-- ============================================================
+			     2. Who this is for
+			     ============================================================ -->
+			<section class="col" style="padding-block:0">
+				<ul class="chips">
+					{TRADES.map(([name, emoji]) => <li>{emoji} {name}</li>)}
+				</ul>
+				<p class="fine" style="margin-top:1rem">
+					If your business is real and local, one page is genuinely all you need.
+				</p>
+			</section>
+
+			<!-- ============================================================
+			     3. The number you were quoted
+			     ============================================================ -->
+			<section class="col">
+				<span class="mark">💸</span>
+				<h2>You were quoted $8,000 and ten weeks.</h2>
+				<p class="lede">
+					We’ve seen the PDF. Discovery phase. Stakeholder workshop. Wireframes. A staging link in
+					six weeks that you’re not allowed to show anybody.
+				</p>
+				<p>
+					Meanwhile you went back to work, and the Facebook page kept doing the job of a website.
+					You needed this sorted in March.
+				</p>
+
+				<div class="quoted">
+					<div class="quoted__row">
+						<span><s>The website project</s></span>
+						<span class="row__dots"></span>
+						<span class="quoted__total"><s>$8,000</s></span>
+					</div>
+					<div class="quoted__row">
+						<span><s>Time until it is live</s></span>
+						<span class="row__dots"></span>
+						<span class="quoted__total"><s>10 weeks</s></span>
+					</div>
+				</div>
+
+				<hr class="rule rule--strong" />
+
+				<p class="quoted__ours">${PRICE.build} · today</p>
+				<p class="fine">
+					So here’s ours, itemised, so you can see exactly what you’re buying. 👇
+				</p>
+			</section>
+
+			<!-- ============================================================
+			     4. What it buys
+			     ============================================================ -->
+			<section class="col">
+				<span class="mark">📋</span>
+				<h2>What ${PRICE.build} buys. Every line.</h2>
+				<p class="lede">No packages. No tiers. No “starting at”. This is the list.</p>
+
+				<ul class="rows">
+					{
+						INCLUDED.map(([label, value]) => (
+							<li class="row">
+								<span class="row__glyph" aria-hidden="true">
+									✓
+								</span>
+								<span class="row__label" set:html={label} />
+								<span class="row__dots" />
+								<span class="row__value">{value}</span>
+							</li>
+						))
+					}
+				</ul>
+
+				<hr class="rule rule--strong" />
+
+				<div class="row row--total">
+					<span class="row__label">Total</span>
+					<span class="row__dots"></span>
+					<span class="row__value"><span class="sticker">${PRICE.build}</span></span>
+				</div>
+				<p class="fine center" style="margin-top:.75rem">Once. Not per month.</p>
+			</section>
+
+			<!-- ============================================================
+			     5. What it isn't
+			     ============================================================ -->
+			<section class="col">
+				<span class="mark">🙅</span>
+				<h2>What it isn’t. Also every line.</h2>
+				<p class="lede">
+					We’d rather you know now than be annoyed on Thursday. Nobody itemises their own
+					limitations, which is exactly why we’re going to.
+				</p>
+
+				<ul class="rows">
+					{
+						EXCLUDED.map(([label, value]) => (
+							<li class="row row--no">
+								<span class="row__glyph" aria-hidden="true">
+									✕
+								</span>
+								<span class="row__label">{label}</span>
+								<span class="row__dots" />
+								<span class="row__value">{value}</span>
+							</li>
+						))
+					}
+				</ul>
+
+				<hr class="rule" />
+
+				<div class="row row--total">
+					<span class="row__label">Not included</span>
+					<span class="row__dots"></span>
+					<span class="row__value">{EXCLUDED.length} things</span>
+				</div>
+
+				<p class="note" style="margin-top:1.25rem">
+					A logo: we’ll use yours if you have one, or set your name in type that looks sharp, for
+					free. If you want a proper logo later, we know people. A blog or a shop: we can build one
+					later, and we’ll tell you the number before we start.
+				</p>
+			</section>
+
+			<!-- ============================================================
+			     6. Same day, actually
+			     ============================================================ -->
+			<section class="col">
+				<span class="mark">⏱️</span>
+				<h2>“Live today” means today.</h2>
+				<p class="lede">Here’s a real Tuesday.</p>
+
+				<ol class="timeline">
+					{
+						TUESDAY.map(([t, what]) => (
+							<li>
+								<time>{t}</time>
+								<span class="dot" aria-hidden="true" />
+								<p set:html={what} />
+							</li>
+						))
+					}
+				</ol>
+
+				<p class="note" style="margin-top:1.5rem">
+					Message us before 11am on a weekday and it’s live the same business day. If you write at
+					4:30pm on a Friday we’ll be honest and say Monday. We don’t promise things we can’t finish
+					by five. 🕔
+				</p>
+				<p style="margin-top:1.25rem">
+					<strong>You pay after you’ve seen it working.</strong> No deposit, no retainer. If you
+					don’t like it, you say so, and you owe us nothing.
+				</p>
+			</section>
+
+			<!-- ============================================================
+			     7. There is nothing to log into
+			     ============================================================ -->
+			<section class="col">
+				<span class="mark">💬</span>
+				<h2>To change something, you text us. That’s the interface.</h2>
+				<p class="lede">
+					No CMS. No admin panel. No “just drag the block into the section”. No two-factor code sent
+					to a phone you replaced two years ago.
+				</p>
+
+				<div class="thread">
+					<p class="bubble bubble--out">
+						new price list 📸<span class="bubble__time">8:02a</span>
+					</p>
+					<p class="bubble bubble--in">
+						got it — up in 20<span class="bubble__time">8:04a</span>
+					</p>
+					<p class="bubble bubble--out">
+						also closed weds, family thing<span class="bubble__time">8:11a</span>
+					</p>
+					<p class="bubble bubble--in">
+						done ✅<span class="bubble__time">8:22a</span>
+					</p>
+				</div>
+
+				<p style="margin-top:1.75rem">
+					New price? Send a photo of the new price list. Closing early Wednesday? Send five words.
+					Bought a new truck and want it on there? Send the picture of the truck.
+				</p>
+				<p>We do it. We reply when it’s done. That’s the entire interface.</p>
+
+				<div class="zero">
+					<span class="zero__n">0</span>
+					<span class="zero__label">Things for you to log into</span>
+				</div>
+
+				<p class="center" style="margin-top:1.75rem">
+					Most small business websites don’t die of bad design.<br />They die of a forgotten
+					password. 💀
+				</p>
+			</section>
+
+			<!-- ============================================================
+			     8. The map box
+			     ============================================================ -->
+			<section class="col">
+				<span class="mark">📍</span>
+				<h2>The little map box on Google matters more than the website.</h2>
+				<p class="lede">
+					Type “plumber near me” into your phone right now. See that map with three businesses
+					pinned on it? That box gets the calls. The blue links underneath it get the leftovers, and
+					nobody in the history of burst pipes has scrolled to page two.
+				</p>
+
+				<div class="mock">
+					<div class="mock__bar">plumber near me</div>
+					<div class="mock__row mock__row--you">
+						<span aria-hidden="true">📍</span>
+						<span>Your business</span>
+						<span>⭐️ 4.9 · Call · Directions</span>
+					</div>
+					<div class="mock__row">
+						<span aria-hidden="true">📍</span>
+						<span class="mock__ghost" style="width:9rem" aria-hidden="true"></span>
+						<span aria-hidden="true">⭐️ 4.4</span>
+					</div>
+					<div class="mock__row">
+						<span aria-hidden="true">📍</span>
+						<span class="mock__ghost" style="width:6.5rem" aria-hidden="true"></span>
+						<span aria-hidden="true">⭐️ 4.1</span>
+					</div>
+				</div>
+
+				<p style="margin-top:1.75rem">
+					To put you in that box, Google has to believe you’re real. It checks whether your name,
+					address, phone number and hours say the same thing in more than one place. A Facebook page
+					on its own doesn’t convince it. A website saying exactly the same thing does.
+				</p>
+				<p>
+					So we set up your Google Business Profile, wire it to your new page, and make the two say
+					identical things. Same name. Same phone. Same hours. Every time.
+				</p>
+				<p>
+					Already have a profile you can’t get into because your nephew made it in 2017? Tell us.
+					We’ve un-stuck a lot of those. 🔓
+				</p>
+
+				<p class="note" style="margin-top:1.25rem">
+					What we won’t do is promise you the number one spot. Anybody who does is guessing. What we
+					can promise is that you’ll finally be set up properly, which is more than most of your
+					competitors have bothered to do.
+				</p>
+			</section>
+
+			<!-- ============================================================
+			     9. Assistants — the one full-bleed blue landmark mid-page
+			     ============================================================ -->
+			<section class="band">
+				<div class="col">
+					<span class="mark">🤖</span>
+					<h2>And when somebody asks ChatGPT instead of Google.</h2>
+					<p class="lede">
+						A lot of people have stopped searching. They just ask. “Who’s a good dog groomer in
+						Riverdale?” “Find me a bookkeeper who works with trades.”
+					</p>
+
+					<div class="mock">
+						<div class="mock__bar">Who’s a good dog groomer in Riverdale?</div>
+						<p class="mock__answer">
+							A few options nearby: <b>your business</b> — open Tue–Sat, does nervous rescues and
+							big dogs, walk-ins before 10am. Two others are listed but I can’t find their hours or
+							what they specialise in.
+						</p>
+					</div>
+
+					<p style="margin-top:1.75rem">
+						Assistants answer out of text they can read. Not your Instagram grid. Not a photo of
+						your price list. Not a Facebook post from 2021. Plain sentences, on a page, that say
+						what you do, where you do it, and when you’re open.
+					</p>
+					<p>
+						Most small businesses have none of that written down anywhere on the internet. That is
+						the entire opportunity, and it is wide open right now.
+					</p>
+					<p>
+						So we write your page for both audiences at once. A person skims it in nine seconds. A
+						machine reads it in one and can repeat it back correctly. Boring on purpose. Readable
+						by everything.
+					</p>
+
+					<div class="note" style="margin-top:1.5rem">
+						<p class="eyebrow" style="color:var(--sky-700)">The honest part</p>
+						<p style="font-size:1rem">
+							We can’t promise ChatGPT will recommend you. Nobody can, and anybody who says
+							otherwise is guessing at you. What we can promise is that you’ll be legible — which
+							is more than almost anyone in your trade can say today.
+						</p>
+					</div>
+
+					<p style="margin-top:1.5rem">
+						<strong>Try it right now:</strong> go and ask ChatGPT about your closest competitor. See
+						whether it has ever heard of them. 🪄
+					</p>
+				</div>
+			</section>
+
+			<!-- ============================================================
+			     10. The rest of the price list
+			     ============================================================ -->
+			<section class="col">
+				<span class="mark">🧰</span>
+				<h2>Changes, after the first 30 days.</h2>
+				<p class="lede">
+					Your first month of changes is free. After that, pick one — or pick none. Picking none is
+					a real option, not a guilt trip.
+				</p>
+
+				<div class="plans">
+					{
+						PLANS.map((plan) => (
+							<div class={`card plan${plan.pick ? " card--pick" : ""}`}>
+								<div class="plan__top">
+									<span class="plan__name">{plan.name}</span>
+									{plan.tag && <span class="tag">{plan.tag}</span>}
+									<span class="plan__dots" />
+									<span class="plan__price">
+										{plan.price}
+										<small>{plan.period}</small>
+									</span>
+								</div>
+								<p>{plan.blurb}</p>
+							</div>
+						))
+					}
+
+					<div class="plan plan--none">
+						<div class="plan__top">
+							<span class="plan__name">No plan at all</span>
+							<span class="plan__dots"></span>
+							<span class="plan__price">$0<small>/month</small></span>
+						</div>
+						<p>
+							Also completely fine. Your page stays live and stays yours. Changes are ${PRICE.perChange}
+							each, whenever you happen to need one. If your hours and prices change twice a year,
+							pick this. Seriously.
+						</p>
+					</div>
+				</div>
+
+				<p class="fine" style="margin-top:1.5rem">
+					“Unlimited normal changes” means words, photos, hours, prices, adding a section. It does
+					not mean “build me a shop”. Ask for something big and we’ll quote you a number before we
+					touch anything. No contracts, and you can cancel by text in four words. 🙂
+				</p>
+			</section>
+
+			<!-- ============================================================
+			     11. The testimonials we don't have
+			     ============================================================ -->
+			<section class="col">
+				<span class="mark">🫤</span>
+				<h2>The part where we’d normally show testimonials.</h2>
+
+				<div class="empty">
+					<span class="empty__face" aria-hidden="true">🫤</span>
+					<span class="empty__cap">[ testimonials go here eventually ]</span>
+				</div>
+
+				<p class="lede">
+					We’re new. We don’t have two hundred five-star reviews and a wall of logos from companies
+					you’ve heard of. We could have put some there. You’d never have known.
+				</p>
+				<p>
+					What we have instead is a price, a deadline, a list of what we don’t do, and the fact that
+					you pay nothing until the thing is live in front of you.
+				</p>
+				<p>That’s a smaller risk than the $8,000 quote, and it takes about a day to find out.</p>
+			</section>
+
+			<!-- ============================================================
+			     12. Questions
+			     ============================================================ -->
+			<section class="col" id="questions">
+				<span class="mark">🤨</span>
+				<h2>Questions we actually get.</h2>
+				<p class="lede">
+					Every answer is right here on the page. Nothing is hidden behind a click, which is the
+					same reason your page won’t hide anything either.
+				</p>
+
+				<div class="faq">
+					{
+						FAQS.map((f) => (
+							<div>
+								<h3>“{f.q}”</h3>
+								<p>{f.a}</p>
+							</div>
+						))
+					}
+				</div>
+			</section>
+
+			<!-- ============================================================
+			     13. Close
+			     ============================================================ -->
+			<section class="band tear-t" id="start">
+				<div class="col center">
+					<span class="mark" style="margin-inline:auto">👋</span>
+					<h2>Alright. Two sentences and we’ll start.</h2>
+					<p class="lede">
+						Tell us what you do and what town you’re in. That is the entire intake form, and you
+						have just read all of it.
+					</p>
+
+					<div class={`btns${hasPhone ? " btns--two" : ""}`}>
+						{
+							hasPhone && (
+								<a class="btn btn--paper" href={telHref(CONTACT.phone)}>
+									📱 Text {CONTACT.phone}
+									<span class="btn__sub">or just call</span>
+								</a>
+							)
+						}
+						<a class="btn btn--paper" href={mailto}>
+							✉️ {CONTACT.email}
+							<span class="btn__sub">we reply in minutes</span>
+						</a>
+					</div>
+
+					<p style="margin-top:1.5rem">
+						Send it before 11am on a weekday and you’ll have a link by the afternoon.
+					</p>
+					<p class="fine">
+						No forms. No discovery call. No five-email nurture sequence. No chatbot named Ava. 👋
+					</p>
+					<p class="fine" style="margin-top:1.25rem">
+						There’s no form on this page. You noticed, right? 😄
+					</p>
+				</div>
+			</section>
 		</main>
-		<Footer />
+
+		<footer class="col center" style="padding-block:3.5rem 4rem">
+			<p class="fine">
+				One page · no cookie banner, because we don’t track you · no newsletter, because we don’t
+				have one
+			</p>
+			<p class="mono" style="margin-top:.75rem">
+				{SITE_TITLE} · <a href={mailto}>{CONTACT.email}</a>{
+					hasPhone && (
+						<>
+							{" · "}
+							<a href={telHref(CONTACT.phone)}>{CONTACT.phone}</a>
+						</>
+					)
+				}
+			</p>
+		</footer>
 	</body>
 </html>

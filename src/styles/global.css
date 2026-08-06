@@ -1,155 +1,1173 @@
-/*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
+/* ==========================================================================
+   The Basic Page — one page, one column, one pen.
+   Everything on this site is drawn with the same sky-blue ink. If you are
+   adding something new and reaching for a colour that isn't in the tokens
+   below, the answer is almost always "use the blue".
+   ========================================================================== */
+
+/* --- Type ------------------------------------------------------------- */
+/* Self-hosted, optical size pinned, subset to Latin. See scripts/. */
+
+@font-face {
+	font-family: "Bricolage Grotesque";
+	font-style: normal;
+	font-weight: 400 800;
+	font-display: swap;
+	src: url("/fonts/bricolage.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "DM Sans";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("/fonts/dmsans.woff2") format("woff2");
+}
+
+@font-face {
+	font-family: "DM Mono";
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+	src: url("/fonts/dmmono-500.woff2") format("woff2");
+}
+
+/* --- Tokens ----------------------------------------------------------- */
 
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
-	--box-shadow:
-		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
+	/* Paper */
+	--paper: #ffffff;
+	--tint: #f1f8fe; /* receipt band — alternating rows, quiet panels */
+
+	/* Sky — the only hue on the page */
+	--sky-100: #e0f2fe;
+	--sky-200: #bae6fd; /* hairlines, dotted leaders, scallops */
+	--sky-300: #7dd3fc;
+	--sky-400: #38bdf8; /* the bright full-bleed blocks */
+	--sky-500: #0ea5e9; /* rules, checks, strike lines, button fill */
+	--sky-600: #0284c7;
+	--sky-700: #0369a1; /* blue that is safe as small text on white (5.9:1) */
+	--sky-800: #075985;
+
+	/* Ink. Blue-black, never pure black — it keeps the page feeling bright.
+	   This exact value is load-bearing: it is the lightest, bluest ink that
+	   still clears WCAG AA as body copy on the bright --sky-400 bands
+	   (5.2:1) as well as on white (11.2:1). Lighten it and the two blue
+	   sections stop being readable. */
+	--ink: #093f5e;
+	--ink-soft: #5a6b80; /* small print, captions (5.5:1 on white) */
+	--ink-faint: #94a3b8; /* struck-out text only, never load-bearing */
+
+	/* Warm accent. Strictly rationed — see the comment on .sticker. */
+	--lemon: #ffd166;
+
+	/* Fonts */
+	--display: "Bricolage Grotesque", "Trebuchet MS", sans-serif;
+	--body: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+	--mono: "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+	/* The column. This number is the whole design. */
+	--col: 41rem; /* 656px */
+	--gutter: 1.375rem;
+
+	/* Rhythm */
+	--section-y: clamp(3.5rem, 9vw, 5.75rem);
+
+	--radius: 1.25rem;
+	--radius-sm: 0.75rem;
+
+	/* Chunky-toy button shadow: hard, no blur. */
+	--press: 0 4px 0 var(--sky-800);
+	--press-hover: 0 6px 0 var(--sky-800);
+
+	color-scheme: light;
 }
-@font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-regular.woff") format("woff");
-	font-weight: 400;
-	font-style: normal;
-	font-display: swap;
+
+/* --- Reset ------------------------------------------------------------ */
+
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
 }
-@font-face {
-	font-family: "Atkinson";
-	src: url("/fonts/atkinson-bold.woff") format("woff");
-	font-weight: 700;
-	font-style: normal;
-	font-display: swap;
-}
-body {
-	font-family: "Atkinson", sans-serif;
+
+* {
 	margin: 0;
-	padding: 0;
-	text-align: left;
-	background: linear-gradient(var(--gray-gradient)) no-repeat;
-	background-size: 100% 600px;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	color: rgb(var(--gray-dark));
-	font-size: 20px;
-	line-height: 1.7;
 }
-main {
-	width: 720px;
-	max-width: calc(100% - 2em);
-	margin: auto;
-	padding: 3em 1em;
+
+html {
+	-webkit-text-size-adjust: 100%;
+	scroll-behavior: smooth;
 }
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+}
+
+body {
+	position: relative; /* anchors the sky wash at the top of the page */
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--body);
+	font-size: 1.125rem;
+	line-height: 1.62;
+	font-synthesis-weight: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	overflow-x: hidden;
+}
+
+@media (min-width: 40rem) {
+	body {
+		font-size: 1.1875rem;
+	}
+}
+
+img,
+svg {
+	display: block;
+	max-width: 100%;
+}
+
+a {
+	color: var(--sky-700);
+	text-underline-offset: 0.18em;
+	text-decoration-thickness: 0.08em;
+}
+
+a:hover {
+	color: var(--sky-800);
+}
+
+:focus-visible {
+	outline: 3px solid var(--sky-500);
+	outline-offset: 3px;
+	border-radius: 4px;
+}
+
+::selection {
+	background: var(--sky-200);
+	color: var(--ink);
+}
+
+/* --- Headings --------------------------------------------------------- */
+
 h1,
 h2,
-h3,
-h4,
-h5,
-h6 {
-	margin: 0 0 0.5rem 0;
-	color: rgb(var(--black));
-	line-height: 1.2;
-}
-h1 {
-	font-size: 3.052em;
-}
-h2 {
-	font-size: 2.441em;
-}
 h3 {
-	font-size: 1.953em;
+	font-family: var(--display);
+	font-weight: 700;
+	line-height: 1.06;
+	letter-spacing: -0.03em;
+	text-wrap: balance;
 }
-h4 {
-	font-size: 1.563em;
+
+h1 {
+	font-size: clamp(2.5rem, 9.5vw, 3.5rem);
+	font-weight: 800;
+	letter-spacing: -0.04em;
 }
-h5 {
-	font-size: 1.25em;
+
+h2 {
+	font-size: clamp(1.875rem, 6.5vw, 2.25rem);
+	letter-spacing: -0.032em;
 }
-strong,
-b {
+
+h3 {
+	font-size: 1.1875rem;
+	line-height: 1.3;
+	letter-spacing: -0.02em;
+}
+
+p {
+	text-wrap: pretty;
+}
+
+p + p {
+	margin-top: 1em;
+}
+
+strong {
 	font-weight: 700;
 }
-a {
-	color: var(--accent);
-}
-a:hover {
-	color: var(--accent);
-}
-p {
-	margin-bottom: 1em;
-}
-.prose p {
-	margin-bottom: 2em;
-}
-textarea {
+
+/* --- Layout ----------------------------------------------------------- */
+
+/* Everything on this site lives in one column. There is no second column. */
+.col {
 	width: 100%;
-	font-size: 16px;
+	max-width: var(--col);
+	margin-inline: auto;
+	padding-inline: var(--gutter);
 }
-input {
-	font-size: 16px;
+
+section {
+	padding-block: var(--section-y);
 }
-table {
+
+/* Full-bleed colour blocks. Used sparingly so the blue lands as punctuation
+   instead of wallpaper. */
+.band {
+	background: var(--sky-400);
+	color: var(--ink);
+}
+
+.band--tint {
+	background: var(--tint);
+}
+
+.band a {
+	color: var(--ink);
+}
+
+/* --- Section headers -------------------------------------------------- */
+
+.eyebrow {
+	font-family: var(--mono);
+	font-size: 0.6875rem;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--sky-700);
+	margin-bottom: 0.875rem;
+}
+
+/* sky-800 on sky-400 is 3.5:1 — fine for a headline, not for 11px labels. */
+.band .eyebrow {
+	color: var(--ink);
+}
+
+/* One emoji per section header. It is a mark, not decoration. */
+.mark {
+	display: block;
+	font-size: 2.25rem;
+	line-height: 1;
+	margin-bottom: 0.875rem;
+	width: fit-content;
+}
+
+.lede {
+	margin-top: 1.125rem;
+}
+
+/* --- Rules ------------------------------------------------------------ */
+
+.rule {
+	border: 0;
+	border-top: 1px solid var(--sky-200);
+	margin-block: 1.75rem;
+}
+
+.rule--strong {
+	border-top: 2px solid var(--sky-500);
+}
+
+/* --- The itemised row: label · dotted leader · value ------------------- */
+
+.rows {
+	list-style: none;
+	padding: 0;
+	margin-top: 1.75rem;
+}
+
+.row {
+	display: flex;
+	align-items: baseline;
+	gap: 0.5rem;
+	padding: 0.5rem 0.625rem;
+	border-radius: 0.4rem;
+}
+
+/* Alternating receipt bands. */
+.rows > .row:nth-child(odd) {
+	background: var(--tint);
+}
+
+/* A drawn check, not the ✅ emoji. Thirteen green boxes running down an
+   otherwise all-blue page fought the palette and won. There is plenty of
+   emoji elsewhere; this list is drawn with the same pen as everything else. */
+.row__glyph {
+	flex: none;
+	width: 1.05rem;
+	font-size: 1.0625rem;
+	font-weight: 700;
+	line-height: 1.45;
+	color: var(--sky-500);
+	text-align: center;
+}
+
+.row--no .row__glyph {
+	color: var(--ink-faint);
+	font-weight: 400;
+}
+
+.row__label {
+	font-size: 1rem;
+	line-height: 1.45;
+}
+
+/* The leader that ties a label to its number. */
+.row__dots {
+	flex: 1 1 1.5rem;
+	min-width: 1.5rem;
+	align-self: center;
+	height: 0;
+	border-bottom: 2px dotted var(--sky-200);
+	transform-origin: left;
+}
+
+.row__value {
+	flex: none;
+	font-family: var(--mono);
+	font-size: 0.875rem;
+	font-variant-numeric: tabular-nums;
+	color: var(--sky-700);
+	white-space: nowrap;
+}
+
+.row--no .row__label {
+	color: var(--ink-soft);
+}
+
+.row--no .row__value {
+	color: var(--ink-faint);
+}
+
+.row--total {
+	background: none !important;
+	padding-top: 1rem;
+}
+
+.row--total .row__label {
+	font-family: var(--mono);
+	font-size: 0.6875rem;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--sky-700);
+}
+
+.row--total .row__value {
+	font-family: var(--display);
+	font-size: 2.25rem;
+	font-weight: 800;
+	letter-spacing: -0.035em;
+	color: var(--ink);
+}
+
+/* --- Stickers, pills, tags -------------------------------------------- */
+
+/* Lemon is the loudest thing on the page, so it is rationed to a handful of
+   appearances: the hero price, the rush tag, the receipt total. */
+.sticker {
+	display: inline-block;
+	background: var(--lemon);
+	color: var(--ink);
+	font-family: var(--display);
+	font-weight: 800;
+	letter-spacing: -0.03em;
+	padding: 0.15em 0.5em;
+	border-radius: 0.5rem;
+	rotate: -2.5deg;
+}
+
+.tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3rem;
+	background: var(--lemon);
+	color: var(--ink);
+	font-family: var(--mono);
+	font-size: 0.625rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	padding: 0.3rem 0.55rem;
+	border-radius: 100px;
+	white-space: nowrap;
+}
+
+/* --- Highlighter swipe ------------------------------------------------ */
+
+/* Sits behind two or three words on the entire page. Skewed and slightly
+   over-run so it reads as a marker, not a rectangle. */
+.swipe {
+	position: relative;
+	white-space: nowrap;
+}
+
+.swipe::before {
+	content: "";
+	position: absolute;
+	inset: 0.12em -0.14em 0.06em;
+	background: var(--sky-200);
+	border-radius: 0.2em 0.6em 0.3em 0.5em;
+	rotate: -1.2deg;
+	z-index: -1;
+	transform-origin: left center;
+}
+
+.swipe--lemon::before {
+	background: var(--lemon);
+}
+
+/* --- Buttons ---------------------------------------------------------- */
+
+.btn {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.15rem;
 	width: 100%;
+	padding: 1rem 1.25rem;
+	/* sky-700, not sky-500: white on sky-500 is only 2.8:1 and fails AA.
+	   This is the most saturated thing on the page, which is correct — it
+	   is also the most important. */
+	background: var(--sky-700);
+	color: #fff;
+	font-family: var(--display);
+	font-size: 1.125rem;
+	font-weight: 700;
+	letter-spacing: -0.02em;
+	text-align: center;
+	text-decoration: none;
+	border: 0;
+	border-radius: 1rem;
+	box-shadow: var(--press);
+	transition:
+		box-shadow 120ms ease,
+		translate 120ms ease,
+		background-color 120ms ease;
 }
-img {
-	max-width: 100%;
-	height: auto;
-	border-radius: 8px;
+
+.btn:hover {
+	background: var(--sky-800);
+	color: #fff;
+	box-shadow: var(--press-hover);
+	translate: 0 -2px;
 }
-code {
-	padding: 2px 5px;
-	background-color: rgb(var(--gray-light));
-	border-radius: 2px;
+
+.btn:active {
+	box-shadow: 0 0 0 var(--sky-800);
+	translate: 0 4px;
 }
-pre {
-	padding: 1.5em;
-	border-radius: 8px;
+
+/* On the bright blue band the buttons invert to white paper. */
+.btn--paper {
+	background: var(--paper);
+	color: var(--ink);
+	box-shadow: 0 4px 0 var(--sky-700);
 }
-pre > code {
-	all: unset;
+
+.btn--paper:hover {
+	background: var(--paper);
+	color: var(--ink);
+	box-shadow: 0 6px 0 var(--sky-700);
 }
-blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0px;
-	font-size: 1.333em;
+
+.btn__sub {
+	font-family: var(--mono);
+	font-size: 0.6875rem;
+	font-weight: 500;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	opacity: 0.72;
 }
-hr {
-	border: none;
-	border-top: 1px solid rgb(var(--gray-light));
+
+.btns {
+	display: grid;
+	gap: 0.875rem;
+	margin-top: 1.75rem;
 }
-@media (max-width: 720px) {
-	body {
-		font-size: 18px;
+
+@media (min-width: 34rem) {
+	.btns--two {
+		grid-template-columns: 1fr 1fr;
 	}
-	main {
-		padding: 1em;
-	}
+}
+
+/* --- Cards ------------------------------------------------------------ */
+
+.card {
+	border: 1px solid var(--sky-200);
+	border-radius: var(--radius);
+	padding: 1.375rem;
+	background: var(--paper);
+}
+
+.card--pick {
+	border: 2px solid var(--sky-500);
+}
+
+.note {
+	background: var(--tint);
+	border-left: 3px solid var(--sky-500);
+	border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+	padding: 1rem 1.125rem;
+	font-size: 1rem;
+}
+
+.band .note {
+	background: var(--paper);
+	border-left-color: var(--sky-600);
+}
+
+/* --- Text-message bubbles --------------------------------------------- */
+
+.thread {
+	display: grid;
+	gap: 0.625rem;
+	margin-top: 1.75rem;
+}
+
+.bubble {
+	max-width: 82%;
+	padding: 0.75rem 1rem;
+	border-radius: 1.25rem;
+	font-size: 1rem;
+	line-height: 1.45;
+}
+
+.bubble--out {
+	justify-self: end;
+	background: var(--sky-700); /* white-on-sky-500 fails AA */
+	color: #fff;
+	border-bottom-right-radius: 0.35rem;
+}
+
+.bubble--in {
+	justify-self: start;
+	background: var(--tint);
+	color: var(--ink);
+	border-bottom-left-radius: 0.35rem;
+	border: 1px solid var(--sky-100);
+}
+
+.bubble__time {
+	display: block;
+	font-family: var(--mono);
+	font-size: 0.6875rem;
+	margin-top: 0.3rem;
+	opacity: 0.72;
+}
+
+/* --- Timeline --------------------------------------------------------- */
+
+.timeline {
+	list-style: none;
+	padding: 0;
+	margin-top: 1.75rem;
+	display: grid;
+	gap: 1.125rem;
+	position: relative;
+}
+
+.timeline::before {
+	content: "";
+	position: absolute;
+	left: 3.62rem;
+	top: 0.55rem;
+	bottom: 0.55rem;
+	width: 1px;
+	background: var(--sky-200);
+}
+
+.timeline li {
+	display: grid;
+	grid-template-columns: 3.25rem 0.75rem 1fr;
+	align-items: baseline;
+	gap: 0 0.5rem;
+}
+
+.timeline time {
+	font-family: var(--mono);
+	font-size: 0.75rem;
+	font-variant-numeric: tabular-nums;
+	color: var(--sky-700);
+	text-align: right;
+	white-space: nowrap;
+}
+
+.timeline .dot {
+	justify-self: center;
+	width: 9px;
+	height: 9px;
+	border-radius: 100px;
+	background: var(--paper);
+	border: 2px solid var(--sky-400);
+	translate: 0 -0.15em;
+}
+
+.timeline li:last-child .dot {
+	background: var(--lemon);
+	border-color: var(--lemon);
+	width: 13px;
+	height: 13px;
+}
+
+.timeline p {
+	font-size: 1rem;
+	line-height: 1.45;
+}
+
+/* --- FAQ -------------------------------------------------------------- */
+
+/* Not an accordion. Every answer is visible on load, on purpose: this page
+   argues that assistants read plain sentences, so hiding eight of them
+   behind a disclosure triangle would refute the pitch. It also means a
+   skeptic on a phone never has to tap to find the answer he came for. */
+.faq {
+	margin-top: 1.75rem;
+	display: grid;
+}
+
+.faq > div {
+	border-top: 1px solid var(--sky-200);
+	padding-block: 1.375rem;
+}
+
+.faq > div:last-child {
+	border-bottom: 1px solid var(--sky-200);
+}
+
+.faq h3 {
+	font-size: 1.25rem;
+	color: var(--sky-800);
+	text-indent: -0.42em; /* hang the opening quote into the margin */
+}
+
+.faq p {
+	margin-top: 0.625rem;
+	font-size: 1.0625rem;
+}
+
+/* --- The hero receipt ------------------------------------------------- */
+
+/* A price card in a shop window: bright sky, torn along the bottom edge,
+   hung very slightly off-square so it reads as a physical object. */
+/* The scalloped edge is made of circles we KEEP, not circles we punch out.
+   Punching half-discs out of a strip always leaves the material between them
+   as a full-height spike — shark teeth, not a torn receipt. Keeping the discs
+   and cutting the gaps away gives round bumps with nothing sharp anywhere. */
+.receipt {
+	--tear: 11px;
+	background: var(--sky-400);
+	color: var(--ink);
+	border-radius: var(--radius) var(--radius) 0 0;
+	padding: 1.375rem 1.5rem 0.875rem;
+	margin-top: 2rem;
+	rotate: -0.55deg;
+	-webkit-mask:
+		radial-gradient(var(--tear) at 50% 0, #000 98%, #0000) repeat-x bottom /
+			calc(var(--tear) * 2) var(--tear),
+		linear-gradient(#000 0 0) top / 100% calc(100% - var(--tear) + 1px) no-repeat;
+	mask:
+		radial-gradient(var(--tear) at 50% 0, #000 98%, #0000) repeat-x bottom /
+			calc(var(--tear) * 2) var(--tear),
+		linear-gradient(#000 0 0) top / 100% calc(100% - var(--tear) + 1px) no-repeat;
+	padding-bottom: calc(0.875rem + var(--tear));
+}
+
+.receipt__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.75rem;
+	font-family: var(--mono);
+	font-size: 0.625rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--sky-800);
+}
+
+.receipt__price {
+	font-family: var(--display);
+	font-size: clamp(4.5rem, 21vw, 7.5rem);
+	font-weight: 800;
+	line-height: 0.92;
+	letter-spacing: -0.055em;
+	margin: 0.5rem 0 0.75rem;
+}
+
+/* No zebra striping inside the card — the blue is already the fill. */
+.receipt .row,
+.receipt .rows > .row:nth-child(odd) {
+	padding-inline: 0;
+	background: none;
+}
+
+.receipt .row__label,
+.receipt .row__value {
+	color: var(--ink);
+	font-family: var(--mono);
+	font-size: 0.75rem;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.receipt .row__dots {
+	border-bottom-color: var(--sky-800);
+	opacity: 0.32;
+}
+
+/* --- Trade chips ------------------------------------------------------ */
+
+/* The one place the reader sees their own trade on the page. */
+.chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+	margin-top: 1.5rem;
+	padding: 0;
+	list-style: none;
+}
+
+.chips li {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	border: 1px solid var(--sky-200);
+	background: var(--paper);
+	border-radius: 100px;
+	padding: 0.35rem 0.7rem;
+	font-size: 0.875rem;
+	line-height: 1.2;
+	white-space: nowrap;
+}
+
+/* --- Plans ------------------------------------------------------------ */
+
+/* Stacked, full width, never a grid. A 2-up inside a 656px column is just
+   two cramped columns. */
+.plans {
+	display: grid;
+	gap: 0.875rem;
+	margin-top: 1.75rem;
+}
+
+.plan__top {
+	display: flex;
+	align-items: baseline;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+}
+
+.plan__name {
+	font-family: var(--mono);
+	font-size: 0.6875rem;
+	letter-spacing: 0.13em;
+	text-transform: uppercase;
+	color: var(--sky-700);
+}
+
+.plan__dots {
+	flex: 1 1 1.5rem;
+	min-width: 1rem;
+	align-self: center;
+	height: 0;
+	border-bottom: 2px dotted var(--sky-200);
+}
+
+.plan__price {
+	font-family: var(--display);
+	font-size: 2rem;
+	font-weight: 800;
+	letter-spacing: -0.035em;
+	white-space: nowrap;
+}
+
+.plan__price small {
+	font-family: var(--mono);
+	font-size: 0.75rem;
+	font-weight: 500;
+	letter-spacing: 0;
+	color: var(--ink-soft);
+}
+
+.plan p {
+	margin-top: 0.5rem;
+	font-size: 1rem;
+	line-height: 1.5;
+}
+
+/* The $0 option is deliberately unstyled — no card, no border. It is the
+   most credible thing in the section precisely because it isn't sold. */
+.plan--none {
+	padding: 0.25rem 0.125rem;
+}
+
+/* --- The one big number ----------------------------------------------- */
+
+.zero {
+	text-align: center;
+	margin-top: 2rem;
+}
+
+.zero__n {
+	display: block;
+	font-family: var(--display);
+	font-size: clamp(6rem, 26vw, 9rem);
+	font-weight: 800;
+	line-height: 0.86;
+	letter-spacing: -0.06em;
+	color: var(--sky-600); /* sky-500 lands at 2.8:1 — under even large-text AA */
+}
+
+.zero__label {
+	display: block;
+	font-family: var(--mono);
+	font-size: 0.6875rem;
+	letter-spacing: 0.18em;
+	text-transform: uppercase;
+	color: var(--sky-700);
+	margin-top: 0.75rem;
+}
+
+/* --- Mocks: the Google map pack, and an assistant's answer ------------- */
+
+.mock {
+	border: 1px solid var(--sky-200);
+	border-radius: var(--radius);
+	background: var(--paper);
+	overflow: hidden;
+	margin-top: 1.75rem;
+}
+
+.mock__bar {
+	font-family: var(--mono);
+	font-size: 0.75rem;
+	color: var(--ink-soft);
+	background: var(--tint);
+	border-bottom: 1px solid var(--sky-200);
+	padding: 0.6rem 0.875rem;
+}
+
+.mock__row {
+	display: flex;
+	align-items: center;
+	gap: 0.625rem;
+	padding: 0.75rem 0.875rem;
+	border-bottom: 1px solid var(--sky-100);
+	font-size: 0.9375rem;
+}
+
+.mock__row:last-child {
+	border-bottom: 0;
+}
+
+.mock__row--you {
+	background: var(--sky-100);
+	font-weight: 700;
+}
+
+.mock__row span:last-child {
+	margin-left: auto;
+	font-family: var(--mono);
+	font-size: 0.75rem;
+	color: var(--ink-soft);
+	white-space: nowrap;
+}
+
+.mock__ghost {
+	height: 0.55rem;
+	border-radius: 100px;
+	background: var(--sky-100);
+}
+
+.mock__answer {
+	padding: 0.875rem;
+	font-size: 0.9375rem;
+	line-height: 1.5;
+}
+
+.mock__answer b {
+	color: var(--sky-700);
+}
+
+/* --- The empty testimonial box ---------------------------------------- */
+
+/* We are new. Rather than invent five-star reviews, we leave the space
+   they would occupy visibly, honestly empty. */
+.empty {
+	margin-top: 1.75rem;
+	border: 2px dashed var(--sky-200);
+	border-radius: var(--radius);
+	padding: 2rem 1rem;
+	text-align: center;
+}
+
+.empty__face {
+	font-size: 2rem;
+	line-height: 1;
+}
+
+.empty__cap {
+	display: block;
+	font-family: var(--mono);
+	font-size: 0.75rem;
+	color: var(--ink-soft);
+	margin-top: 0.75rem;
+}
+
+/* --- The struck-out competitor quote ---------------------------------- */
+
+.quoted {
+	margin-top: 1.5rem;
+	display: grid;
+	gap: 0.3rem;
+}
+
+.quoted__row {
+	display: flex;
+	align-items: baseline;
+	gap: 0.5rem;
+	font-family: var(--mono);
+	font-size: 0.9375rem;
+	color: var(--ink-faint);
+}
+
+.quoted__row .row__dots {
+	border-bottom-color: var(--sky-100);
+}
+
+.quoted__row s {
+	text-decoration-color: var(--ink-faint);
+	text-decoration-thickness: 1px;
+}
+
+.quoted__total {
+	font-size: 1.75rem;
+	font-family: var(--display);
+	font-weight: 700;
+	letter-spacing: -0.03em;
+	color: var(--ink-faint);
+}
+
+.quoted__ours {
+	font-family: var(--display);
+	font-size: clamp(2.25rem, 8vw, 3rem);
+	font-weight: 800;
+	letter-spacing: -0.04em;
+	color: var(--ink);
+	margin-top: 1.25rem;
+}
+
+/* --- Scalloped receipt tear ------------------------------------------- */
+
+.tear-b {
+	--tear: 11px;
+	-webkit-mask:
+		radial-gradient(var(--tear) at 50% 0, #000 98%, #0000) repeat-x bottom /
+			calc(var(--tear) * 2) var(--tear),
+		linear-gradient(#000 0 0) top / 100% calc(100% - var(--tear) + 1px) no-repeat;
+	mask:
+		radial-gradient(var(--tear) at 50% 0, #000 98%, #0000) repeat-x bottom /
+			calc(var(--tear) * 2) var(--tear),
+		linear-gradient(#000 0 0) top / 100% calc(100% - var(--tear) + 1px) no-repeat;
+	padding-bottom: calc(var(--section-y) + var(--tear));
+}
+
+.tear-t {
+	--tear: 11px;
+	-webkit-mask:
+		radial-gradient(var(--tear) at 50% 100%, #000 98%, #0000) repeat-x top /
+			calc(var(--tear) * 2) var(--tear),
+		linear-gradient(#000 0 0) bottom / 100% calc(100% - var(--tear) + 1px) no-repeat;
+	mask:
+		radial-gradient(var(--tear) at 50% 100%, #000 98%, #0000) repeat-x top /
+			calc(var(--tear) * 2) var(--tear),
+		linear-gradient(#000 0 0) bottom / 100% calc(100% - var(--tear) + 1px) no-repeat;
+	padding-top: calc(var(--section-y) + var(--tear));
+}
+
+/* --- Atmosphere ------------------------------------------------------- */
+
+/* A sky wash bleeding down from the top of the page, and a whisper of grain
+   over the whole thing so the white reads as paper rather than as #FFF. */
+.sky-wash {
+	position: absolute;
+	inset: 0 0 auto;
+	height: 34rem;
+	background: linear-gradient(
+		180deg,
+		var(--sky-100) 0%,
+		color-mix(in srgb, var(--sky-100) 45%, transparent) 38%,
+		transparent 100%
+	);
+	pointer-events: none;
+	z-index: -2;
+}
+
+.grain {
+	position: fixed;
+	inset: 0;
+	pointer-events: none;
+	z-index: -1;
+	opacity: 0.035;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --- Utilities -------------------------------------------------------- */
+
+.mono {
+	font-family: var(--mono);
+	font-size: 0.8125rem;
+	letter-spacing: 0.02em;
+	color: var(--ink-soft);
+}
+
+.center {
+	text-align: center;
+}
+
+.fine {
+	font-size: 0.875rem;
+	line-height: 1.5;
+	color: var(--ink-soft);
+}
+
+/* --ink-soft is only 2.6:1 on the bright bands, so fine print goes full ink
+   there and leans on size alone to stay quiet. */
+.band .fine {
+	color: var(--ink);
+	opacity: 0.85;
 }
 
 .sr-only {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	position: absolute !important;
-	height: 1px;
+	position: absolute;
 	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
 	overflow: hidden;
-	/* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-	clip: rect(1px 1px 1px 1px);
-	/* maybe deprecated but we need to support legacy browsers */
-	clip: rect(1px, 1px, 1px, 1px);
-	/* modern browsers, clip-path works inwards from each corner */
 	clip-path: inset(50%);
-	/* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
 	white-space: nowrap;
+	border: 0;
+}
+
+/* --- Motion ----------------------------------------------------------- */
+
+/* All CSS. There is no JavaScript on this page, which is partly a flex and
+   partly because there is genuinely nothing here that needs it. */
+
+@media (prefers-reduced-motion: no-preference) {
+	@keyframes rise {
+		from {
+			opacity: 0;
+			translate: 0 14px;
+		}
+		to {
+			opacity: 1;
+			translate: 0 0;
+		}
+	}
+
+	@keyframes draw {
+		from {
+			transform: scaleX(0);
+		}
+		to {
+			transform: scaleX(1);
+		}
+	}
+
+	@keyframes pop {
+		0% {
+			opacity: 0;
+			scale: 0.9;
+		}
+		60% {
+			scale: 1.03;
+		}
+		100% {
+			opacity: 1;
+			scale: 1;
+		}
+	}
+
+	@keyframes wiggle {
+		0%,
+		100% {
+			rotate: 0deg;
+		}
+		25% {
+			rotate: -9deg;
+		}
+		55% {
+			rotate: 8deg;
+		}
+		80% {
+			rotate: -3deg;
+		}
+	}
+
+	/* Hero load-in: staggered, once, on every browser. */
+	.reveal > * {
+		animation: rise 620ms cubic-bezier(0.2, 0.9, 0.25, 1) backwards;
+	}
+
+	.reveal > *:nth-child(1) {
+		animation-delay: 60ms;
+	}
+	.reveal > *:nth-child(2) {
+		animation-delay: 150ms;
+	}
+	.reveal > *:nth-child(3) {
+		animation-delay: 230ms;
+	}
+	.reveal > *:nth-child(4) {
+		animation-delay: 310ms;
+	}
+	.reveal > *:nth-child(5) {
+		animation-delay: 390ms;
+	}
+	.reveal > *:nth-child(6) {
+		animation-delay: 470ms;
+	}
+
+	.pop {
+		animation: pop 700ms cubic-bezier(0.2, 0.9, 0.25, 1) 260ms backwards;
+	}
+
+	.swipe::before {
+		animation: draw 460ms cubic-bezier(0.2, 0.9, 0.25, 1) 520ms backwards;
+	}
+
+	.mark:hover {
+		animation: wiggle 520ms ease;
+	}
+
+	/* Scroll-driven. Progressive enhancement only — where this isn't
+	   supported the page simply renders finished, which is fine.
+
+	   Two rules learned the hard way:
+	   1. Reveal individual items, never their container. A container taller
+	      than the viewport fades as one slab, and anything that leaves an
+	      1,800px block of text sitting at opacity 0 is a bug waiting to
+	      happen on somebody's phone.
+	   2. Finish inside the `entry` phase. Ranges that run into `cover` may
+	      never complete for elements near the end of the document, which
+	      would strand them half-transparent. */
+	@supports (animation-timeline: view()) {
+		.rows > .row,
+		.timeline > li,
+		.thread > .bubble,
+		.plans > *,
+		.faq > div,
+		.chips,
+		.mock,
+		.empty,
+		.quoted,
+		.zero {
+			animation: rise 420ms linear both;
+			animation-timeline: view();
+			animation-range: entry 8% entry 62%;
+		}
+
+		.row__dots {
+			animation: draw 400ms linear both;
+			animation-timeline: view();
+			animation-range: entry 14% entry 70%;
+		}
+	}
 }

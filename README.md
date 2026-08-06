@@ -1,64 +1,69 @@
-# Astro Starter Kit: Blog
+# The Basic Page
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/astro-blog-starter-template)
+The marketing site for [thebasicpage.com](https://thebasicpage.com) — a flat-fee $499
+one-page website for small businesses, live the same business day.
 
-![Astro Template Preview](https://github.com/withastro/astro/assets/2244813/ff10799f-a816-4703-b967-c78997e8323d)
+It is one page. That is not a limitation of the build, it's the argument: the site is
+supposed to be a demo of the product it sells.
 
-<!-- dash-content-start -->
+## ⚠️ The one thing that needs filling in
 
-Create a blog with Astro and deploy it on Cloudflare Workers as a [static website](https://developers.cloudflare.com/workers/static-assets/).
+`CONTACT.phone` in [`src/consts.ts`](src/consts.ts) is **deliberately empty**.
 
-Features:
+The entire pitch is "text a human", so a placeholder `(555)` number would have been the
+single lie on an otherwise scrupulously honest page. Put the real number in and the text
+button, the `tel:` links in the hero and footer, and the `telephone` field in the
+structured data all switch on by themselves. Format it however you want it displayed:
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
-- ✅ Built-in Observability logging
-
-<!-- dash-content-end -->
-
-## Getting Started
-
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
-
-```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/astro-blog-starter-template
+```ts
+export const CONTACT = { email: "hi@thebasicpage.com", phone: "(705) 555-0142" } as const;
 ```
 
-A live public deployment of this template is available at [https://astro-blog-starter-template.templates.workers.dev](https://astro-blog-starter-template.templates.workers.dev)
+Also confirm `hi@thebasicpage.com` actually receives mail before launch.
 
-## 🚀 Project Structure
+## Running it
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+```bash
+npm install && npm run dev
+```
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Dev server on `localhost:4321` |
+| `npm run build` | Production build into `dist/` |
+| `npm run preview` | Build, then serve through Wrangler as Cloudflare will |
+| `npm run deploy` | Deploy to Cloudflare Workers |
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+## Where things live
 
-Any static assets, like images, can be placed in the `public/` directory.
+| Path | What's in it |
+| --- | --- |
+| `src/pages/index.astro` | The whole site. Every section, in order. |
+| `src/consts.ts` | Contact details, prices, the monthly plans. Change a price once, here. |
+| `src/faq.ts` | The questions. Renders the FAQ **and** generates the `FAQPage` structured data, so the two can't drift. |
+| `src/styles/global.css` | Design tokens and every component. |
+| `src/components/BaseHead.astro` | Meta tags, Open Graph, and the JSON-LD. |
+| `public/fonts/` | Self-hosted, subset. |
+| `scripts/` | How the fonts were fetched and subset — re-run if the type changes. |
 
-## 🧞 Commands
+## Notes for whoever edits this next
 
-All commands are run from the root of the project, from a terminal:
+- **No JavaScript ships.** The reveals are CSS scroll-driven animations behind an
+  `@supports` check, so browsers without them just render the page finished. Reveal
+  individual items, never a container — a faded-out container taller than the viewport
+  is an invisible wall of text waiting to happen.
+- **The FAQ is not an accordion, on purpose.** The page argues that assistants read plain
+  sentences; hiding twelve answers behind a disclosure triangle would refute it.
+- **Colour is load-bearing.** `--ink` (`#093f5e`) is the lightest, bluest ink that still
+  clears WCAG AA on the bright `--sky-400` bands (5.2:1) as well as on white (11.2:1).
+  White text on `--sky-500` is only 2.8:1 and fails — that's why buttons and outgoing
+  message bubbles are `--sky-700`.
+- **Warm accents are rationed.** Lemon appears on the hero total, the receipt total, and
+  the one-business-hour tag. That scarcity is why the price is impossible to miss.
+- **No invented numbers.** There are deliberately no "loads in 0.4s / weighs 41 KB"
+  claims. On a page whose whole position is itemised honesty, one checkable false number
+  would undo the rest. If you add a stat, measure it first.
 
-| Command                           | Action                                           |
-| :-------------------------------- | :----------------------------------------------- |
-| `npm install`                     | Installs dependencies                            |
-| `npm run dev`                     | Starts local dev server at `localhost:4321`      |
-| `npm run build`                   | Build your production site to `./dist/`          |
-| `npm run preview`                 | Preview your build locally, before deploying     |
-| `npm run astro ...`               | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help`         | Get help using the Astro CLI                     |
-| `npm run build && npm run deploy` | Deploy your production site to Cloudflare        |
-| `npm wrangler tail`               | View real-time logs for all Workers              |
+## Stack
 
-## 👀 Want to learn more?
-
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
-
-## Credit
-
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+Astro 5, deployed to Cloudflare Workers. No UI framework, no CSS framework, no CMS.
