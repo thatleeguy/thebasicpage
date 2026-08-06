@@ -1,0 +1,193 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import Logo from "../../components/Logo.astro";
+import { CONTACT, PRICE, SITE_TITLE } from "../../consts";
+import { TRADES } from "../../data/trades";
+
+// The index of every sample page. Styled in our own design system rather than a
+// client's, because this one is ours: it is the thing you send a prospect who
+// says "what would mine look like?".
+
+const GROUPS = [
+	{
+		heading: "Service businesses",
+		note: "Somebody has a problem right now and needs to reach a human. The whole page points at the phone.",
+		items: TRADES.map((t) => ({
+			href: `/demo/service/${t.slug}`,
+			emoji: t.emoji,
+			name: t.trade,
+			sub: t.business,
+		})),
+	},
+	{
+		heading: "Property and finance",
+		note: "Longer decisions, bigger numbers. These lead with a mailing list so you stay in touch until they are ready.",
+		items: [
+			{ href: "/demo/realestate", emoji: "🏡", name: "Real estate agent", sub: "Hollis & Co." },
+			{
+				href: "/demo/mortgage-broker",
+				emoji: "🏦",
+				name: "Mortgage broker",
+				sub: "Northrock Mortgage",
+			},
+		],
+	},
+	{
+		heading: "Newsletters and shows",
+		note: "One job: get the email address. Each comes in three colourways.",
+		items: [
+			{ href: "/demo/newsletter", emoji: "✉️", name: "Newsletter, light", sub: "Open Early" },
+			{ href: "/demo/newsletter/dark", emoji: "🌙", name: "Newsletter, dark", sub: "Open Early" },
+			{
+				href: "/demo/newsletter/purple",
+				emoji: "🪻",
+				name: "Newsletter, purple grey",
+				sub: "Open Early",
+			},
+			{ href: "/demo/podcast", emoji: "🎙️", name: "Podcast, light", sub: "The Back Room" },
+			{ href: "/demo/podcast/dark", emoji: "🎧", name: "Podcast, dark", sub: "The Back Room" },
+			{ href: "/demo/podcast/clay", emoji: "🧱", name: "Podcast, clay", sub: "The Back Room" },
+		],
+	},
+];
+
+const count = GROUPS.reduce((n, g) => n + g.items.length, 0);
+const mailto = `mailto:${CONTACT.email}?subject=${encodeURIComponent("I'd like a basic page")}`;
+---
+
+<!doctype html>
+<html lang="en-CA">
+	<head>
+		<BaseHead
+			title={`Sample pages · ${SITE_TITLE}`}
+			description={`${count} example one-page websites, one for each kind of small business we build for. Every one of them is a $499 page.`}
+		/>
+	</head>
+	<body>
+		<div class="sky-wash" aria-hidden="true"></div>
+		<div class="grain" aria-hidden="true"></div>
+
+		<main>
+			<section class="col reveal">
+				<div class="brandline">
+					<Logo size={26} wordmark />
+					<span class="brandline__meta">Sample pages</span>
+				</div>
+
+				<h1>What yours could look like.</h1>
+				<p class="lede">
+					{count} sample pages, one for each kind of business we build for. They are all fictional, and
+					they are all the same ${PRICE.build} page underneath. Yours would say your name, your
+					services and your phone number, and it would be live the same business day.
+				</p>
+
+				<div class="btns">
+					<a class="btn" href={mailto}>
+						✉️ {CONTACT.email}
+						<span class="btn__sub">tell us your trade and your town</span>
+					</a>
+				</div>
+			</section>
+
+			{
+				GROUPS.map((g) => (
+					<section class="col">
+						<h2>{g.heading}</h2>
+						<p class="lede">{g.note}</p>
+						<ul class="demolist">
+							{g.items.map((i) => (
+								<li>
+									<a href={i.href}>
+										<span class="demolist__emoji" aria-hidden="true">
+											{i.emoji}
+										</span>
+										<span class="demolist__text">
+											<strong>{i.name}</strong>
+											<small>{i.sub}</small>
+										</span>
+										<span class="demolist__go" aria-hidden="true">
+											→
+										</span>
+									</a>
+								</li>
+							))}
+						</ul>
+					</section>
+				))
+			}
+
+			<section class="col">
+				<p class="fine">
+					Every business on these pages is made up. The phone numbers are in the 555-01 range, which
+					is reserved for fiction and cannot ring anybody. <a href="/">Back to the real page</a>.
+				</p>
+			</section>
+		</main>
+
+		<footer class="col center" style="padding-block:2rem 4rem">
+			<Logo size={30} class="footer-logo" />
+			<p class="fine" style="margin-top:1rem">
+				{SITE_TITLE} · <a href={mailto}>{CONTACT.email}</a>
+			</p>
+		</footer>
+
+		<style>
+			.demolist {
+				list-style: none;
+				padding: 0;
+				margin-top: 1.5rem;
+				display: grid;
+				gap: 0.5rem;
+			}
+
+			.demolist a {
+				display: flex;
+				align-items: center;
+				gap: 0.875rem;
+				padding: 0.875rem 1rem;
+				border: 1px solid var(--sky-200);
+				border-radius: var(--radius-sm);
+				background: var(--paper);
+				text-decoration: none;
+				color: var(--ink);
+				transition:
+					border-color 140ms ease,
+					translate 140ms ease;
+			}
+
+			.demolist a:hover {
+				border-color: var(--sky-500);
+				translate: 0 -1px;
+			}
+
+			.demolist__emoji {
+				font-size: 1.375rem;
+				line-height: 1;
+				flex: none;
+			}
+
+			.demolist__text {
+				min-width: 0;
+			}
+
+			.demolist__text strong {
+				display: block;
+				font-family: var(--display);
+				font-size: 1.0625rem;
+				letter-spacing: -0.02em;
+			}
+
+			.demolist__text small {
+				display: block;
+				font-size: 0.8125rem;
+				color: var(--ink-soft);
+			}
+
+			.demolist__go {
+				margin-left: auto;
+				color: var(--sky-500);
+				font-size: 1.125rem;
+			}
+		</style>
+	</body>
+</html>

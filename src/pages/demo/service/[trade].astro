@@ -1,0 +1,633 @@
+---
+import Demo from "../../../layouts/Demo.astro";
+import { TRADES, type Trade } from "../../../data/trades";
+
+// One template, thirteen businesses. A plumber's page and a bookkeeper's page
+// are the same shape: who you are, what you do, where you do it, proof, and an
+// unmissable way to get in touch. What actually differs is the copy, the colour
+// and whether the customer comes to you or you go to them, so those are data.
+export function getStaticPaths() {
+	return TRADES.map((t) => ({ params: { trade: t.slug }, props: { t } }));
+}
+
+interface Props {
+	t: Trade;
+}
+const { t } = Astro.props;
+const telHref = `tel:+1${t.phone.replace(/\D/g, "")}`;
+
+// Only businesses that travel to the customer get a place in the kicker. A
+// shop saying "local and nearby" tells you nothing, so it just says the trade.
+const place =
+	t.areaOrHours.mode === "area" ? t.areaOrHours.items[0].split(/\s+and\s+/i)[0] : null;
+const kicker = place ? `${t.trade} · around ${place}` : t.trade;
+---
+
+<Demo
+	title={`${t.business} · ${t.trade} demo site`}
+	description={`Sample one-page website for a ${t.trade.toLowerCase()}, built by The Basic Page. ${t.business} is a fictional business used to demonstrate the design.`}
+	business={t.business}
+	theme="realestate"
+>
+	<Fragment slot="head">
+		<link rel="preload" href="/fonts/sora.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+	</Fragment>
+
+	<div class="sv" style={`--brand:${t.brand}; --tint:${t.tint}`}>
+		<header class="bar">
+			<div class="bar__brand">
+				<span class="bar__emoji" aria-hidden="true">{t.emoji}</span>
+				<span>
+					<strong>{t.business}</strong>
+					<small>{t.tagline}</small>
+				</span>
+			</div>
+			<a class="btn btn--sm" href={telHref}>{t.phone}</a>
+		</header>
+
+		<main>
+			<section class="hero">
+				<div class="hero__inner">
+					<p class="kicker">{kicker}</p>
+					<h1>{t.heroHeadline}</h1>
+					<p class="lede">{t.heroSub}</p>
+
+					<div class="cta">
+						<a class="btn btn--lg" href={telHref}>
+							{t.ctaPrimary}
+							<span class="btn__sub">{t.phone}</span>
+						</a>
+						<a class="btn btn--lg btn--ghost" href="#quote">Request a quote</a>
+					</div>
+					<p class="cta__note">{t.ctaNote}</p>
+
+					<ul class="trust">
+						{t.trust.map((x) => <li>{x}</li>)}
+					</ul>
+				</div>
+			</section>
+
+			<section class="stats">
+				{
+					t.stats.map((s) => (
+						<div>
+							<strong>{s.value}</strong>
+							<span>{s.label}</span>
+						</div>
+					))
+				}
+			</section>
+
+			<section class="wrap">
+				<h2>What we do</h2>
+				<div class="services">
+					{
+						t.services.map((s) => (
+							<article class="service">
+								<h3>{s.name}</h3>
+								<p>{s.blurb}</p>
+								{s.price && <p class="service__price">{s.price}</p>}
+							</article>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="wrap area">
+				<div>
+					<h2>{t.areaOrHours.heading}</h2>
+					<ul class={`area__list area__list--${t.areaOrHours.mode}`}>
+						{t.areaOrHours.items.map((i) => <li>{i}</li>)}
+					</ul>
+					<p class="area__note">{t.areaOrHours.note}</p>
+				</div>
+				<div class="map" role="img" aria-label="Map placeholder">
+					<svg viewBox="0 0 320 240" aria-hidden="true">
+						<rect width="320" height="240" fill="var(--tint)" />
+						<g stroke="var(--brand)" stroke-opacity=".18" stroke-width="2" fill="none">
+							<path d="M-10 70 L120 40 L210 96 L340 66" />
+							<path d="M-10 150 L90 130 L200 176 L340 142" />
+							<path d="M60 -10 L84 90 L52 250" />
+							<path d="M200 -10 L216 110 L248 250" />
+						</g>
+						<circle cx="160" cy="120" r="34" fill="var(--brand)" opacity=".12" />
+						<circle cx="160" cy="120" r="9" fill="var(--brand)" />
+					</svg>
+				</div>
+			</section>
+
+			<section class="wrap">
+				<h2>What people say</h2>
+				<div class="reviews">
+					{
+						t.reviews.map((r) => (
+							<figure class="review">
+								<div class="stars" aria-label="5 out of 5">
+									{[0, 1, 2, 3, 4].map(() => (
+										<svg viewBox="0 0 20 20" aria-hidden="true">
+											<path
+												fill="currentColor"
+												d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"
+											/>
+										</svg>
+									))}
+								</div>
+								<blockquote>{r.quote}</blockquote>
+								<figcaption>
+									<strong>{r.name}</strong>
+									<span>{r.detail}</span>
+								</figcaption>
+							</figure>
+						))
+					}
+				</div>
+			</section>
+
+			<section class="close" id="quote">
+				<div class="close__inner">
+					<h2>{t.closing.headline}</h2>
+					<p>{t.closing.blurb}</p>
+
+					<div class="close__actions">
+						<a class="btn btn--lg btn--onbrand" href={telHref}>
+							{t.ctaPrimary}
+							<span class="btn__sub">{t.phone}</span>
+						</a>
+					</div>
+
+					<form class="qform" id="qform" novalidate>
+						<label class="sr-only" for="q-name">Your name</label>
+						<input id="q-name" name="name" placeholder="Your name" autocomplete="name" required />
+						<label class="sr-only" for="q-contact">Phone or email</label>
+						<input id="q-contact" name="contact" placeholder="Phone or email" required />
+						<label class="sr-only" for="q-msg">What do you need?</label>
+						<textarea id="q-msg" name="message" rows="3" placeholder="What do you need?"></textarea>
+						<button class="btn btn--onbrand" type="submit">Send it over</button>
+					</form>
+					<p class="qform__msg" id="qmsg" role="status" hidden></p>
+				</div>
+			</section>
+		</main>
+	</div>
+
+	<style>
+		@font-face {
+			font-family: "Sora";
+			src: url("/fonts/sora.woff2") format("woff2");
+			font-weight: 400 700;
+			font-display: swap;
+		}
+		@font-face {
+			font-family: "DM Sans";
+			src: url("/fonts/dmsans.woff2") format("woff2");
+			font-weight: 400 700;
+			font-display: swap;
+		}
+
+		/* --brand and --tint are set per trade from data. Every pair was checked:
+		   white on --brand and --ink on --tint both clear AA. */
+		.sv {
+			--ink: #15202b;
+			--body: #4c5a68;
+			--line: #e3e8ee;
+			--paper: #ffffff;
+			font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+			color: var(--body);
+			background: var(--paper);
+			font-size: 1.0625rem;
+			line-height: 1.62;
+		}
+
+		h1,
+		h2,
+		h3 {
+			font-family: "Sora", ui-sans-serif, system-ui, sans-serif;
+			color: var(--ink);
+			font-weight: 600;
+			letter-spacing: -0.028em;
+			line-height: 1.14;
+			text-wrap: balance;
+		}
+		h1 {
+			font-size: clamp(2.125rem, 5vw, 3.25rem);
+			letter-spacing: -0.038em;
+		}
+		h2 {
+			font-size: clamp(1.5rem, 3vw, 2rem);
+			margin-bottom: 1.5rem;
+		}
+		h3 {
+			font-size: 1.0625rem;
+		}
+		p {
+			text-wrap: pretty;
+		}
+
+		.wrap {
+			max-width: 64rem;
+			margin-inline: auto;
+			padding: clamp(3rem, 6vw, 4.5rem) 1.5rem;
+		}
+
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+
+		/* --- Bar --- */
+		.bar {
+			display: flex;
+			align-items: center;
+			gap: 1rem;
+			justify-content: space-between;
+			padding: 0.875rem 1.5rem;
+			border-bottom: 1px solid var(--line);
+			background: var(--paper);
+		}
+		.bar__brand {
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+			min-width: 0;
+		}
+		.bar__emoji {
+			font-size: 1.5rem;
+			line-height: 1;
+		}
+		.bar__brand strong {
+			display: block;
+			font-family: "Sora", sans-serif;
+			font-size: 1.0625rem;
+			color: var(--ink);
+			letter-spacing: -0.02em;
+		}
+		.bar__brand small {
+			display: block;
+			font-size: 0.8125rem;
+			color: var(--body);
+		}
+
+		/* --- Buttons --- */
+		.btn {
+			display: inline-flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			background: var(--brand);
+			color: #fff;
+			font-family: "Sora", sans-serif;
+			font-weight: 600;
+			font-size: 0.9375rem;
+			padding: 0.7rem 1.1rem;
+			border: 1px solid transparent;
+			border-radius: 9px;
+			text-decoration: none;
+			cursor: pointer;
+			white-space: nowrap;
+			transition: filter 140ms ease;
+		}
+		.btn:hover {
+			filter: brightness(1.12);
+			color: #fff;
+		}
+		.btn--sm {
+			font-size: 0.875rem;
+			padding: 0.55rem 0.9rem;
+		}
+		.btn--lg {
+			font-size: 1.0625rem;
+			padding: 0.95rem 1.5rem;
+		}
+		.btn__sub {
+			font-family: "DM Sans", sans-serif;
+			font-weight: 400;
+			font-size: 0.75rem;
+			opacity: 0.85;
+			margin-top: 0.1rem;
+		}
+		.btn--ghost {
+			background: transparent;
+			color: var(--ink);
+			border-color: var(--line);
+		}
+		.btn--ghost:hover {
+			background: var(--tint);
+			color: var(--ink);
+			filter: none;
+		}
+		.btn--onbrand {
+			background: #fff;
+			color: var(--ink);
+		}
+		.btn--onbrand:hover {
+			color: var(--ink);
+		}
+
+		/* --- Hero --- */
+		.hero {
+			background:
+				radial-gradient(46rem 24rem at 12% -20%, var(--tint) 0%, transparent 68%),
+				linear-gradient(180deg, var(--tint), var(--paper));
+			border-bottom: 1px solid var(--line);
+		}
+		.hero__inner {
+			max-width: 64rem;
+			margin-inline: auto;
+			padding: clamp(3rem, 7vw, 5rem) 1.5rem;
+		}
+		.kicker {
+			font-size: 0.75rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			font-weight: 700;
+			color: var(--brand);
+			margin-bottom: 1rem;
+		}
+		.lede {
+			font-size: 1.125rem;
+			margin-top: 1rem;
+			max-width: 38rem;
+		}
+		.cta {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.75rem;
+			margin-top: 1.75rem;
+		}
+		.cta__note {
+			font-size: 0.875rem;
+			color: var(--body);
+			margin-top: 0.75rem;
+		}
+		.trust {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+			list-style: none;
+			padding: 0;
+			margin-top: 1.75rem;
+		}
+		.trust li {
+			background: var(--paper);
+			border: 1px solid var(--line);
+			border-radius: 100px;
+			padding: 0.35rem 0.8rem;
+			font-size: 0.8125rem;
+		}
+		.trust li::before {
+			content: "✓";
+			color: var(--brand);
+			font-weight: 700;
+			margin-right: 0.4rem;
+		}
+
+		/* --- Stats --- */
+		.stats {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			max-width: 64rem;
+			margin-inline: auto;
+			padding: 2rem 1.5rem;
+			gap: 1rem;
+			text-align: center;
+		}
+		.stats strong {
+			display: block;
+			font-family: "Sora", sans-serif;
+			font-size: clamp(1.5rem, 3.4vw, 2.125rem);
+			color: var(--brand);
+			font-weight: 600;
+			letter-spacing: -0.03em;
+		}
+		.stats span {
+			font-size: 0.8125rem;
+		}
+
+		/* --- Services --- */
+		.services {
+			display: grid;
+			gap: 1rem;
+		}
+		@media (min-width: 44rem) {
+			.services {
+				grid-template-columns: repeat(2, 1fr);
+			}
+		}
+		.service {
+			border: 1px solid var(--line);
+			border-radius: 12px;
+			padding: 1.25rem;
+			background: var(--paper);
+		}
+		.service p {
+			margin-top: 0.4rem;
+			font-size: 0.9375rem;
+			line-height: 1.55;
+		}
+		.service__price {
+			font-family: "Sora", sans-serif;
+			font-weight: 600;
+			font-size: 0.875rem;
+			color: var(--brand);
+			margin-top: 0.6rem;
+		}
+
+		/* --- Area / hours --- */
+		.area {
+			display: grid;
+			gap: 2rem;
+			align-items: center;
+			background: var(--tint);
+			max-width: none;
+		}
+		.area > * {
+			max-width: 64rem;
+		}
+		@media (min-width: 46rem) {
+			.area {
+				grid-template-columns: 1fr 1fr;
+				gap: 3rem;
+				max-width: 64rem;
+			}
+		}
+		.area__list {
+			list-style: none;
+			padding: 0;
+			display: grid;
+			gap: 0.5rem;
+		}
+		.area__list--area {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+		.area__list li {
+			font-size: 0.9375rem;
+			padding-left: 1.4rem;
+			position: relative;
+		}
+		.area__list--area li::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0.6em;
+			width: 7px;
+			height: 7px;
+			border-radius: 100px;
+			background: var(--brand);
+		}
+		.area__list--hours li::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			top: 0.52em;
+			width: 9px;
+			height: 9px;
+			border: 2px solid var(--brand);
+			border-radius: 100px;
+		}
+		.area__note {
+			margin-top: 1rem;
+			font-size: 0.875rem;
+		}
+		.map {
+			border-radius: 12px;
+			overflow: hidden;
+			border: 1px solid var(--line);
+			background: var(--paper);
+		}
+		.map svg {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+
+		/* --- Reviews --- */
+		.reviews {
+			display: grid;
+			gap: 1rem;
+		}
+		@media (min-width: 46rem) {
+			.reviews {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+		.review {
+			margin: 0;
+			border: 1px solid var(--line);
+			border-radius: 12px;
+			padding: 1.25rem;
+		}
+		.stars {
+			display: flex;
+			gap: 2px;
+			color: #e0a33a;
+			margin-bottom: 0.7rem;
+		}
+		.stars svg {
+			width: 14px;
+			height: 14px;
+		}
+		.review blockquote {
+			margin: 0;
+			font-size: 0.9375rem;
+			line-height: 1.6;
+		}
+		.review figcaption {
+			margin-top: 0.875rem;
+			font-size: 0.8125rem;
+		}
+		.review figcaption strong {
+			color: var(--ink);
+		}
+		.review figcaption span {
+			display: block;
+			opacity: 0.8;
+		}
+
+		/* --- Close --- */
+		.close {
+			background: var(--brand);
+			color: #fff;
+		}
+		.close__inner {
+			max-width: 40rem;
+			margin-inline: auto;
+			padding: clamp(3rem, 6vw, 4.5rem) 1.5rem;
+			text-align: center;
+		}
+		.close h2 {
+			color: #fff;
+		}
+		.close p {
+			opacity: 0.92;
+		}
+		.close__actions {
+			display: flex;
+			justify-content: center;
+			margin-top: 1.75rem;
+		}
+		.qform {
+			display: grid;
+			gap: 0.625rem;
+			margin-top: 1.75rem;
+			text-align: left;
+		}
+		@media (min-width: 34rem) {
+			.qform {
+				grid-template-columns: 1fr 1fr;
+			}
+			.qform textarea,
+			.qform button {
+				grid-column: 1 / -1;
+			}
+		}
+		.qform input,
+		.qform textarea {
+			font: inherit;
+			font-size: 1rem;
+			padding: 0.75rem 0.875rem;
+			border-radius: 9px;
+			border: 1px solid rgb(255 255 255 / 0.28);
+			background: rgb(255 255 255 / 0.12);
+			color: #fff;
+			width: 100%;
+		}
+		.qform input::placeholder,
+		.qform textarea::placeholder {
+			color: rgb(255 255 255 / 0.72);
+		}
+		.qform input:focus-visible,
+		.qform textarea:focus-visible {
+			outline: 2px solid #fff;
+			outline-offset: 1px;
+		}
+		.qform__msg {
+			margin-top: 0.875rem;
+			font-weight: 600;
+		}
+	</style>
+
+	<script is:inline>
+		// Demo only. A real build points this at the owner's inbox.
+		(function () {
+			var f = document.getElementById("qform");
+			var msg = document.getElementById("qmsg");
+			if (!f) return;
+			f.addEventListener("submit", function (e) {
+				e.preventDefault();
+				var name = f.querySelector("#q-name").value.trim();
+				var contact = f.querySelector("#q-contact").value.trim();
+				msg.hidden = false;
+				msg.textContent =
+					name && contact
+						? "Thanks " + name + ", we will be in touch today. (Demo form, nothing was sent.)"
+						: "Pop your name and a phone number or email in and we will get back to you.";
+				if (name && contact) f.reset();
+			});
+		})();
+	</script>
+</Demo>
