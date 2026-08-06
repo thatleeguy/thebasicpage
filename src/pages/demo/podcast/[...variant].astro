@@ -1,0 +1,685 @@
+---
+import Demo from "../../../layouts/Demo.astro";
+
+// Same construction as the newsletter demo: one file, three skins driven by
+// custom properties on a single wrapper. Uses Sora rather than Fraunces so the
+// two demos don't read as the same page with the colours swapped.
+export function getStaticPaths() {
+	return [
+		{ params: { variant: undefined }, props: { theme: "light" } },
+		{ params: { variant: "dark" }, props: { theme: "dark" } },
+		{ params: { variant: "clay" }, props: { theme: "clay" } },
+	];
+}
+
+const { theme } = Astro.props;
+
+const SHOW = "The Back Room";
+const TAGLINE =
+	"Long conversations with the people who actually run things. A new episode every Thursday, on video and in your ears.";
+
+const VARIANTS = [
+	{ slug: "light", label: "Light", href: "/demo/podcast" },
+	{ slug: "dark", label: "Dark", href: "/demo/podcast/dark" },
+	{ slug: "clay", label: "Clay", href: "/demo/podcast/clay" },
+];
+
+// Generic glyphs rather than reproductions of each platform's logo. The name
+// does the identifying; the icon is just a visual anchor.
+const PLATFORMS = [
+	{ name: "YouTube", icon: "video" },
+	{ name: "Spotify", icon: "wave" },
+	{ name: "Apple Podcasts", icon: "mic" },
+	{ name: "RSS", icon: "rss" },
+];
+
+const EPISODES = [
+	{
+		n: "48",
+		title: "The bakery that stopped opening on Mondays",
+		blurb:
+			"Closing a day a week put her margins up. We go through the actual numbers, including the two months it looked like a mistake.",
+		len: "58 min",
+		date: "14 Aug",
+	},
+	{
+		n: "47",
+		title: "Firing your biggest customer",
+		blurb:
+			"He was 40% of revenue and most of the stress. What happened to the business in the eighteen months afterwards.",
+		len: "1 hr 06",
+		date: "7 Aug",
+	},
+	{
+		n: "46",
+		title: "Nobody tells you about the second van",
+		blurb:
+			"The unglamorous mechanics of going from one crew to two: hiring, scheduling, and the month everything broke.",
+		len: "44 min",
+		date: "31 Jul",
+	},
+];
+
+const REVIEWS = [
+	{
+		quote:
+			"Finally a business podcast where the guest actually says how much money they make. No ads for mattresses, no forty minute intro.",
+		name: "gravelrider_88",
+		role: "Apple Podcasts",
+	},
+	{
+		quote:
+			"I listen to this on the drive between jobs. It is the only one where I have pulled over to write something down.",
+		name: "Kelly N.",
+		role: "YouTube",
+	},
+	{
+		quote:
+			"The episode on firing your biggest customer genuinely changed how I run my books. Six months later and I am not exaggerating.",
+		name: "marchetti.co",
+		role: "Spotify",
+	},
+	{
+		quote:
+			"Long, unedited, and better for it. You can tell nobody is trying to sell you a course at the end of it.",
+		name: "Dev P.",
+		role: "Apple Podcasts",
+	},
+];
+
+const titles = {
+	light: `${SHOW} · podcast demo (light)`,
+	dark: `${SHOW} · podcast demo (dark)`,
+	clay: `${SHOW} · podcast demo (clay)`,
+};
+---
+
+<Demo
+	title={titles[theme]}
+	description={`Sample one-page site for a podcast and YouTube channel, built by The Basic Page. ${SHOW} is a fictional show used to demonstrate the design.`}
+	business={SHOW}
+	theme="realestate"
+>
+	<Fragment slot="head">
+		<link rel="preload" href="/fonts/sora.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+	</Fragment>
+
+	<main class="pc" data-pc={theme}>
+		<section class="hero">
+			<!-- Cover art. Abstract rather than titled, so the show name isn't set
+			     twice at two different sizes right on top of itself. -->
+			<div class="cover" role="img" aria-label={`${SHOW} cover art`}>
+				<svg viewBox="0 0 220 220" aria-hidden="true">
+					<defs>
+						<linearGradient id="cov" x1="0" y1="0" x2="0.7" y2="1">
+							<stop offset="0" stop-color="var(--cover-a)" />
+							<stop offset="1" stop-color="var(--cover-b)" />
+						</linearGradient>
+					</defs>
+					<rect width="220" height="220" rx="26" fill="url(#cov)" />
+					<g fill="var(--cover-bar)">
+						<rect x="34" y="96" width="10" height="28" rx="5" />
+						<rect x="52" y="82" width="10" height="56" rx="5" />
+						<rect x="70" y="60" width="10" height="100" rx="5" />
+						<rect x="88" y="40" width="10" height="140" rx="5" />
+						<rect x="106" y="70" width="10" height="80" rx="5" />
+						<rect x="124" y="30" width="10" height="160" rx="5" />
+						<rect x="142" y="74" width="10" height="72" rx="5" />
+						<rect x="160" y="88" width="10" height="44" rx="5" />
+						<rect x="178" y="100" width="10" height="20" rx="5" />
+					</g>
+				</svg>
+			</div>
+
+			<h1>{SHOW}</h1>
+			<p class="tagline">{TAGLINE}</p>
+
+			<ul class="platforms">
+				{
+					PLATFORMS.map((p) => (
+						<li>
+							<a href="#" class="platform">
+								<svg class="platform__icon" viewBox="0 0 24 24" aria-hidden="true">
+									{p.icon === "video" && (
+										<g>
+											<rect x="1.5" y="4" width="21" height="16" rx="4.5" fill="currentColor" />
+											<path d="M10 8.6l6 3.4-6 3.4Z" fill="var(--bg)" />
+										</g>
+									)}
+									{p.icon === "wave" && (
+										<g fill="currentColor">
+											<rect x="3" y="10" width="2.6" height="4" rx="1.3" />
+											<rect x="7.4" y="7" width="2.6" height="10" rx="1.3" />
+											<rect x="11.8" y="4.5" width="2.6" height="15" rx="1.3" />
+											<rect x="16.2" y="8" width="2.6" height="8" rx="1.3" />
+											<rect x="20.6" y="10.5" width="2.6" height="3" rx="1.3" />
+										</g>
+									)}
+									{p.icon === "mic" && (
+										<g fill="currentColor">
+											<rect x="9" y="2" width="6" height="11" rx="3" />
+											<path d="M5.5 11a6.5 6.5 0 0 0 13 0h-2a4.5 4.5 0 0 1-9 0Z" />
+											<rect x="11" y="17.5" width="2" height="4.5" rx="1" />
+										</g>
+									)}
+									{p.icon === "rss" && (
+										<g fill="currentColor">
+											<circle cx="5.5" cy="18.5" r="2.5" />
+											<path d="M3 10.5a10.5 10.5 0 0 1 10.5 10.5h-3A7.5 7.5 0 0 0 3 13.5Z" />
+											<path d="M3 3.5A17.5 17.5 0 0 1 20.5 21h-3A14.5 14.5 0 0 0 3 6.5Z" />
+										</g>
+									)}
+								</svg>
+								{p.name}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+
+			<p class="stats">
+				<strong>48</strong> episodes ·
+				<strong>31k</strong> monthly listeners ·
+				<strong>4.9</strong> average rating
+			</p>
+		</section>
+
+		<section class="block">
+			<h2>Latest episodes</h2>
+			<ol class="eps">
+				{
+					EPISODES.map((e) => (
+						<li class="ep">
+							<a class="ep__play" href="#" aria-label={`Play episode ${e.n}`}>
+								<svg viewBox="0 0 24 24" aria-hidden="true">
+									<path d="M8.5 5.5l10 6.5-10 6.5Z" fill="currentColor" />
+								</svg>
+							</a>
+							<div class="ep__body">
+								<p class="ep__meta">
+									Episode {e.n} · {e.len} · {e.date}
+								</p>
+								<h3>{e.title}</h3>
+								<p class="ep__blurb">{e.blurb}</p>
+							</div>
+						</li>
+					))
+				}
+			</ol>
+		</section>
+
+		<section class="block">
+			<h2>What listeners say</h2>
+			<div class="reviews">
+				{
+					REVIEWS.map((r) => (
+						<figure class="review">
+							<div class="review__stars" aria-label="5 out of 5">
+								{[0, 1, 2, 3, 4].map(() => (
+									<svg viewBox="0 0 20 20" aria-hidden="true">
+										<path
+											fill="currentColor"
+											d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"
+										/>
+									</svg>
+								))}
+							</div>
+							<blockquote>{r.quote}</blockquote>
+							<figcaption>
+								<span class="review__name">{r.name}</span>
+								<span class="review__role">{r.role}</span>
+							</figcaption>
+						</figure>
+					))
+				}
+			</div>
+		</section>
+
+		<section class="signup-block">
+			<h2>Never miss one</h2>
+			<p class="signup-block__lede">
+				New episode every Thursday morning, in your inbox with the show notes and the links we
+				mention.
+			</p>
+
+			<!--
+				Same swap point as the newsletter demo. To go live with beehiiv,
+				replace the <form> and leave the wrapper alone:
+
+				  <div class="signup__slot">
+				    <iframe src="https://embeds.beehiiv.com/YOUR-ID"
+				            data-test-id="beehiiv-embed" frameborder="0" scrolling="no"
+				            style="width:100%;height:64px;border-radius:10px;background:transparent"></iframe>
+				  </div>
+			-->
+			<div class="signup__slot">
+				<form class="signup" id="pc-form" novalidate>
+					<label class="sr-only" for="pc-email">Email address</label>
+					<input
+						id="pc-email"
+						type="email"
+						inputmode="email"
+						autocomplete="email"
+						placeholder="you@example.com"
+						required
+					/>
+					<button type="submit">Subscribe free</button>
+				</form>
+			</div>
+			<p class="signup__msg" id="pc-msg" role="status" hidden></p>
+			<p class="signup-block__fine">Free. One email a week. Unsubscribe in a click.</p>
+		</section>
+
+		<nav class="variants" aria-label="Colour variants">
+			<span>This demo in:</span>
+			{
+				VARIANTS.map((v) => (
+					<a href={v.href} class:list={["variants__link", { "is-on": v.slug === theme }]}>
+						{v.label}
+					</a>
+				))
+			}
+		</nav>
+	</main>
+
+	<style>
+		@font-face {
+			font-family: "Sora";
+			src: url("/fonts/sora.woff2") format("woff2");
+			font-weight: 400 700;
+			font-display: swap;
+		}
+		@font-face {
+			font-family: "DM Sans";
+			src: url("/fonts/dmsans.woff2") format("woff2");
+			font-weight: 400 700;
+			font-display: swap;
+		}
+
+		/* --- Themes ---------------------------------------------------------
+		   The clay is #6B4436: a real mid tone that still carries secondary text
+		   at AA (5.6:1). Same rule as the newsletter's purple. Checked, not
+		   eyeballed. */
+		.pc[data-pc="light"] {
+			--bg: #fcfbf9;
+			--surface: #ffffff;
+			--text: #16151a;
+			--muted: #6a6772;
+			--border: #e8e5e0;
+			--accent: #16151a;
+			--accent-text: #fcfbf9;
+			--star: #d9a441;
+			--cover-a: #2c2b33;
+			--cover-b: #16151a;
+			--cover-bar: #fcfbf9;
+			--halo: radial-gradient(50rem 26rem at 50% -12%, #f1ede6 0%, transparent 70%);
+			--shadow: 0 1px 2px rgb(22 21 26 / 0.05), 0 12px 28px rgb(22 21 26 / 0.05);
+		}
+		.pc[data-pc="dark"] {
+			--bg: #0b0b0e;
+			--surface: #14141a;
+			--text: #f3f2f6;
+			--muted: #9c99a7;
+			--border: #25252e;
+			--accent: #f3f2f6;
+			--accent-text: #0b0b0e;
+			--star: #e0b45c;
+			--cover-a: #33323d;
+			--cover-b: #16161d;
+			--cover-bar: #f3f2f6;
+			--halo: radial-gradient(50rem 26rem at 50% -12%, #1b1b24 0%, transparent 70%);
+			--shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 14px 34px rgb(0 0 0 / 0.35);
+		}
+		.pc[data-pc="clay"] {
+			--bg: #6b4436;
+			--surface: #744b3b;
+			--text: #fbf6f2;
+			--muted: #e4cfc2;
+			--border: #825645;
+			--accent: #f0c9a8;
+			--accent-text: #3a2018;
+			--star: #f7d9a8;
+			--cover-a: #8a5a46;
+			--cover-b: #4e3227;
+			--cover-bar: #fbf6f2;
+			--halo: radial-gradient(50rem 26rem at 50% -12%, #7a5040 0%, transparent 70%);
+			--shadow: 0 1px 2px rgb(30 15 10 / 0.22), 0 14px 34px rgb(30 15 10 / 0.26);
+		}
+
+		.pc {
+			background: var(--bg);
+			background-image: var(--halo);
+			color: var(--text);
+			font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+			font-size: 1.0625rem;
+			line-height: 1.62;
+			padding: clamp(3.5rem, 8vw, 5.5rem) 1.5rem clamp(3rem, 6vw, 4.5rem);
+		}
+
+		h1,
+		h2,
+		h3 {
+			font-family: "Sora", ui-sans-serif, system-ui, sans-serif;
+			font-weight: 600;
+			letter-spacing: -0.03em;
+			line-height: 1.12;
+			text-wrap: balance;
+		}
+
+		/* --- Hero ----------------------------------------------------------- */
+		.hero {
+			max-width: 40rem;
+			margin-inline: auto;
+			text-align: center;
+		}
+
+		.cover {
+			width: clamp(140px, 32vw, 190px);
+			margin: 0 auto 1.75rem;
+			border-radius: 22px;
+			overflow: hidden;
+			box-shadow: var(--shadow);
+		}
+		.cover svg {
+			display: block;
+			width: 100%;
+			height: auto;
+		}
+
+		h1 {
+			font-size: clamp(2.25rem, 7vw, 3.5rem);
+			letter-spacing: -0.04em;
+		}
+
+		.tagline {
+			margin: 1.125rem auto 0;
+			max-width: 32rem;
+			font-size: 1.125rem;
+			color: var(--muted);
+			text-wrap: pretty;
+		}
+
+		/* --- Platform buttons (the primary call to action) ------------------- */
+		.platforms {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 0.625rem;
+			list-style: none;
+			padding: 0;
+			margin: 2rem 0 0;
+		}
+
+		.platform {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			background: var(--accent);
+			color: var(--accent-text);
+			font-weight: 600;
+			font-size: 0.9375rem;
+			padding: 0.7rem 1.1rem;
+			border-radius: 10px;
+			text-decoration: none;
+			transition: opacity 140ms ease;
+		}
+		.platform:hover {
+			opacity: 0.86;
+		}
+		.platform__icon {
+			width: 17px;
+			height: 17px;
+			flex: none;
+		}
+
+		.stats {
+			margin-top: 1.25rem;
+			font-size: 0.875rem;
+			color: var(--muted);
+		}
+		.stats strong {
+			color: var(--text);
+			font-weight: 600;
+		}
+
+		/* --- Blocks --------------------------------------------------------- */
+		.block {
+			max-width: 46rem;
+			margin: clamp(3.25rem, 7vw, 5rem) auto 0;
+		}
+
+		h2 {
+			font-size: clamp(1.375rem, 3.2vw, 1.75rem);
+			text-align: center;
+			margin-bottom: 1.75rem;
+		}
+
+		/* --- Episodes ------------------------------------------------------- */
+		.eps {
+			list-style: none;
+			padding: 0;
+			display: grid;
+			gap: 0.875rem;
+		}
+
+		.ep {
+			display: flex;
+			gap: 1rem;
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: 14px;
+			padding: 1.125rem 1.25rem;
+			box-shadow: var(--shadow);
+		}
+
+		.ep__play {
+			flex: none;
+			width: 2.75rem;
+			height: 2.75rem;
+			border-radius: 100px;
+			display: grid;
+			place-items: center;
+			background: var(--accent);
+			color: var(--accent-text);
+			text-decoration: none;
+			margin-top: 0.2rem;
+		}
+		.ep__play svg {
+			width: 18px;
+			height: 18px;
+			translate: 1px 0;
+		}
+		.ep__play:hover {
+			opacity: 0.86;
+		}
+
+		.ep__meta {
+			font-size: 0.8125rem;
+			color: var(--muted);
+			margin-bottom: 0.2rem;
+		}
+		.ep h3 {
+			font-size: 1.0625rem;
+		}
+		.ep__blurb {
+			margin-top: 0.4rem;
+			font-size: 0.9375rem;
+			line-height: 1.55;
+			color: var(--muted);
+			text-wrap: pretty;
+		}
+
+		/* --- Reviews -------------------------------------------------------- */
+		.reviews {
+			display: grid;
+			gap: 0.875rem;
+		}
+		@media (min-width: 44rem) {
+			.reviews {
+				grid-template-columns: 1fr 1fr;
+				gap: 1rem;
+			}
+		}
+
+		.review {
+			margin: 0;
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: 14px;
+			padding: 1.25rem;
+			box-shadow: var(--shadow);
+		}
+		.review__stars {
+			display: flex;
+			gap: 2px;
+			color: var(--star);
+			margin-bottom: 0.7rem;
+		}
+		.review__stars svg {
+			width: 14px;
+			height: 14px;
+		}
+		.review blockquote {
+			margin: 0;
+			font-size: 0.9375rem;
+			line-height: 1.6;
+			text-wrap: pretty;
+		}
+		.review figcaption {
+			margin-top: 0.875rem;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+			align-items: baseline;
+			font-size: 0.8125rem;
+		}
+		.review__name {
+			font-weight: 700;
+		}
+		.review__role {
+			color: var(--muted);
+		}
+
+		/* --- Signup --------------------------------------------------------- */
+		.signup-block {
+			max-width: 34rem;
+			margin: clamp(3.25rem, 7vw, 5rem) auto 0;
+			text-align: center;
+		}
+		.signup-block__lede {
+			color: var(--muted);
+			margin-top: 0.625rem;
+		}
+		.signup__slot {
+			max-width: 27rem;
+			margin: 1.75rem auto 0;
+		}
+		.signup {
+			display: flex;
+			gap: 0.5rem;
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: 12px;
+			padding: 0.375rem;
+			box-shadow: var(--shadow);
+		}
+		.signup input {
+			flex: 1 1 auto;
+			min-width: 0;
+			font: inherit;
+			font-size: 1rem;
+			padding: 0.7rem 0.75rem;
+			border: 0;
+			background: transparent;
+			color: var(--text);
+			border-radius: 8px;
+		}
+		.signup input::placeholder {
+			color: var(--muted);
+		}
+		.signup input:focus-visible {
+			outline: 2px solid var(--accent);
+		}
+		.signup button {
+			flex: none;
+			font: inherit;
+			font-weight: 600;
+			font-size: 0.9375rem;
+			padding: 0.7rem 1.125rem;
+			border: 0;
+			border-radius: 8px;
+			background: var(--accent);
+			color: var(--accent-text);
+			cursor: pointer;
+		}
+		.signup button:hover {
+			opacity: 0.86;
+		}
+		.signup__msg {
+			margin-top: 0.875rem;
+			font-size: 0.9375rem;
+			font-weight: 600;
+		}
+		.signup-block__fine {
+			margin-top: 0.875rem;
+			font-size: 0.8125rem;
+			color: var(--muted);
+		}
+
+		/* --- Variant switcher ----------------------------------------------- */
+		.variants {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			gap: 0.5rem;
+			margin-top: clamp(3rem, 6vw, 4.5rem);
+			font-size: 0.8125rem;
+			color: var(--muted);
+		}
+		.variants__link {
+			color: var(--text);
+			text-decoration: none;
+			border: 1px solid var(--border);
+			border-radius: 100px;
+			padding: 0.3rem 0.7rem;
+		}
+		.variants__link:hover {
+			border-color: var(--muted);
+		}
+		.variants__link.is-on {
+			background: var(--accent);
+			color: var(--accent-text);
+			border-color: var(--accent);
+		}
+
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+	</style>
+
+	<script is:inline>
+		// Demo only. Replacing the form with a beehiiv embed makes this redundant.
+		(function () {
+			var f = document.getElementById("pc-form");
+			var msg = document.getElementById("pc-msg");
+			if (!f) return;
+			f.addEventListener("submit", function (e) {
+				e.preventDefault();
+				var input = f.querySelector("input");
+				var ok = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value.trim());
+				msg.hidden = false;
+				msg.textContent = ok
+					? "You are subscribed. Next episode lands Thursday. (Demo form, nothing was sent.)"
+					: "That email does not look right. Have another go.";
+				if (ok) f.reset();
+			});
+		})();
+	</script>
+</Demo>
