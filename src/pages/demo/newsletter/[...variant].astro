@@ -1,0 +1,505 @@
+---
+import Demo from "../../../layouts/Demo.astro";
+
+// One page, three skins. Light, dark, and a mid purple-grey, all driven by
+// custom properties on a single wrapper so a prospect can be shown the same
+// layout in whichever one they like without maintaining three files.
+export function getStaticPaths() {
+	return [
+		{ params: { variant: undefined }, props: { theme: "light" } },
+		{ params: { variant: "dark" }, props: { theme: "dark" } },
+		{ params: { variant: "purple" }, props: { theme: "purple" } },
+	];
+}
+
+const { theme } = Astro.props;
+
+const BRAND = "Open Early";
+const TAGLINE =
+	"One useful idea for running a small business, every Sunday at 6am. Five minutes to read, and no webinar at the end.";
+
+const VARIANTS = [
+	{ slug: "light", label: "Light", href: "/demo/newsletter" },
+	{ slug: "dark", label: "Dark", href: "/demo/newsletter/dark" },
+	{ slug: "purple", label: "Purple grey", href: "/demo/newsletter/purple" },
+];
+
+const REVIEWS = [
+	{
+		quote:
+			"I have unsubscribed from about forty of these. This is the one that survived, because it is genuinely five minutes and there is never a pitch at the end.",
+		name: "Dana R.",
+		role: "Bike shop, two locations",
+	},
+	{
+		quote:
+			"The issue about firing your worst customer paid for my entire year. I read it on a Sunday and had the conversation on the Tuesday.",
+		name: "Marcus O.",
+		role: "Commercial cleaning",
+	},
+	{
+		quote:
+			"It is the only newsletter my husband and I both read, and we run the business together. We argue about it over breakfast, which I think is the point.",
+		name: "Priya S.",
+		role: "Bakery",
+	},
+	{
+		quote:
+			"No fluff, no 2,000 word preamble about somebody's morning routine. Straight to the idea, then it leaves me alone for a week.",
+		name: "Tom W.",
+		role: "Electrician",
+	},
+	{
+		quote:
+			"I forwarded one issue to my accountant and she asked to be added. That has never happened with anything else I subscribe to.",
+		name: "Leigh M.",
+		role: "Physiotherapy clinic",
+	},
+	{
+		quote:
+			"Short enough that I actually read it, useful enough that I keep a folder of them. Six months in and I have not skipped one.",
+		name: "Aaron K.",
+		role: "Landscaping",
+	},
+];
+
+const titles = {
+	light: `${BRAND} · newsletter demo (light)`,
+	dark: `${BRAND} · newsletter demo (dark)`,
+	purple: `${BRAND} · newsletter demo (purple grey)`,
+};
+---
+
+<Demo
+	title={titles[theme]}
+	description={`Sample one-page newsletter landing site, built by The Basic Page. ${BRAND} is a fictional newsletter used to demonstrate the design.`}
+	business={BRAND}
+	theme="realestate"
+>
+	<Fragment slot="head">
+		<link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+	</Fragment>
+
+	<main class="nl" data-nl={theme}>
+		<section class="hero">
+			<!-- Centred lockup: mark, title, tagline. -->
+			<svg class="mark" viewBox="0 0 64 64" role="img" aria-label={BRAND}>
+				<g fill="currentColor">
+					<path d="M18 43a14 14 0 0 1 28 0Z" />
+					<rect x="5" y="45.5" width="54" height="5" rx="2.5" />
+				</g>
+				<g
+					stroke="currentColor"
+					stroke-width="3.6"
+					stroke-linecap="round"
+					fill="none"
+					opacity="0.85"
+				>
+					<line x1="32" y1="9" x2="32" y2="16.5" />
+					<line x1="13.5" y1="16.5" x2="18.5" y2="21.5" />
+					<line x1="50.5" y1="16.5" x2="45.5" y2="21.5" />
+				</g>
+			</svg>
+
+			<h1>{BRAND}</h1>
+			<p class="tagline">{TAGLINE}</p>
+
+			<!--
+				SIGNUP.
+
+				This is the native version, styled to match the page. To go live with
+				beehiiv, replace the <form> below with their embed iframe and leave the
+				wrapper alone:
+
+				  <div class="signup__slot">
+				    <iframe src="https://embeds.beehiiv.com/YOUR-ID"
+				            data-test-id="beehiiv-embed" frameborder="0" scrolling="no"
+				            style="width:100%;height:64px;border-radius:10px;background:transparent"></iframe>
+				  </div>
+
+				The wrapper controls width and centring, so the embed inherits the
+				layout without any of beehiiv's own chrome fighting the design. The
+				same slot takes a ConvertKit, Buttondown or Mailchimp embed.
+			-->
+			<div class="signup__slot">
+				<form class="signup" id="nl-form" novalidate>
+					<label class="sr-only" for="nl-email">Email address</label>
+					<input
+						id="nl-email"
+						type="email"
+						inputmode="email"
+						autocomplete="email"
+						placeholder="you@example.com"
+						required
+					/>
+					<button type="submit">Subscribe free</button>
+				</form>
+			</div>
+			<p class="signup__msg" id="nl-msg" role="status" hidden></p>
+
+			<p class="trust">
+				<strong>9,400</strong> owners read it ·
+				<strong>Sundays</strong> at 6am ·
+				<strong>One click</strong> to unsubscribe
+			</p>
+		</section>
+
+		<section class="reviews">
+			<h2>What readers say</h2>
+			<div class="reviews__grid">
+				{
+					REVIEWS.map((r) => (
+						<figure class="review">
+							<div class="review__stars" aria-label="5 out of 5">
+								{[0, 1, 2, 3, 4].map(() => (
+									<svg viewBox="0 0 20 20" aria-hidden="true">
+										<path
+											fill="currentColor"
+											d="M10 1.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L1.6 7.7l5.8-.8z"
+										/>
+									</svg>
+								))}
+							</div>
+							<blockquote>{r.quote}</blockquote>
+							<figcaption>
+								<span class="review__name">{r.name}</span>
+								<span class="review__role">{r.role}</span>
+							</figcaption>
+						</figure>
+					))
+				}
+			</div>
+
+			<div class="closer">
+				<p>Every Sunday at 6am. Free, and about five minutes.</p>
+				<a class="closer__btn" href="#nl-email">Subscribe free</a>
+			</div>
+		</section>
+
+		<!-- Demo affordance so the same layout can be shown in all three skins. -->
+		<nav class="variants" aria-label="Colour variants">
+			<span>This demo in:</span>
+			{
+				VARIANTS.map((v) => (
+					<a href={v.href} class:list={["variants__link", { "is-on": v.slug === theme }]}>
+						{v.label}
+					</a>
+				))
+			}
+		</nav>
+	</main>
+
+	<style>
+		@font-face {
+			font-family: "Fraunces";
+			src: url("/fonts/fraunces.woff2") format("woff2");
+			font-weight: 500 700;
+			font-display: swap;
+		}
+		@font-face {
+			font-family: "DM Sans";
+			src: url("/fonts/dmsans.woff2") format("woff2");
+			font-weight: 400 700;
+			font-display: swap;
+		}
+
+		/* --- Themes ---------------------------------------------------------
+		   Every value below was checked for contrast. The purple-grey is a real
+		   mid tone (#575063), which is the lightest it can be while still
+		   carrying secondary text at AA. Lighten it and --muted stops passing. */
+		.nl[data-nl="light"] {
+			--bg: #fbfaf8;
+			--surface: #ffffff;
+			--text: #17161a;
+			--muted: #6b6873;
+			--border: #e7e4df;
+			--accent: #17161a;
+			--accent-text: #fbfaf8;
+			--star: #d9a441;
+			--halo: radial-gradient(48rem 26rem at 50% -14%, #f0ece4 0%, transparent 70%);
+			--shadow: 0 1px 2px rgb(23 22 26 / 0.05), 0 12px 28px rgb(23 22 26 / 0.05);
+		}
+		.nl[data-nl="dark"] {
+			--bg: #0c0c10;
+			--surface: #15151b;
+			--text: #f2f1f5;
+			--muted: #9b98a6;
+			--border: #26262f;
+			--accent: #f2f1f5;
+			--accent-text: #0c0c10;
+			--star: #e0b45c;
+			--halo: radial-gradient(48rem 26rem at 50% -14%, #1c1c26 0%, transparent 70%);
+			--shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 14px 34px rgb(0 0 0 / 0.35);
+		}
+		.nl[data-nl="purple"] {
+			--bg: #575063;
+			--surface: #625a70;
+			--text: #f6f4f9;
+			--muted: #cfc8dc;
+			--border: #6f6880;
+			--accent: #dcd3f0;
+			--accent-text: #2a2536;
+			--star: #f0d9a0;
+			--halo: radial-gradient(48rem 26rem at 50% -14%, #665e76 0%, transparent 70%);
+			--shadow: 0 1px 2px rgb(20 17 26 / 0.22), 0 14px 34px rgb(20 17 26 / 0.24);
+		}
+
+		.nl {
+			background: var(--bg);
+			background-image: var(--halo);
+			color: var(--text);
+			font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+			font-size: 1.0625rem;
+			line-height: 1.62;
+			padding: clamp(3.5rem, 8vw, 6rem) 1.5rem clamp(3rem, 6vw, 4.5rem);
+		}
+
+		/* --- Hero ----------------------------------------------------------- */
+		.hero {
+			max-width: 40rem;
+			margin-inline: auto;
+			text-align: center;
+		}
+
+		.mark {
+			width: 60px;
+			height: 60px;
+			margin: 0 auto 1.5rem;
+			color: var(--text);
+		}
+
+		h1 {
+			font-family: "Fraunces", Georgia, serif;
+			font-weight: 600;
+			font-size: clamp(2.75rem, 8vw, 4.25rem);
+			line-height: 1;
+			letter-spacing: -0.035em;
+			text-wrap: balance;
+		}
+
+		.tagline {
+			margin: 1.125rem auto 0;
+			max-width: 30rem;
+			font-size: 1.125rem;
+			color: var(--muted);
+			text-wrap: pretty;
+		}
+
+		/* --- Signup ---------------------------------------------------------
+		   .signup__slot is the swap point for a beehiiv iframe. Keep the wrapper,
+		   replace what's inside it. */
+		.signup__slot {
+			max-width: 27rem;
+			margin: 2.25rem auto 0;
+		}
+
+		.signup {
+			display: flex;
+			gap: 0.5rem;
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: 12px;
+			padding: 0.375rem;
+			box-shadow: var(--shadow);
+		}
+
+		.signup input {
+			flex: 1 1 auto;
+			min-width: 0;
+			font: inherit;
+			font-size: 1rem;
+			padding: 0.7rem 0.75rem;
+			border: 0;
+			background: transparent;
+			color: var(--text);
+			border-radius: 8px;
+		}
+		.signup input::placeholder {
+			color: var(--muted);
+		}
+		.signup input:focus-visible {
+			outline: 2px solid var(--accent);
+			outline-offset: 0;
+		}
+
+		.signup button {
+			flex: none;
+			font: inherit;
+			font-weight: 600;
+			font-size: 0.9375rem;
+			padding: 0.7rem 1.125rem;
+			border: 0;
+			border-radius: 8px;
+			background: var(--accent);
+			color: var(--accent-text);
+			cursor: pointer;
+			transition: opacity 140ms ease;
+		}
+		.signup button:hover {
+			opacity: 0.86;
+		}
+
+		.signup__msg {
+			margin-top: 0.875rem;
+			font-size: 0.9375rem;
+			font-weight: 600;
+		}
+
+		.trust {
+			margin-top: 1.125rem;
+			font-size: 0.875rem;
+			color: var(--muted);
+		}
+		.trust strong {
+			color: var(--text);
+			font-weight: 600;
+		}
+
+		/* --- Reviews -------------------------------------------------------- */
+		.reviews {
+			max-width: 58rem;
+			margin: clamp(3.5rem, 8vw, 5.5rem) auto 0;
+		}
+
+		h2 {
+			font-family: "Fraunces", Georgia, serif;
+			font-weight: 600;
+			font-size: clamp(1.5rem, 3.4vw, 2rem);
+			letter-spacing: -0.02em;
+			text-align: center;
+			margin-bottom: 2rem;
+		}
+
+		.reviews__grid {
+			display: grid;
+			gap: 1rem;
+		}
+		@media (min-width: 46rem) {
+			.reviews__grid {
+				grid-template-columns: repeat(2, 1fr);
+				gap: 1.125rem;
+			}
+		}
+
+		.review {
+			margin: 0;
+			background: var(--surface);
+			border: 1px solid var(--border);
+			border-radius: 14px;
+			padding: 1.375rem;
+			box-shadow: var(--shadow);
+		}
+
+		.review__stars {
+			display: flex;
+			gap: 2px;
+			color: var(--star);
+			margin-bottom: 0.75rem;
+		}
+		.review__stars svg {
+			width: 15px;
+			height: 15px;
+		}
+
+		.review blockquote {
+			margin: 0;
+			font-size: 1rem;
+			line-height: 1.6;
+			text-wrap: pretty;
+		}
+
+		.review figcaption {
+			margin-top: 1rem;
+			display: flex;
+			flex-wrap: wrap;
+			align-items: baseline;
+			gap: 0.5rem;
+			font-size: 0.875rem;
+		}
+		.review__name {
+			font-weight: 700;
+		}
+		.review__role {
+			color: var(--muted);
+		}
+
+		/* --- Closer --------------------------------------------------------- */
+		.closer {
+			text-align: center;
+			margin-top: 2.5rem;
+		}
+		.closer p {
+			color: var(--muted);
+			margin-bottom: 1rem;
+		}
+		.closer__btn {
+			display: inline-block;
+			background: var(--accent);
+			color: var(--accent-text);
+			font-weight: 600;
+			font-size: 0.9375rem;
+			padding: 0.8rem 1.5rem;
+			border-radius: 10px;
+			text-decoration: none;
+		}
+		.closer__btn:hover {
+			opacity: 0.86;
+		}
+
+		/* --- Variant switcher ----------------------------------------------- */
+		.variants {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			gap: 0.5rem;
+			margin-top: clamp(3rem, 6vw, 4.5rem);
+			font-size: 0.8125rem;
+			color: var(--muted);
+		}
+		.variants__link {
+			color: var(--text);
+			text-decoration: none;
+			border: 1px solid var(--border);
+			border-radius: 100px;
+			padding: 0.3rem 0.7rem;
+		}
+		.variants__link:hover {
+			border-color: var(--muted);
+		}
+		.variants__link.is-on {
+			background: var(--accent);
+			color: var(--accent-text);
+			border-color: var(--accent);
+		}
+
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+	</style>
+
+	<script is:inline>
+		// Demo only. Replacing the form with a beehiiv embed makes this redundant.
+		(function () {
+			var f = document.getElementById("nl-form");
+			var msg = document.getElementById("nl-msg");
+			if (!f) return;
+			f.addEventListener("submit", function (e) {
+				e.preventDefault();
+				var input = f.querySelector("input");
+				var ok = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value.trim());
+				msg.hidden = false;
+				msg.textContent = ok
+					? "You are subscribed. First issue lands Sunday. (Demo form, nothing was sent.)"
+					: "That email does not look right. Have another go.";
+				if (ok) f.reset();
+			});
+		})();
+	</script>
+</Demo>
