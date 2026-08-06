@@ -5,15 +5,6 @@ import Demo from "../../layouts/Demo.astro";
 const BROKER = "Priya Raman";
 const BRAND = "Northrock Mortgage";
 
-// Illustrative only, and labelled as such on the page. Nothing here is a quote
-// and nothing here is advice.
-const RATES = [
-	["5-year fixed", "4.79%", "down 0.10 this week"],
-	["3-year fixed", "4.94%", "unchanged"],
-	["5-year variable", "5.20%", "down 0.25 this week"],
-	["HELOC", "6.45%", "unchanged"],
-];
-
 const STEPS = [
 	["A 15 minute call", "What you earn, what you owe, what you are hoping to buy. No documents yet and no credit check."],
 	["We shop 40+ lenders", "Banks, credit unions and monoline lenders. They compete for you, which is the entire point of a broker."],
@@ -46,7 +37,6 @@ const FAQ = [
 			{BRAND}
 		</a>
 		<nav class="nav__links">
-			<a href="#rates">Rates</a>
 			<a href="#how">How it works</a>
 			<a href="#faq">Questions</a>
 		</nav>
@@ -56,67 +46,85 @@ const FAQ = [
 	<main id="top">
 		<section class="hero">
 			<div class="hero__inner">
-				<p class="eyebrow">Licensed mortgage brokerage · Ontario</p>
-				<h1>Know the moment rates move, not three weeks later.</h1>
-				<p class="lede">
-					Most people find out their rate was beatable after they have already signed. Rate Watch is
-					a short Wednesday email with where fixed and variable actually landed this week, and
-					whether it is worth doing anything about it.
-				</p>
+				<div class="hero__text">
+					<p class="eyebrow">Licensed mortgage brokerage · Ontario</p>
+					<h1>Know the moment rates move, not three weeks later.</h1>
+					<p class="lede">
+						Most people find out their rate was beatable after they have already signed. Rate Watch
+						is a short Wednesday email with where fixed and variable actually landed this week, and
+						whether it is worth doing anything about it.
+					</p>
 
-				<form class="form form--hero" id="hero-form" novalidate>
-					<label class="sr-only" for="hero-email">Email address</label>
-					<input
-						id="hero-email"
-						type="email"
-						inputmode="email"
-						autocomplete="email"
-						placeholder="you@example.com"
-						required
-					/>
-					<button class="btn" type="submit">Get Rate Watch free</button>
-				</form>
-				<p class="form__msg" id="hero-msg" role="status" hidden></p>
-				<p class="hero__note">
-					Free, weekly, and about 300 words. 2,600 homeowners read it. Unsubscribe any time.
-				</p>
-			</div>
-		</section>
-
-		<section class="rates" id="rates">
-			<div class="wrap">
-				<div class="sechead sechead--split">
-					<div>
-						<h2>This week’s rates</h2>
-						<p>What we are actually placing deals at, updated every Wednesday morning.</p>
-					</div>
-					<a class="btn btn--ghost btn--sm" href="#watch">Email these to me weekly</a>
+					<form class="form form--hero" id="hero-form" novalidate>
+						<label class="sr-only" for="hero-email">Email address</label>
+						<input
+							id="hero-email"
+							type="email"
+							inputmode="email"
+							autocomplete="email"
+							placeholder="you@example.com"
+							required
+						/>
+						<button class="btn" type="submit">Get Rate Watch free</button>
+					</form>
+					<p class="form__msg" id="hero-msg" role="status" hidden></p>
+					<p class="hero__note">
+						Free, weekly, and about 300 words. 2,600 homeowners read it. Unsubscribe any time.
+					</p>
 				</div>
 
-				<table class="rtable">
-					<thead>
-						<tr>
-							<th scope="col">Product</th>
-							<th scope="col">Rate</th>
-							<th scope="col">Change</th>
-						</tr>
-					</thead>
-					<tbody>
-						{
-							RATES.map(([product, rate, change]) => (
-								<tr>
-									<th scope="row">{product}</th>
-									<td class="rtable__rate">{rate}</td>
-									<td class={change.startsWith("down") ? "is-down" : "is-flat"}>{change}</td>
-								</tr>
-							))
-						}
-					</tbody>
-				</table>
-				<p class="fine">
-					Sample figures shown to demonstrate the layout of this demo page. They are not a quote,
-					not an offer and not advice. A real rate depends on your file.
-				</p>
+				{/*
+					Placeholder for the client's own headshot. Drawn rather than
+					photographed on purpose: a stock photo of a stranger standing in
+					for a named broker is the one thing on this page that would be
+					dishonest. Swap in a real portrait before showing a client.
+				*/}
+				<figure class="portrait">
+					<svg viewBox="0 0 460 520" role="img" aria-label={`Portrait of ${BROKER}`}>
+						<defs>
+							<linearGradient id="pbg" x1="0" y1="0" x2="0.4" y2="1">
+								<stop offset="0" stop-color="#12405e" />
+								<stop offset="0.55" stop-color="#0d2440" />
+								<stop offset="1" stop-color="#0a1c33" />
+							</linearGradient>
+							<linearGradient id="pfig" x1="0.2" y1="0" x2="0.8" y2="1">
+								<stop offset="0" stop-color="#4fd8c9" />
+								<stop offset="1" stop-color="#0f7d78" />
+							</linearGradient>
+							<radialGradient id="pglow" cx="0.7" cy="0.18" r="0.6">
+								<stop offset="0" stop-color="#34c5b8" stop-opacity="0.34" />
+								<stop offset="1" stop-color="#34c5b8" stop-opacity="0" />
+							</radialGradient>
+							<pattern id="pdots" width="14" height="14" patternUnits="userSpaceOnUse">
+								<circle cx="1.4" cy="1.4" r="1.4" fill="#ffffff" opacity="0.055" />
+							</pattern>
+							<clipPath id="pclip">
+								<rect width="460" height="520" rx="18" />
+							</clipPath>
+						</defs>
+
+						<g clip-path="url(#pclip)">
+							<rect width="460" height="520" fill="url(#pbg)" />
+							<rect width="460" height="520" fill="url(#pdots)" />
+							<rect width="460" height="520" fill="url(#pglow)" />
+
+							<!-- Head, neck and shoulders, reduced to shapes. Drawn neck first so
+							     the head laps over the top of it and the shoulders over the bottom,
+							     which is what stops the head reading as though it is floating. -->
+							<rect x="188" y="214" width="84" height="120" rx="24" fill="#1a8a82" />
+							<circle cx="230" cy="172" r="86" fill="url(#pfig)" />
+							<path d="M40 520c0-121 85-208 190-208s190 87 190 208Z" fill="url(#pfig)" />
+							<!-- Collar and lapels, so the silhouette reads as a suit. -->
+							<path d="M230 312l-54 26 30 54 24-36 24 36 30-54Z" fill="#0d2440" opacity="0.85" />
+							<path d="M230 362l-9 158h18Z" fill="#0d2440" opacity="0.45" />
+						</g>
+					</svg>
+
+					<figcaption class="portrait__card">
+						<span class="portrait__name">{BROKER}</span>
+						<span class="portrait__role">Principal Broker · Licensed since 2011</span>
+					</figcaption>
+				</figure>
 			</div>
 		</section>
 
@@ -324,13 +332,6 @@ const FAQ = [
 			margin-top: 1rem;
 			max-width: 38rem;
 		}
-		.fine {
-			font-size: 0.8125rem;
-			line-height: 1.5;
-			color: #7d8ca0;
-			margin-top: 1rem;
-			max-width: 42rem;
-		}
 
 		/* --- Nav --- */
 		.nav {
@@ -441,7 +442,16 @@ const FAQ = [
 		.hero__inner {
 			max-width: 66rem;
 			margin-inline: auto;
-			padding: clamp(3.25rem, 7vw, 6rem) 1.5rem;
+			padding: clamp(3.25rem, 7vw, 5rem) 1.5rem;
+			display: grid;
+			gap: 2.5rem;
+			align-items: center;
+		}
+		@media (min-width: 58rem) {
+			.hero__inner {
+				grid-template-columns: 1.1fr 0.9fr;
+				gap: 3.5rem;
+			}
 		}
 		.hero__note {
 			font-size: 0.875rem;
@@ -450,6 +460,55 @@ const FAQ = [
 		}
 		.form--hero {
 			max-width: 34rem;
+		}
+
+		/* --- Hero portrait --- */
+		.portrait {
+			position: relative;
+			margin: 0;
+			max-width: 24rem;
+			justify-self: center;
+			width: 100%;
+		}
+		@media (min-width: 58rem) {
+			.portrait {
+				justify-self: end;
+			}
+		}
+		.portrait svg {
+			width: 100%;
+			height: auto;
+			border-radius: 18px;
+			box-shadow:
+				0 18px 40px rgb(13 36 64 / 0.18),
+				0 2px 6px rgb(13 36 64 / 0.12);
+		}
+		/* A chip pinned to one corner, not a full-width bar: the bar covered the
+		   figure it was supposed to be labelling. */
+		.portrait__card {
+			position: absolute;
+			left: 0.875rem;
+			bottom: 0.875rem;
+			max-width: calc(100% - 1.75rem);
+			background: rgb(255 255 255 / 0.95);
+			backdrop-filter: blur(6px);
+			border-radius: 12px;
+			padding: 0.7rem 0.9rem;
+			box-shadow: 0 6px 18px rgb(13 36 64 / 0.22);
+		}
+		.portrait__name {
+			display: block;
+			font-family: "Sora", sans-serif;
+			font-weight: 600;
+			font-size: 1rem;
+			color: var(--ink);
+			letter-spacing: -0.02em;
+		}
+		.portrait__role {
+			display: block;
+			font-size: 0.8125rem;
+			color: #5c6f85;
+			margin-top: 0.1rem;
 		}
 
 		/* --- Forms --- */
@@ -483,10 +542,6 @@ const FAQ = [
 			color: var(--teal);
 		}
 
-		/* --- Rates --- */
-		.rates {
-			background: var(--paper);
-		}
 		.sechead {
 			max-width: 36rem;
 			margin-bottom: 2rem;
@@ -494,54 +549,6 @@ const FAQ = [
 		.sechead p {
 			margin-top: 0.625rem;
 		}
-		.sechead--split {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 1.25rem;
-			align-items: flex-end;
-			justify-content: space-between;
-			max-width: none;
-		}
-		.rtable {
-			width: 100%;
-			border-collapse: collapse;
-			text-align: left;
-		}
-		.rtable th,
-		.rtable td {
-			padding: 1rem 0.75rem;
-			border-bottom: 1px solid var(--line);
-		}
-		.rtable thead th {
-			font-family: "Sora", sans-serif;
-			font-size: 0.6875rem;
-			letter-spacing: 0.12em;
-			text-transform: uppercase;
-			color: #7d8ca0;
-			font-weight: 600;
-			border-bottom-color: #c9d5e2;
-		}
-		.rtable tbody th {
-			font-weight: 500;
-			color: var(--ink);
-			font-size: 1rem;
-		}
-		.rtable__rate {
-			font-family: "Sora", sans-serif;
-			font-size: 1.25rem;
-			font-weight: 600;
-			color: var(--ink);
-			font-variant-numeric: tabular-nums;
-		}
-		.rtable .is-down {
-			color: #0b7d55;
-			font-size: 0.9375rem;
-		}
-		.rtable .is-flat {
-			color: #7d8ca0;
-			font-size: 0.9375rem;
-		}
-
 		/* --- Rate Watch (primary CTA) --- */
 		.watch {
 			background:
