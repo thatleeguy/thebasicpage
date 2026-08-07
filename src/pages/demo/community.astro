@@ -1,0 +1,1812 @@
+---
+import Demo from "../../layouts/Demo.astro";
+
+// HelloGTA — a community directory for the Greater Toronto Area.
+//
+// Unlike the other pages in /demo, HelloGTA is a REAL business. What is
+// placeholder here is everything inside it: the nine members, their phone
+// numbers, their photos and the neighbourhood counts. Nobody has bought a
+// placement yet, so nothing on this page claims that they have. The demo bar
+// at the top says exactly that.
+//
+// The design brief: a directory is only worth $125 a month to a realtor if the
+// page has an audience of its own. So the newsletter is the primary call to
+// action in the hero, in the middle, and at the end — the directory is what
+// the audience is *for*. Sell the Sunday Dispatch to the public; sell the
+// public to the members.
+//
+// Photography is hot-linked from Unsplash, which is free to use and needs no
+// attribution. That is deliberate for a template: a client can go live before
+// they own a single photograph, and swap them one at a time afterwards. Every
+// id below was opened and looked at, not guessed.
+
+const BRAND = "HelloGTA";
+
+/**
+ * Unsplash source URL. `auto=format` serves AVIF/WebP to browsers that take
+ * them, so these are much smaller than the JPEG the id implies.
+ */
+const img = (id: string, w: number, h: number) =>
+	`https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=72`;
+
+/** 1x/2x srcset for the same crop. */
+const img2x = (id: string, w: number, h: number) =>
+	`${img(id, w, h)} 1x, ${img(id, w * 2, h * 2)} 2x`;
+
+// ---------------------------------------------------------------------------
+// Numbers
+// ---------------------------------------------------------------------------
+// Leave a value as an empty string and the thing that would have shown it does
+// not render. This is the same rule as CONTACT.phone on the main site: a
+// directory whose whole pitch is "we tell you the real number" cannot open with
+// an invented subscriber count. Fill these in from the mailing list dashboard
+// the week you launch, and not before.
+const NUMBERS = {
+	/** Confirmed subscribers, e.g. "1,240". */
+	subscribers: "",
+	/** Neighbourhoods with at least one member, e.g. "22". */
+	areasCovered: "",
+} as const;
+
+const PLACEMENT = {
+	price: "$125",
+	period: "a month",
+	perArea: 2,
+} as const;
+
+const DISPATCH = {
+	name: "The Sunday Dispatch",
+	when: "Sundays at 7am",
+	/** Reads as a noun: "in about {read}". */
+	read: "five minutes",
+	/** Reads as an adjective: "a {adj} email". */
+	adj: "five-minute",
+};
+
+// ---------------------------------------------------------------------------
+// What's in the newsletter
+// ---------------------------------------------------------------------------
+const SECTIONS = [
+	{
+		tag: "01",
+		title: "What actually sold",
+		body: "Every sale that closed in your neighbourhood last week, at the price it closed for, not the price it was listed at. Two lines each. No commentary.",
+		photo: "1570129477492-45c003edd2be",
+		alt: "A white clapboard house with a wide front porch",
+	},
+	{
+		tag: "02",
+		title: "Where rates landed",
+		body: "The five-year fixed and the variable that GTA brokers were actually writing on Friday afternoon, and whether that is up or down on the week.",
+		photo: "1554224155-6726b3ff858f",
+		alt: "Mortgage paperwork and a calculator on a desk",
+	},
+	{
+		tag: "03",
+		title: "Open houses worth a Sunday",
+		body: "Not all of them — the dozen we would go to, with one sentence on why. Members' open houses are in here, marked as theirs so you know.",
+		photo: "1560448204-e02f11c3d0e2",
+		alt: "A bright living room with large windows",
+	},
+	{
+		tag: "04",
+		title: "One street, walked properly",
+		body: "Each week somebody walks a single neighbourhood and writes it up: the schools, the parking, the coffee, and the thing you only learn by living there.",
+		photo: "1414235077428-338989a2e8c0",
+		alt: "A table of food at a neighbourhood restaurant",
+	},
+];
+
+// ---------------------------------------------------------------------------
+// Members
+// ---------------------------------------------------------------------------
+// PLACEHOLDERS. Every person below is invented and every photo is a stock
+// portrait. Phone numbers use the 555-01xx range, which is reserved for fiction
+// and cannot ring a real person — same rule as src/data/trades.ts.
+//
+// Replace a row when somebody actually signs, and delete the rows you have not
+// sold yet rather than leaving a full-looking directory that isn't.
+type Member = {
+	kind: "agent" | "broker";
+	name: string;
+	firm: string;
+	photo: string;
+	areas: string[];
+	line: string;
+	langs: string;
+	phone: string;
+	site: string;
+	since: string;
+	/** RECO for realtors, FSRA for mortgage brokers. Both are Ontario regulators. */
+	checked: string;
+};
+
+const MEMBERS: Member[] = [
+	{
+		kind: "agent",
+		name: "Priya Raman",
+		firm: "Sales representative, Bayview & Co.",
+		photo: "1573496359142-b8d87734a5a2",
+		areas: ["Leaside", "Davisville"],
+		line: "Fourteen years on the same six streets. I will tell you when a house is priced to start a war, and I will tell you when it isn't worth the war.",
+		langs: "English, Tamil",
+		phone: "(416) 555-0142",
+		site: "priyaraman.ca",
+		since: "Member since 2026",
+		checked: "RECO registered",
+	},
+	{
+		kind: "agent",
+		name: "Daniel Okonkwo",
+		firm: "Broker, Lakeshore Realty",
+		photo: "1507003211169-0a1dd7228f2d",
+		areas: ["The Beaches", "Riverside"],
+		line: "I grew up on Kingston Road and I still coach at the same rink. If you want to know which basements flood, ask me before you ask the inspector.",
+		langs: "English, Igbo",
+		phone: "(416) 555-0118",
+		site: "danielokonkwo.ca",
+		since: "Member since 2026",
+		checked: "RECO registered",
+	},
+	{
+		kind: "agent",
+		name: "Marta Kowalczyk",
+		firm: "Sales representative, Credit River Group",
+		photo: "1580489944761-15a19d654956",
+		areas: ["Port Credit", "Lorne Park"],
+		line: "Most of my work is people moving out of the city and getting the commute wrong. I would rather talk you out of the wrong street than sell you one.",
+		langs: "English, Polish",
+		phone: "(905) 555-0176",
+		site: "martakowalczyk.ca",
+		since: "Member since 2026",
+		checked: "RECO registered",
+	},
+	{
+		kind: "agent",
+		name: "Ken Abbott",
+		firm: "Broker of record, Abbott & Reid",
+		photo: "1472099645785-5658abf4ff4e",
+		areas: ["Whitby", "Brooklin"],
+		line: "Twenty-six years east of the city. I answer my own phone and I do not have a team, so the person who lists your house is the person who shows it.",
+		langs: "English",
+		phone: "(905) 555-0133",
+		site: "kenabbott.ca",
+		since: "Member since 2026",
+		checked: "RECO registered",
+	},
+	{
+		kind: "agent",
+		name: "Sofia Almeida",
+		firm: "Sales representative, Humber West",
+		photo: "1544005313-94ddf0286df2",
+		areas: ["Bloor West Village", "Etobicoke"],
+		line: "First-time buyers, mostly. I will sit in your kitchen with a spreadsheet and no pressure, and if the answer is wait another year, that is the answer.",
+		langs: "English, Portuguese",
+		phone: "(416) 555-0159",
+		site: "sofiaalmeida.ca",
+		since: "Member since 2026",
+		checked: "RECO registered",
+	},
+	{
+		kind: "agent",
+		name: "Nadia Farrow",
+		firm: "Sales representative, Rouge Valley Realty",
+		photo: "1438761681033-6461ffad8d80",
+		areas: ["Unionville", "Markham"],
+		line: "I sell the older parts of Markham, where every second house has been added onto twice. I know which additions were permitted and which ones were not.",
+		langs: "English, Cantonese",
+		phone: "(905) 555-0107",
+		site: "nadiafarrow.ca",
+		since: "Member since 2026",
+		checked: "RECO registered",
+	},
+	{
+		kind: "broker",
+		name: "Jasleen Bhatti",
+		firm: "Mortgage agent, Level One Financial",
+		photo: "1494790108377-be9c29b29330",
+		areas: ["Peel", "Halton"],
+		line: "Self-employed files are most of my week. If two lenders have said no because of how your income looks on paper, I am the third call, not the first.",
+		langs: "English, Punjabi, Hindi",
+		phone: "(905) 555-0191",
+		site: "jasleenbhatti.ca",
+		since: "Member since 2026",
+		checked: "FSRA licensed",
+	},
+	{
+		kind: "broker",
+		name: "Curtis Yee",
+		firm: "Principal broker, Northbound Mortgage",
+		photo: "1560250097-0b93528c311a",
+		areas: ["Toronto", "York Region"],
+		line: "I send you the rate sheet I am actually looking at, including the lender I am not recommending and the reason why. Renewals are half of what I do.",
+		langs: "English, Mandarin",
+		phone: "(416) 555-0164",
+		site: "northboundmortgage.ca",
+		since: "Member since 2026",
+		checked: "FSRA licensed",
+	},
+	{
+		kind: "broker",
+		name: "Owen Mbeki",
+		firm: "Mortgage agent, Harbour Lending",
+		photo: "1519085360753-af0119f7cbe7",
+		areas: ["Durham", "East Toronto"],
+		line: "Newcomer files and thin credit files. I will tell you in the first ten minutes whether the answer is yes, no, or six months of paperwork away.",
+		langs: "English, Swahili, French",
+		phone: "(905) 555-0128",
+		site: "harbourlending.ca",
+		since: "Member since 2026",
+		checked: "FSRA licensed",
+	},
+];
+
+const agents = MEMBERS.filter((m) => m.kind === "agent");
+const brokers = MEMBERS.filter((m) => m.kind === "broker");
+
+// ---------------------------------------------------------------------------
+// Neighbourhoods
+// ---------------------------------------------------------------------------
+// `open: true` means nobody has bought that area yet. Showing the gaps is the
+// point: it is honest, and it is the only scarcity argument that works on a
+// realtor reading this page.
+const AREAS = [
+	{
+		name: "Leaside & Davisville",
+		photo: "1570129477492-45c003edd2be",
+		alt: "A white house with a covered front porch",
+		open: false,
+	},
+	{
+		name: "The Beaches",
+		photo: "1507992781348-310259076fe0",
+		alt: "The Toronto skyline seen across the water at sunset",
+		open: false,
+	},
+	{
+		name: "Bloor West Village",
+		photo: "1441986300917-64674bd600d8",
+		alt: "The inside of a small independent shop",
+		open: false,
+	},
+	{
+		name: "Port Credit",
+		photo: "1449844908441-8829872d2607",
+		alt: "A house at the end of a tree-lined driveway in autumn",
+		open: false,
+	},
+	{
+		name: "Maple & Vaughan",
+		photo: "1605276374104-dee2a0ed3cd6",
+		alt: "A brick suburban house with a double garage",
+		open: true,
+	},
+	{
+		name: "Old Oakville",
+		photo: "1576941089067-2de3c901e126",
+		alt: "A white cottage with a red roof and a flower box",
+		open: true,
+	},
+	{
+		name: "Unionville & Markham",
+		photo: "1568605114967-8130f3a36994",
+		alt: "A modern house lit from inside at dusk",
+		open: false,
+	},
+	{
+		name: "Downtown & the waterfront",
+		photo: "1486325212027-8081e485255e",
+		alt: "Downtown Toronto lit up at night, with the CN Tower behind it",
+		open: true,
+	},
+];
+
+// ---------------------------------------------------------------------------
+// The placement pitch
+// ---------------------------------------------------------------------------
+const INCLUDES = [
+	{
+		h: "Your own phone number, not a lead form",
+		p: "Your number, your email and a plain link to your own site. Nothing on this page routes through us, and nothing is sold on.",
+	},
+	{
+		h: `${PLACEMENT.perArea} people per neighbourhood`,
+		p: "One realtor and one mortgage broker. When Leaside is taken it is taken, and the only way in is if somebody leaves.",
+	},
+	{
+		h: "No referral fee, ever",
+		p: "We do not take a cut of a deal, we do not ask what closed, and we never will. The monthly fee is the entire business model.",
+	},
+	{
+		h: "A paragraph in the Dispatch each month",
+		p: "You write it, about your own area, with your name on it. Not an ad — the part of the email people forward to a friend.",
+	},
+	{
+		h: "Your open houses in Sunday's list",
+		p: "Marked as yours, in the section people actually read on a Sunday morning, at no extra cost.",
+	},
+	{
+		h: "We check you are registered first",
+		p: "RECO for realtors, FSRA for mortgage agents and brokers. If it does not check out you do not go live, which is the reason the badge means anything.",
+	},
+];
+---
+
+<Demo
+	title={`${BRAND} · a community directory for the Greater Toronto Area`}
+	description="HelloGTA lists one realtor and one mortgage broker per GTA neighbourhood, and sends a five-minute email every Sunday morning about what sold, where rates landed, and which open houses are worth the trip."
+	business={BRAND}
+	theme="community"
+	disclaimer={`${BRAND} is real, but every member, phone number and photograph on this page is a placeholder. Nobody has bought a placement yet.`}
+>
+	<Fragment slot="head">
+		<link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+		<link rel="preload" href="/fonts/gabarito-400-900.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+	</Fragment>
+
+	<div class="gta">
+		<!-- ---------------------------------------------------------------- Nav -->
+		<header class="topbar">
+			<a class="wordmark" href="#top">
+				<span class="wordmark__dot" aria-hidden="true"></span>
+				<span>Hello<em>GTA</em></span>
+			</a>
+			<nav class="topnav" aria-label="Sections">
+				<a href="#dispatch">The Dispatch</a>
+				<a href="#directory">Directory</a>
+				<a href="#areas">Neighbourhoods</a>
+				<a href="#listed">Get listed</a>
+			</nav>
+			<a class="btn btn--sm" href="#signup">Subscribe free</a>
+		</header>
+
+		<!-- -------------------------------------------------------------- Hero -->
+		<section class="hero" id="top">
+			<div class="hero__copy">
+				<p class="eyebrow"><span class="eyebrow__pip" aria-hidden="true"></span>{DISPATCH.name}</p>
+
+				<h1>Who to call, and what actually sold on your street.</h1>
+
+				<p class="lede">
+					{BRAND} lists one realtor and one mortgage broker per neighbourhood across the Greater Toronto
+					Area — no more than that — and sends a {DISPATCH.adj} email every Sunday morning about what changed
+					in yours.
+				</p>
+
+				<!--
+					SIGNUP.
+
+					Native form, styled to match the page. To go live with beehiiv,
+					replace the <form> with their embed iframe and leave the wrapper:
+
+					  <div class="signup__slot">
+					    <iframe src="https://embeds.beehiiv.com/YOUR-ID"
+					            data-test-id="beehiiv-embed" frameborder="0" scrolling="no"
+					            style="width:100%;height:64px;border-radius:14px;background:transparent"></iframe>
+					  </div>
+
+					The wrapper owns width and alignment so the embed inherits the layout.
+					The same slot takes ConvertKit, Buttondown or Mailchimp. There are two
+					of these on the page; both are wired by the one script at the bottom.
+				-->
+				<div class="signup__slot" id="signup">
+					<form class="signup" data-signup novalidate>
+						<label class="sr-only" for="email-hero">Email address</label>
+						<input
+							id="email-hero"
+							type="email"
+							inputmode="email"
+							autocomplete="email"
+							placeholder="you@example.com"
+							required
+						/>
+						<button type="submit">Get Sunday’s issue</button>
+					</form>
+					<p class="signup__msg" data-msg role="status" hidden></p>
+				</div>
+
+				<ul class="ticks">
+					<li>Free</li>
+					<li>{DISPATCH.when}</li>
+					<li>One click to unsubscribe</li>
+					{NUMBERS.subscribers && <li>{NUMBERS.subscribers} neighbours reading</li>}
+				</ul>
+			</div>
+
+			<div class="hero__art">
+				<figure class="shot shot--main">
+					<img
+						src={img("1517090504586-fde19ea6066f", 760, 620)}
+						srcset={img2x("1517090504586-fde19ea6066f", 760, 620)}
+						width="760"
+						height="620"
+						alt="The CN Tower seen from a park across Toronto harbour on a clear day"
+						fetchpriority="high"
+						decoding="async"
+					/>
+				</figure>
+
+				<figure class="shot shot--house">
+					<img
+						src={img("1605276374104-dee2a0ed3cd6", 340, 250)}
+						srcset={img2x("1605276374104-dee2a0ed3cd6", 340, 250)}
+						width="340"
+						height="250"
+						alt="A brick house with a double garage on a quiet suburban street"
+						loading="lazy"
+						decoding="async"
+					/>
+				</figure>
+
+				<div class="pin">
+					<p class="pin__when">This Sunday, 7am</p>
+					<p class="pin__what">
+						“Eleven sales on Bessborough, and one of them makes no sense. Plus: the variable moved.”
+					</p>
+				</div>
+			</div>
+		</section>
+
+		<!-- ------------------------------------------------------------- Strip -->
+		<div class="strip">
+			<p>
+				<strong>Written by people who live here.</strong> Not scraped, not syndicated, and not a portal
+				trying to sell your address to four agents at once.
+			</p>
+		</div>
+
+		<!-- ---------------------------------------------------------- Dispatch -->
+		<section class="wrap sec" id="dispatch">
+			<div class="sechead">
+				<p class="eyebrow"><span class="eyebrow__pip" aria-hidden="true"></span>What’s in it</p>
+				<h2>Four things, every Sunday, in about {DISPATCH.read}.</h2>
+				<p class="sechead__sub">
+					The same four sections in the same order every week, so you can read the one you came for and
+					close it.
+				</p>
+			</div>
+
+			<div class="sections">
+				{
+					SECTIONS.map((s) => (
+						<article class="sect">
+							<div class="sect__photo">
+								<img
+									src={img(s.photo, 560, 360)}
+									srcset={img2x(s.photo, 560, 360)}
+									width="560"
+									height="360"
+									alt={s.alt}
+									loading="lazy"
+									decoding="async"
+								/>
+								<span class="sect__num">{s.tag}</span>
+							</div>
+							<h3>{s.title}</h3>
+							<p>{s.body}</p>
+						</article>
+					))
+				}
+			</div>
+		</section>
+
+		<!-- --------------------------------------------------------- Directory -->
+		<!-- The filter is three radio inputs and CSS sibling selectors. No script,
+		     which means it works before hydration and on a page with JS off. The
+		     inputs must stay ahead of .dir__grid in the DOM for `~` to reach it. -->
+		<section class="dir sec" id="directory">
+			<input class="fq sr-only" type="radio" name="kind" id="f-all" checked />
+			<input class="fq sr-only" type="radio" name="kind" id="f-agent" />
+			<input class="fq sr-only" type="radio" name="kind" id="f-broker" />
+
+			<div class="wrap">
+				<div class="sechead">
+					<p class="eyebrow"><span class="eyebrow__pip" aria-hidden="true"></span>The directory</p>
+					<h2>{MEMBERS.length} people, and their actual phone numbers.</h2>
+					<p class="sechead__sub">
+						One realtor and one mortgage broker per neighbourhood. Calling them calls them — nothing on
+						this page goes through us, and no enquiry is ever sold on.
+					</p>
+				</div>
+
+				<div class="filter" role="group" aria-label="Filter the directory">
+					<label for="f-all" data-on="all">Everyone <span>{MEMBERS.length}</span></label>
+					<label for="f-agent" data-on="agent">Realtors <span>{agents.length}</span></label>
+					<label for="f-broker" data-on="broker">Mortgage brokers <span>{brokers.length}</span></label>
+				</div>
+			</div>
+
+			<div class="wrap dir__grid">
+				{
+					MEMBERS.map((m) => (
+						<article class="mem" data-kind={m.kind}>
+							<div class="mem__top">
+								<img
+									class="mem__face"
+									src={img(m.photo, 128, 128)}
+									srcset={img2x(m.photo, 128, 128)}
+									width="128"
+									height="128"
+									alt={m.name}
+									loading="lazy"
+									decoding="async"
+								/>
+								<div class="mem__id">
+									<h3>{m.name}</h3>
+									<p class="mem__firm">{m.firm}</p>
+									<p class="mem__check">
+										<svg viewBox="0 0 16 16" aria-hidden="true">
+											<path
+												fill="currentColor"
+												d="M8 .8l1.9 1.4 2.3-.3.9 2.2 2 1.2-.7 2.2.7 2.2-2 1.2-.9 2.2-2.3-.3L8 15.2l-1.9-1.4-2.3.3-.9-2.2-2-1.2.7-2.2-.7-2.2 2-1.2.9-2.2 2.3.3z"
+											/>
+											<path
+												fill="#fffaf3"
+												d="M7.1 10.9L4.5 8.3l1.1-1.1 1.5 1.5 3.4-3.4 1.1 1.1z"
+											/>
+										</svg>
+										{m.checked}
+									</p>
+								</div>
+							</div>
+
+							<ul class="chips">
+								{m.areas.map((a) => (
+									<li>{a}</li>
+								))}
+							</ul>
+
+							<p class="mem__line">{m.line}</p>
+
+							<dl class="mem__meta">
+								<div>
+									<dt>Speaks</dt>
+									<dd>{m.langs}</dd>
+								</div>
+								<div>
+									<dt>Listed</dt>
+									<dd>{m.since.replace("Member since ", "")}</dd>
+								</div>
+							</dl>
+
+							<div class="mem__act">
+								<a class="btn btn--ink" href={`tel:+1${m.phone.replace(/\D/g, "")}`}>
+									{m.phone}
+								</a>
+								<a class="btn btn--quiet" href={`https://${m.site}`} rel="noopener">
+									{m.site}
+								</a>
+							</div>
+						</article>
+					))
+				}
+			</div>
+
+			<div class="wrap">
+				<p class="dir__note">
+					Every member is checked with their regulator before they go live, and checked again each year.
+					If somebody on this page treats you badly,
+					<a href="#listed">tell us</a> and they come off it.
+				</p>
+			</div>
+		</section>
+
+		<!-- ------------------------------------------------------------- Areas -->
+		<section class="wrap sec" id="areas">
+			<div class="sechead">
+				<p class="eyebrow"><span class="eyebrow__pip" aria-hidden="true"></span>Neighbourhoods</p>
+				<h2>Browse by where you actually live.</h2>
+				<p class="sechead__sub">
+					{
+						NUMBERS.areasCovered
+							? `${NUMBERS.areasCovered} areas covered so far. The open ones have nobody in them yet.`
+							: "The open ones have nobody in them yet — that is not a waiting list, it is a vacancy."
+					}
+				</p>
+			</div>
+
+			<div class="areas">
+				{
+					AREAS.map((a) => (
+						<a class="area" href="#directory">
+							<img
+								src={img(a.photo, 420, 300)}
+								srcset={img2x(a.photo, 420, 300)}
+								width="420"
+								height="300"
+								alt={a.alt}
+								loading="lazy"
+								decoding="async"
+							/>
+							<div class="area__body">
+								<h3>{a.name}</h3>
+								<p>{a.open ? "Open — no member yet" : "1 realtor · 1 broker"}</p>
+							</div>
+							{a.open && <span class="area__flag">Open</span>}
+						</a>
+					))
+				}
+			</div>
+		</section>
+
+		<!-- ------------------------------------------------------------ Listed -->
+		<section class="listed sec" id="listed">
+			<div class="wrap listed__grid">
+				<div class="listed__copy">
+					<p class="eyebrow">
+						<span class="eyebrow__pip" aria-hidden="true"></span>For realtors and mortgage brokers
+					</p>
+					<h2>
+						{PLACEMENT.price} <span>{PLACEMENT.period}</span>
+					</h2>
+					<p class="listed__lede">
+						Month to month. No setup fee, no contract, no referral cut, and no annual anything. Cancel by
+						email and the last month is the last month.
+					</p>
+
+					<ul class="includes">
+						{
+							INCLUDES.map((i) => (
+								<li>
+									<h3>{i.h}</h3>
+									<p>{i.p}</p>
+								</li>
+							))
+						}
+					</ul>
+
+					<div class="listed__act">
+						<a class="btn btn--flame" href="mailto:hello@hellogta.ca?subject=Placement%20enquiry"
+							>Ask about your neighbourhood</a
+						>
+						<p>
+							Tell us the area. If it is taken we will say so on the same day rather than put you on a
+							list.
+						</p>
+					</div>
+				</div>
+
+				<figure class="listed__art">
+					<img
+						src={img("1590650153855-d9e808231d41", 620, 760)}
+						srcset={img2x("1590650153855-d9e808231d41", 620, 760)}
+						width="620"
+						height="760"
+						alt="An agent standing at a laptop in a bright office"
+						loading="lazy"
+						decoding="async"
+					/>
+					<figcaption>
+						<strong>Why it is only {PLACEMENT.perArea} per area.</strong>
+						A directory that lists everybody is a phone book, and nobody pays to be in a phone book.
+					</figcaption>
+				</figure>
+			</div>
+		</section>
+
+		<!-- --------------------------------------------------------- Big close -->
+		<section class="close">
+			<img
+				class="close__bg"
+				src={img("1517935706615-2717063c2225", 1600, 900)}
+				width="1600"
+				height="900"
+				alt=""
+				loading="lazy"
+				decoding="async"
+			/>
+			<div class="close__inner">
+				<p class="eyebrow eyebrow--dark">
+					<span class="eyebrow__pip" aria-hidden="true"></span>{DISPATCH.name}
+				</p>
+				<h2>Sunday, 7am. Then it leaves you alone for a week.</h2>
+				<p>
+					What sold and for how much, where rates landed, the open houses worth the trip, and one
+					neighbourhood walked properly.
+				</p>
+
+				<div class="signup__slot">
+					<form class="signup signup--dark" data-signup novalidate>
+						<label class="sr-only" for="email-close">Email address</label>
+						<input
+							id="email-close"
+							type="email"
+							inputmode="email"
+							autocomplete="email"
+							placeholder="you@example.com"
+							required
+						/>
+						<button type="submit">Subscribe free</button>
+					</form>
+					<p class="signup__msg" data-msg role="status" hidden></p>
+				</div>
+
+				<p class="close__fine">Free. One click to unsubscribe. We do not sell the list.</p>
+			</div>
+		</section>
+
+		<!-- ------------------------------------------------------------ Footer -->
+		<footer class="foot">
+			<div class="wrap foot__grid">
+				<div>
+					<a class="wordmark" href="#top">
+						<span class="wordmark__dot" aria-hidden="true"></span>
+						<span>Hello<em>GTA</em></span>
+					</a>
+					<p class="foot__blurb">
+						A small directory of people worth calling in the Greater Toronto Area, and an email about
+						what is happening on your street.
+					</p>
+				</div>
+				<nav aria-label="Footer">
+					<h3>The site</h3>
+					<a href="#dispatch">What’s in the Dispatch</a>
+					<a href="#directory">The directory</a>
+					<a href="#areas">Neighbourhoods</a>
+					<a href="#listed">Get listed</a>
+				</nav>
+				<div>
+					<h3>Get in touch</h3>
+					<a href="mailto:hello@hellogta.ca">hello@hellogta.ca</a>
+					<p class="foot__blurb">
+						Realtors are registered with RECO. Mortgage agents and brokers are licensed by FSRA. We check
+						both.
+					</p>
+				</div>
+			</div>
+		</footer>
+	</div>
+
+	<style>
+		@font-face {
+			font-family: "Gabarito";
+			src: url("/fonts/gabarito-400-900.woff2") format("woff2");
+			font-weight: 400 900;
+			font-display: swap;
+		}
+		@font-face {
+			font-family: "DM Sans";
+			src: url("/fonts/dmsans.woff2") format("woff2");
+			font-weight: 400 700;
+			font-display: swap;
+		}
+
+		/* --- Palette --------------------------------------------------------
+		   Warm cream and near-black, with one hot accent doing all the pointing.
+		   Every pair below was measured:
+		     ink on paper        17.6:1
+		     muted on paper       5.8:1
+		     ink on flame         4.7:1   (so flame carries INK text, never white)
+		     white on flame-dk    5.2:1   (so buttons darken the flame first)
+		     ink on butter       14.7:1
+		     flame-lt on ink      7.1:1
+		     dim on ink           8.1:1
+		   The photographs are almost all blue, green and grey, which is the whole
+		   reason the accent is orange: it never has to compete with them. */
+		.gta {
+			--paper: #fffaf3;
+			--card: #ffffff;
+			--ink: #191410;
+			--muted: #6b6259;
+			--line: #ece2d4;
+			--flame: #e0512f;
+			--flame-dk: #c2401d;
+			--flame-lt: #ff7a52;
+			--butter: #fbe4b8;
+			--mint: #e2eee4;
+			--dim: #b8ab9c;
+			--r: 18px;
+			--shadow: 0 1px 2px rgb(25 20 16 / 0.05), 0 18px 40px -18px rgb(25 20 16 / 0.22);
+			--shadow-lg: 0 2px 4px rgb(25 20 16 / 0.06), 0 34px 70px -24px rgb(25 20 16 / 0.3);
+
+			background: var(--paper);
+			color: var(--ink);
+			font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+			font-size: 1.0625rem;
+			line-height: 1.62;
+			/* Warm light falling in from the top left, so the page is brightest
+			   exactly where the headline is. */
+			background-image:
+				radial-gradient(70rem 40rem at 8% -8%, #fff2dd 0%, transparent 62%),
+				radial-gradient(52rem 34rem at 96% 4%, #ffe9e0 0%, transparent 60%);
+			background-repeat: no-repeat;
+			overflow-x: clip;
+		}
+
+		.wrap {
+			max-width: 74rem;
+			margin-inline: auto;
+			padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+		}
+
+		.sec {
+			padding-block: clamp(4rem, 9vw, 7rem);
+		}
+
+		h1,
+		h2,
+		h3,
+		.wordmark {
+			font-family: "Gabarito", ui-sans-serif, system-ui, sans-serif;
+			font-weight: 700;
+			letter-spacing: -0.025em;
+			line-height: 1.05;
+			text-wrap: balance;
+		}
+
+		.sr-only {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip-path: inset(50%);
+			white-space: nowrap;
+		}
+
+		/* --- Eyebrow --------------------------------------------------------- */
+		.eyebrow {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-size: 0.75rem;
+			font-weight: 700;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: var(--flame-dk);
+		}
+		.eyebrow--dark {
+			color: var(--flame-lt);
+		}
+		.eyebrow__pip {
+			width: 7px;
+			height: 7px;
+			border-radius: 50%;
+			background: currentColor;
+			/* A slow pulse on one 7px dot. It is the only thing on the page that
+			   moves by itself, which is why it reads as "live" rather than as noise. */
+			animation: pip 2.6s ease-in-out infinite;
+		}
+		@keyframes pip {
+			0%,
+			100% {
+				box-shadow: 0 0 0 0 currentColor;
+				opacity: 1;
+			}
+			70% {
+				box-shadow: 0 0 0 6px transparent;
+				opacity: 0.75;
+			}
+		}
+		@media (prefers-reduced-motion: reduce) {
+			.eyebrow__pip {
+				animation: none;
+			}
+		}
+
+		/* --- Buttons --------------------------------------------------------- */
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 0.4rem;
+			font-family: "Gabarito", sans-serif;
+			font-weight: 600;
+			font-size: 0.9375rem;
+			letter-spacing: -0.01em;
+			text-decoration: none;
+			padding: 0.7rem 1.25rem;
+			border-radius: 100px;
+			border: 1px solid transparent;
+			background: var(--ink);
+			color: var(--paper);
+			transition:
+				transform 140ms ease,
+				background-color 140ms ease,
+				box-shadow 140ms ease;
+		}
+		.btn:hover {
+			transform: translateY(-1px);
+		}
+		.btn--sm {
+			padding: 0.5rem 1rem;
+			font-size: 0.875rem;
+		}
+		.btn--flame {
+			background: var(--flame-dk);
+			color: #fff;
+			box-shadow: 0 10px 24px -10px rgb(194 64 29 / 0.7);
+		}
+		.btn--flame:hover {
+			background: #ab3616;
+		}
+		.btn--ink {
+			background: var(--ink);
+			color: var(--paper);
+		}
+		.btn--quiet {
+			background: transparent;
+			color: var(--ink);
+			border-color: var(--line);
+		}
+		.btn--quiet:hover {
+			border-color: var(--ink);
+		}
+
+		/* --- Top bar --------------------------------------------------------- */
+		.topbar {
+			position: sticky;
+			top: 0;
+			z-index: 20;
+			display: flex;
+			align-items: center;
+			gap: 1.5rem;
+			max-width: 74rem;
+			margin-inline: auto;
+			padding: 0.9rem clamp(1.25rem, 4vw, 2.5rem);
+		}
+		/* Blur only the bar's own strip, so the photography behind it stays sharp
+		   and the bar never reads as a grey slab over a bright page. */
+		.topbar::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			z-index: -1;
+			background: rgb(255 250 243 / 0.82);
+			backdrop-filter: blur(12px);
+			-webkit-backdrop-filter: blur(12px);
+			border-bottom: 1px solid var(--line);
+		}
+
+		.wordmark {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			font-size: 1.25rem;
+			font-weight: 800;
+			color: var(--ink);
+			text-decoration: none;
+			letter-spacing: -0.03em;
+		}
+		.wordmark em {
+			font-style: normal;
+			color: var(--flame-dk);
+		}
+		.wordmark__dot {
+			width: 0.7em;
+			height: 0.7em;
+			border-radius: 50% 50% 50% 2px;
+			background: var(--flame);
+			transform: rotate(-8deg);
+		}
+
+		.topnav {
+			display: none;
+			gap: 1.5rem;
+			margin-left: auto;
+			font-size: 0.9375rem;
+		}
+		.topnav a {
+			color: var(--muted);
+			text-decoration: none;
+			padding-block: 0.25rem;
+			border-bottom: 2px solid transparent;
+		}
+		.topnav a:hover {
+			color: var(--ink);
+			border-color: var(--flame);
+		}
+		@media (min-width: 60rem) {
+			.topnav {
+				display: flex;
+			}
+		}
+		.topbar .btn {
+			margin-left: auto;
+		}
+		@media (min-width: 60rem) {
+			.topbar .btn {
+				margin-left: 0;
+			}
+		}
+
+		/* --- Hero ------------------------------------------------------------
+		   Two columns that deliberately do not line up: the copy sits high, the
+		   photography runs past the bottom of it. On narrow screens the art
+		   stacks under and keeps its overlap. */
+		.hero {
+			max-width: 74rem;
+			margin-inline: auto;
+			padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 2.5rem) clamp(3rem, 7vw, 5rem);
+			display: grid;
+			gap: clamp(2.5rem, 6vw, 4rem);
+			align-items: start;
+		}
+		@media (min-width: 62rem) {
+			.hero {
+				grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+				gap: 3.5rem;
+			}
+		}
+
+		h1 {
+			margin-top: 1rem;
+			font-size: clamp(2.5rem, 6.2vw, 4.25rem);
+			font-weight: 800;
+		}
+
+		.lede {
+			margin-top: 1.25rem;
+			max-width: 34rem;
+			font-size: 1.125rem;
+			color: var(--muted);
+			text-wrap: pretty;
+		}
+
+		.ticks {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.4rem 1.25rem;
+			list-style: none;
+			padding: 0;
+			margin-top: 1.125rem;
+			font-size: 0.875rem;
+			color: var(--muted);
+		}
+		.ticks li {
+			display: flex;
+			align-items: center;
+			gap: 0.4rem;
+		}
+		.ticks li::before {
+			content: "";
+			width: 6px;
+			height: 6px;
+			border-radius: 50%;
+			background: var(--flame);
+		}
+
+		/* --- Signup ---------------------------------------------------------- */
+		.signup__slot {
+			margin-top: 1.75rem;
+			max-width: 29rem;
+		}
+		.signup {
+			display: flex;
+			gap: 0.4rem;
+			background: var(--card);
+			border: 1px solid var(--line);
+			border-radius: 100px;
+			padding: 0.35rem 0.35rem 0.35rem 0.4rem;
+			box-shadow: var(--shadow);
+		}
+		.signup input {
+			flex: 1 1 auto;
+			min-width: 0;
+			font: inherit;
+			font-size: 1rem;
+			padding: 0.65rem 0.9rem;
+			border: 0;
+			background: transparent;
+			color: var(--ink);
+			border-radius: 100px;
+		}
+		.signup input::placeholder {
+			color: #948a7f;
+		}
+		.signup input:focus-visible {
+			outline: 2px solid var(--flame-dk);
+			outline-offset: -1px;
+		}
+		.signup button {
+			flex: none;
+			font-family: "Gabarito", sans-serif;
+			font-weight: 600;
+			font-size: 0.9375rem;
+			padding: 0.7rem 1.25rem;
+			border: 0;
+			border-radius: 100px;
+			background: var(--flame-dk);
+			color: #fff;
+			cursor: pointer;
+			transition: background-color 140ms ease;
+		}
+		.signup button:hover {
+			background: #ab3616;
+		}
+		.signup--dark {
+			background: rgb(255 255 255 / 0.1);
+			border-color: rgb(255 255 255 / 0.28);
+			backdrop-filter: blur(6px);
+			-webkit-backdrop-filter: blur(6px);
+			box-shadow: none;
+		}
+		.signup--dark input {
+			color: #fff;
+		}
+		.signup--dark input::placeholder {
+			color: #d6cec6;
+		}
+		.signup--dark input:focus-visible {
+			outline-color: #fff;
+		}
+		.signup__msg {
+			margin-top: 0.75rem;
+			font-size: 0.9375rem;
+			font-weight: 600;
+		}
+
+		/* --- Hero art -------------------------------------------------------- */
+		.hero__art {
+			position: relative;
+			padding-bottom: 3rem;
+		}
+		.shot {
+			margin: 0;
+			border-radius: 24px;
+			overflow: hidden;
+			background: var(--line);
+		}
+		.shot img {
+			width: 100%;
+			height: auto;
+			object-fit: cover;
+		}
+		.shot--main {
+			box-shadow: var(--shadow-lg);
+			/* A degree and a half. Enough to look pinned up rather than laid out,
+			   not enough to read as a mistake. */
+			rotate: -1.5deg;
+		}
+		.shot--house {
+			position: absolute;
+			right: -0.5rem;
+			bottom: 0;
+			width: min(52%, 15rem);
+			border: 6px solid var(--paper);
+			border-radius: 20px;
+			box-shadow: var(--shadow-lg);
+			rotate: 3deg;
+		}
+		.pin {
+			position: absolute;
+			left: -0.5rem;
+			bottom: 2.5rem;
+			width: min(66%, 17.5rem);
+			background: var(--butter);
+			border-radius: 14px;
+			padding: 0.9rem 1.05rem;
+			box-shadow: var(--shadow);
+			rotate: -2.5deg;
+		}
+		.pin__when {
+			font-family: "Gabarito", sans-serif;
+			font-size: 0.6875rem;
+			font-weight: 700;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: var(--flame-dk);
+		}
+		.pin__what {
+			margin-top: 0.35rem;
+			font-size: 0.9375rem;
+			line-height: 1.4;
+			text-wrap: pretty;
+		}
+		/* Below this the three pieces stop overlapping and stack. Overlap needs
+		   room to overlap into; on a phone the pin was simply covering the house.
+		   They keep their tilts, inset a little so the corners never touch the
+		   edge of the screen. */
+		@media (max-width: 34rem) {
+			.hero__art {
+				display: grid;
+				gap: 0.9rem;
+				padding-bottom: 0;
+			}
+			.shot--house {
+				position: static;
+				width: calc(100% - 1.25rem);
+				margin-inline: auto;
+				rotate: 1.5deg;
+			}
+			.shot--house img {
+				width: 100%;
+			}
+			.pin {
+				position: static;
+				width: calc(100% - 1.25rem);
+				margin-inline: auto;
+				rotate: -1.5deg;
+			}
+		}
+
+		/* --- Strip ----------------------------------------------------------- */
+		.strip {
+			background: var(--ink);
+			color: var(--dim);
+		}
+		.strip p {
+			max-width: 74rem;
+			margin-inline: auto;
+			padding: 1.1rem clamp(1.25rem, 4vw, 2.5rem);
+			font-size: 0.9375rem;
+			text-wrap: pretty;
+		}
+		.strip strong {
+			color: #fff;
+			font-weight: 600;
+		}
+
+		/* --- Section heads --------------------------------------------------- */
+		.sechead {
+			max-width: 40rem;
+			margin-bottom: clamp(2rem, 4vw, 3rem);
+		}
+		.sechead h2 {
+			margin-top: 0.875rem;
+			font-size: clamp(1.9rem, 4.2vw, 2.9rem);
+		}
+		.sechead__sub {
+			margin-top: 0.875rem;
+			color: var(--muted);
+			text-wrap: pretty;
+		}
+
+		/* --- What's in it ---------------------------------------------------- */
+		.sections {
+			display: grid;
+			gap: clamp(1.5rem, 3vw, 2rem);
+		}
+		@media (min-width: 40rem) {
+			.sections {
+				grid-template-columns: repeat(2, 1fr);
+			}
+		}
+		@media (min-width: 68rem) {
+			.sections {
+				grid-template-columns: repeat(4, 1fr);
+			}
+			/* Drop every other card half a step. The row reads as a hand of cards
+			   rather than a bar chart. */
+			.sect:nth-child(even) {
+				margin-top: 2.25rem;
+			}
+		}
+		.sect__photo {
+			position: relative;
+			border-radius: var(--r);
+			overflow: hidden;
+			background: var(--line);
+			aspect-ratio: 14 / 9;
+		}
+		.sect__photo img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transition: transform 400ms cubic-bezier(0.2, 0.7, 0.3, 1);
+		}
+		.sect:hover .sect__photo img {
+			transform: scale(1.04);
+		}
+		.sect__num {
+			position: absolute;
+			left: 0.75rem;
+			bottom: 0.75rem;
+			font-family: "Gabarito", sans-serif;
+			font-size: 0.75rem;
+			font-weight: 700;
+			letter-spacing: 0.06em;
+			background: var(--butter);
+			color: var(--ink);
+			padding: 0.2rem 0.55rem;
+			border-radius: 100px;
+		}
+		.sect h3 {
+			margin-top: 1.125rem;
+			font-size: 1.25rem;
+		}
+		.sect p {
+			margin-top: 0.5rem;
+			font-size: 0.9375rem;
+			color: var(--muted);
+			text-wrap: pretty;
+		}
+
+		/* --- Directory ------------------------------------------------------- */
+		.dir {
+			position: relative;
+			background: linear-gradient(180deg, transparent 0 3rem, var(--mint) 3rem 100%);
+		}
+		@media (min-width: 48rem) {
+			.dir {
+				background: linear-gradient(180deg, transparent 0 5rem, var(--mint) 5rem 100%);
+			}
+		}
+
+		.filter {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+			margin-bottom: 2rem;
+		}
+		.filter label {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.45rem;
+			font-family: "Gabarito", sans-serif;
+			font-weight: 600;
+			font-size: 0.9375rem;
+			padding: 0.5rem 0.95rem;
+			border: 1px solid var(--line);
+			border-radius: 100px;
+			background: var(--card);
+			cursor: pointer;
+			user-select: none;
+			transition:
+				background-color 140ms ease,
+				color 140ms ease,
+				border-color 140ms ease;
+		}
+		.filter label span {
+			font-size: 0.75rem;
+			font-weight: 700;
+			color: var(--muted);
+			background: var(--paper);
+			border-radius: 100px;
+			padding: 0.05rem 0.4rem;
+		}
+		.filter label:hover {
+			border-color: var(--ink);
+		}
+
+		#f-all:checked ~ .wrap .filter label[data-on="all"],
+		#f-agent:checked ~ .wrap .filter label[data-on="agent"],
+		#f-broker:checked ~ .wrap .filter label[data-on="broker"] {
+			background: var(--ink);
+			color: var(--paper);
+			border-color: var(--ink);
+		}
+		#f-all:checked ~ .wrap .filter label[data-on="all"] span,
+		#f-agent:checked ~ .wrap .filter label[data-on="agent"] span,
+		#f-broker:checked ~ .wrap .filter label[data-on="broker"] span {
+			background: rgb(255 255 255 / 0.16);
+			color: #fff;
+		}
+		/* The real input is off-screen, so its focus ring has to be drawn on the
+		   label the keyboard user is actually looking at. */
+		#f-all:focus-visible ~ .wrap .filter label[data-on="all"],
+		#f-agent:focus-visible ~ .wrap .filter label[data-on="agent"],
+		#f-broker:focus-visible ~ .wrap .filter label[data-on="broker"] {
+			outline: 3px solid var(--flame-dk);
+			outline-offset: 2px;
+		}
+
+		#f-agent:checked ~ .dir__grid .mem[data-kind="broker"],
+		#f-broker:checked ~ .dir__grid .mem[data-kind="agent"] {
+			display: none;
+		}
+
+		.dir__grid {
+			display: grid;
+			gap: 1.125rem;
+		}
+		@media (min-width: 44rem) {
+			.dir__grid {
+				grid-template-columns: repeat(2, 1fr);
+			}
+		}
+		@media (min-width: 70rem) {
+			.dir__grid {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+
+		.mem {
+			display: flex;
+			flex-direction: column;
+			background: var(--card);
+			border: 1px solid #d9e5db;
+			border-radius: var(--r);
+			padding: 1.25rem;
+			box-shadow: 0 1px 2px rgb(25 20 16 / 0.04);
+			transition:
+				transform 160ms ease,
+				box-shadow 160ms ease;
+		}
+		.mem:hover {
+			transform: translateY(-3px);
+			box-shadow: var(--shadow);
+		}
+
+		.mem__top {
+			display: flex;
+			gap: 0.875rem;
+			align-items: flex-start;
+		}
+		.mem__face {
+			flex: none;
+			width: 64px;
+			height: 64px;
+			border-radius: 50%;
+			object-fit: cover;
+			background: var(--line);
+		}
+		.mem__id h3 {
+			font-size: 1.1875rem;
+		}
+		.mem__firm {
+			margin-top: 0.1rem;
+			font-size: 0.8125rem;
+			color: var(--muted);
+		}
+		.mem__check {
+			display: flex;
+			align-items: center;
+			gap: 0.3rem;
+			margin-top: 0.4rem;
+			font-size: 0.75rem;
+			font-weight: 600;
+			color: #1d6a4f;
+		}
+		.mem__check svg {
+			width: 14px;
+			height: 14px;
+			flex: none;
+		}
+
+		.chips {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.35rem;
+			list-style: none;
+			padding: 0;
+			margin: 1rem 0 0;
+		}
+		.chips li {
+			font-size: 0.75rem;
+			font-weight: 600;
+			background: var(--butter);
+			color: var(--ink);
+			padding: 0.2rem 0.55rem;
+			border-radius: 100px;
+		}
+
+		.mem__line {
+			margin-top: 0.875rem;
+			font-size: 0.9375rem;
+			line-height: 1.55;
+			text-wrap: pretty;
+		}
+
+		.mem__meta {
+			display: flex;
+			gap: 1.5rem;
+			margin: 1rem 0 0;
+			padding-top: 0.875rem;
+			border-top: 1px solid var(--line);
+			font-size: 0.8125rem;
+		}
+		.mem__meta dt {
+			color: var(--muted);
+			font-size: 0.6875rem;
+			text-transform: uppercase;
+			letter-spacing: 0.07em;
+			font-weight: 700;
+		}
+		.mem__meta dd {
+			margin: 0.15rem 0 0;
+			font-weight: 600;
+		}
+
+		.mem__act {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 0.5rem;
+			margin-top: auto;
+			padding-top: 1.125rem;
+		}
+		.mem__act .btn {
+			font-size: 0.875rem;
+			padding: 0.55rem 1rem;
+		}
+
+		.dir__note {
+			margin-top: 2rem;
+			max-width: 42rem;
+			font-size: 0.9375rem;
+			color: #4f5c52;
+			text-wrap: pretty;
+		}
+		.dir__note a {
+			color: var(--flame-dk);
+		}
+
+		/* --- Neighbourhoods -------------------------------------------------- */
+		.areas {
+			display: grid;
+			gap: 1rem;
+			grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+		}
+		.area {
+			position: relative;
+			display: block;
+			border-radius: var(--r);
+			overflow: hidden;
+			background: var(--ink);
+			text-decoration: none;
+			color: #fff;
+			box-shadow: var(--shadow);
+			isolation: isolate;
+		}
+		.area img {
+			width: 100%;
+			aspect-ratio: 7 / 5;
+			object-fit: cover;
+			transition:
+				transform 500ms cubic-bezier(0.2, 0.7, 0.3, 1),
+				opacity 300ms ease;
+			opacity: 0.92;
+		}
+		.area:hover img {
+			transform: scale(1.05);
+			opacity: 1;
+		}
+		.area__body {
+			position: absolute;
+			inset: auto 0 0 0;
+			padding: 2.5rem 1rem 0.9rem;
+			background: linear-gradient(transparent, rgb(20 14 10 / 0.82) 62%);
+		}
+		.area__body h3 {
+			font-size: 1.125rem;
+		}
+		.area__body p {
+			margin-top: 0.1rem;
+			font-size: 0.8125rem;
+			color: #e6ddd3;
+		}
+		.area__flag {
+			position: absolute;
+			top: 0.7rem;
+			right: 0.7rem;
+			font-family: "Gabarito", sans-serif;
+			font-size: 0.6875rem;
+			font-weight: 700;
+			letter-spacing: 0.06em;
+			text-transform: uppercase;
+			background: var(--flame);
+			color: var(--ink);
+			padding: 0.22rem 0.55rem;
+			border-radius: 100px;
+		}
+		.area:focus-visible {
+			outline: 3px solid var(--flame-dk);
+			outline-offset: 3px;
+		}
+
+		/* --- Get listed ------------------------------------------------------
+		   The offer band is the warmest thing on the page, not the darkest. An ink
+		   panel here would run straight into the ink closing CTA below it and the
+		   two would read as one long dark basement. Butter keeps the page bright
+		   and leaves the single dark moment at the end, where the ask is.
+		     ink on butter        15.4:1
+		     muted on butter       5.0:1
+		     flame-dk on butter    4.4:1  */
+		.listed {
+			background: linear-gradient(180deg, #fdf3e2 0%, #fbe9cd 100%);
+			color: var(--ink);
+			border-block: 1px solid #f2e0bf;
+		}
+		.listed__grid {
+			display: grid;
+			gap: clamp(2.5rem, 6vw, 4rem);
+			align-items: start;
+		}
+		@media (min-width: 64rem) {
+			.listed__grid {
+				grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+				/* The list of what you get is much taller than the photograph.
+				   Centring the shorter column stops it hanging from the top with a
+				   pool of empty butter underneath it. */
+				align-items: center;
+			}
+		}
+		.listed h2 {
+			margin-top: 0.875rem;
+			font-size: clamp(3rem, 8vw, 4.75rem);
+			font-weight: 800;
+		}
+		.listed h2 span {
+			font-size: 0.3em;
+			font-weight: 600;
+			color: var(--muted);
+			letter-spacing: -0.01em;
+		}
+		.listed__lede {
+			margin-top: 0.75rem;
+			max-width: 32rem;
+			color: var(--muted);
+			text-wrap: pretty;
+		}
+
+		.includes {
+			display: grid;
+			gap: 1.25rem;
+			list-style: none;
+			padding: 0;
+			margin: 2rem 0 0;
+		}
+		@media (min-width: 34rem) {
+			.includes {
+				grid-template-columns: repeat(2, 1fr);
+				gap: 1.5rem 2rem;
+			}
+		}
+		.includes li {
+			padding-top: 0.875rem;
+			border-top: 2px solid var(--flame);
+		}
+		.includes h3 {
+			font-size: 1rem;
+			line-height: 1.25;
+		}
+		.includes p {
+			margin-top: 0.4rem;
+			font-size: 0.875rem;
+			color: var(--muted);
+			text-wrap: pretty;
+		}
+
+		.listed__act {
+			margin-top: 2.25rem;
+		}
+		.listed__act p {
+			margin-top: 0.875rem;
+			max-width: 26rem;
+			font-size: 0.875rem;
+			color: var(--muted);
+		}
+
+		.listed__art {
+			margin: 0;
+		}
+		.listed__art img {
+			width: 100%;
+			height: auto;
+			border-radius: 24px;
+			rotate: 1.5deg;
+			box-shadow: var(--shadow-lg);
+		}
+		.listed__art figcaption {
+			margin-top: 1.75rem;
+			font-size: 0.9375rem;
+			color: var(--muted);
+			text-wrap: pretty;
+		}
+		.listed__art strong {
+			display: block;
+			font-family: "Gabarito", sans-serif;
+			font-size: 1.0625rem;
+			color: var(--ink);
+			margin-bottom: 0.2rem;
+		}
+
+		/* --- Big close ------------------------------------------------------- */
+		.close {
+			position: relative;
+			isolation: isolate;
+			padding: clamp(4rem, 10vw, 7.5rem) clamp(1.25rem, 4vw, 2.5rem);
+			text-align: center;
+			color: #fff;
+			background: var(--ink);
+		}
+		.close__bg {
+			position: absolute;
+			inset: 0;
+			z-index: -2;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		/* Two stops, not one: the middle stays dark enough for the form, the edges
+		   keep enough of the photograph to still be a photograph. */
+		.close::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			z-index: -1;
+			background:
+				linear-gradient(180deg, rgb(20 14 10 / 0.42), rgb(20 14 10 / 0.74)),
+				radial-gradient(58% 58% at 50% 50%, rgb(20 14 10 / 0.42), transparent);
+		}
+		.close__inner {
+			max-width: 40rem;
+			margin-inline: auto;
+		}
+		.close h2 {
+			margin-top: 0.875rem;
+			font-size: clamp(2rem, 5.2vw, 3.25rem);
+		}
+		/* :not(.eyebrow) matters — this rule is more specific than .eyebrow--dark
+		   and would otherwise repaint the eyebrow grey and push it down a line. */
+		.close__inner > p:not(.eyebrow) {
+			margin-top: 1rem;
+			color: #e6ddd3;
+			text-wrap: pretty;
+		}
+		.close .signup__slot {
+			margin-inline: auto;
+		}
+		.close__fine {
+			margin-top: 1rem;
+			font-size: 0.8125rem;
+			color: #cdc2b7;
+		}
+
+		/* --- Footer ---------------------------------------------------------- */
+		.foot {
+			background: var(--paper);
+			border-top: 1px solid var(--line);
+			padding-block: clamp(2.5rem, 6vw, 4rem);
+		}
+		.foot__grid {
+			display: grid;
+			gap: 2rem;
+		}
+		@media (min-width: 48rem) {
+			.foot__grid {
+				grid-template-columns: 1.4fr 1fr 1fr;
+				gap: 3rem;
+			}
+		}
+		.foot h3 {
+			font-size: 0.75rem;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			color: var(--muted);
+			margin-bottom: 0.75rem;
+		}
+		.foot nav {
+			display: flex;
+			flex-direction: column;
+			gap: 0.4rem;
+			align-items: flex-start;
+		}
+		.foot a:not(.wordmark) {
+			color: var(--ink);
+			text-decoration: none;
+			font-size: 0.9375rem;
+			border-bottom: 1px solid transparent;
+		}
+		.foot a:not(.wordmark):hover {
+			border-color: var(--flame);
+		}
+		.foot__blurb {
+			margin-top: 0.75rem;
+			max-width: 24rem;
+			font-size: 0.875rem;
+			color: var(--muted);
+			text-wrap: pretty;
+		}
+	</style>
+
+	<script is:inline>
+		// Demo only. Swapping either form for a beehiiv embed makes this redundant
+		// for that form; the script handles however many are left.
+		(function () {
+			document.querySelectorAll("form[data-signup]").forEach(function (f) {
+				var msg = f.parentElement.querySelector("[data-msg]");
+				f.addEventListener("submit", function (e) {
+					e.preventDefault();
+					var input = f.querySelector("input");
+					var ok = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value.trim());
+					msg.hidden = false;
+					msg.textContent = ok
+						? "You’re on the list. Sunday, 7am. (Demo form — nothing was sent.)"
+						: "That email doesn’t look right. Have another go.";
+					if (ok) f.reset();
+				});
+			});
+		})();
+	</script>
+</Demo>
