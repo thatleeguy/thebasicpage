@@ -341,130 +341,174 @@ const INCLUDES = [
 >
 	<Fragment slot="head">
 		<link rel="preconnect" href="https://images.unsplash.com" crossorigin />
-		<link rel="preload" href="/fonts/gabarito-400-900.woff2" as="font" type="font/woff2" crossorigin />
-		<link rel="preload" href="/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/outfit-300-900.woff2" as="font" type="font/woff2" crossorigin />
 	</Fragment>
 
 	<div class="gta">
 		<!-- ---------------------------------------------------------------- Nav -->
 		<header class="topbar">
 			<a class="wordmark" href="#top">
-				<span class="wordmark__dot" aria-hidden="true"></span>
+				<span class="wordmark__mark" aria-hidden="true">
+					<svg viewBox="0 0 32 32">
+						<rect width="32" height="32" rx="9" fill="currentColor"></rect>
+						<path d="M10 22V10h3.2v4.4h5.6V10H22v12h-3.2v-4.7h-5.6V22z" fill="#fff"></path>
+					</svg>
+				</span>
 				<span>Hello<em>GTA</em></span>
 			</a>
-			<nav class="topnav" aria-label="Sections">
-				<a href="#dispatch">The Dispatch</a>
+
+			<!-- The segmented dark pill, borrowed wholesale from the reference. -->
+			<nav class="pillnav" aria-label="Sections">
+				<a href="#dispatch">Dispatch</a>
 				<a href="#directory">Directory</a>
 				<a href="#areas">Neighbourhoods</a>
 				<a href="#listed">Get listed</a>
 			</nav>
-			<a class="btn btn--sm" href="#signup">Subscribe free</a>
+
+			<a class="btn btn--blue btn--sm" href="#signup">Subscribe free</a>
 		</header>
 
 		<!-- -------------------------------------------------------------- Hero -->
 		<section class="hero" id="top">
-			<div class="hero__copy">
-				<p class="eyebrow"><span class="eyebrow__pip" aria-hidden="true"></span>{DISPATCH.name}</p>
+			<!-- The reference sits its centred hero on a washed-out photograph of a
+			     stadium. Same idea: the page is meant to be image-led, and a plain
+			     grey band under the headline would have thrown that away. -->
+			<img
+				class="hero__bg"
+				src={img("1517090504586-fde19ea6066f", 1500, 700)}
+				width="1500"
+				height="700"
+				alt=""
+				fetchpriority="high"
+				decoding="async"
+			/>
 
-				<h1>Who to call, and what actually sold on your street.</h1>
+			<p class="chip chip--blue">
+				<span class="chip__pip" aria-hidden="true"></span>{DISPATCH.name} · {DISPATCH.when}
+			</p>
 
-				<p class="lede">
-					{BRAND} lists one realtor and one mortgage broker per neighbourhood across the Greater Toronto
-					Area — no more than that — and sends a {DISPATCH.adj} email every Sunday morning about what changed
-					in yours.
-				</p>
+			<h1>Who to call, and what actually sold on your street.</h1>
 
-				<!--
-					SIGNUP.
+			<p class="lede">
+				{BRAND} lists one realtor and one mortgage broker per neighbourhood across the Greater Toronto
+				Area — no more than that — and sends a {DISPATCH.adj} email every Sunday morning about what changed
+				in yours.
+			</p>
 
-					Native form, styled to match the page. To go live with beehiiv,
-					replace the <form> with their embed iframe and leave the wrapper:
+			<!--
+				SIGNUP.
 
-					  <div class="signup__slot">
-					    <iframe src="https://embeds.beehiiv.com/YOUR-ID"
-					            data-test-id="beehiiv-embed" frameborder="0" scrolling="no"
-					            style="width:100%;height:64px;border-radius:14px;background:transparent"></iframe>
-					  </div>
+				Native form, styled to match the page. To go live with beehiiv,
+				replace the <form> with their embed iframe and leave the wrapper:
 
-					The wrapper owns width and alignment so the embed inherits the layout.
-					The same slot takes ConvertKit, Buttondown or Mailchimp. There are two
-					of these on the page; both are wired by the one script at the bottom.
-				-->
-				<div class="signup__slot" id="signup">
-					<form class="signup" data-signup novalidate>
-						<label class="sr-only" for="email-hero">Email address</label>
-						<input
-							id="email-hero"
-							type="email"
-							inputmode="email"
-							autocomplete="email"
-							placeholder="you@example.com"
-							required
-						/>
-						<button type="submit">Get Sunday’s issue</button>
-					</form>
-					<p class="signup__msg" data-msg role="status" hidden></p>
-				</div>
+				  <div class="signup__slot">
+				    <iframe src="https://embeds.beehiiv.com/YOUR-ID"
+				            data-test-id="beehiiv-embed" frameborder="0" scrolling="no"
+				            style="width:100%;height:66px;border-radius:999px;background:transparent"></iframe>
+				  </div>
 
-				<ul class="ticks">
-					<li>Free</li>
-					<li>{DISPATCH.when}</li>
-					<li>One click to unsubscribe</li>
-					{NUMBERS.subscribers && <li>{NUMBERS.subscribers} neighbours reading</li>}
-				</ul>
+				The wrapper owns width and alignment so the embed inherits the layout.
+				The same slot takes ConvertKit, Buttondown or Mailchimp. There are two
+				of these on the page; both are wired by the one script at the bottom.
+			-->
+			<div class="signup__slot" id="signup">
+				<form class="signup" data-signup novalidate>
+					<label class="sr-only" for="email-hero">Email address</label>
+					<input
+						id="email-hero"
+						type="email"
+						inputmode="email"
+						autocomplete="email"
+						placeholder="Your email, for Sunday morning"
+						required
+					/>
+					<button type="submit">
+						<span class="sr-only">Subscribe free</span>
+						<svg viewBox="0 0 24 24" aria-hidden="true">
+							<path
+								d="M4 12h15M13 6l6 6-6 6"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2.4"
+								stroke-linecap="round"
+								stroke-linejoin="round"></path>
+						</svg>
+					</button>
+				</form>
+				<p class="signup__msg" data-msg role="status" hidden></p>
 			</div>
 
-			<div class="hero__art">
-				<figure class="shot shot--main">
-					<img
-						src={img("1517090504586-fde19ea6066f", 760, 620)}
-						srcset={img2x("1517090504586-fde19ea6066f", 760, 620)}
-						width="760"
-						height="620"
-						alt="The CN Tower seen from a park across Toronto harbour on a clear day"
-						fetchpriority="high"
-						decoding="async"
-					/>
-				</figure>
+			<ul class="ticks">
+				<li>Free</li>
+				<li>No spam, no pitch</li>
+				<li>One click to unsubscribe</li>
+				{NUMBERS.subscribers && <li>{NUMBERS.subscribers} neighbours reading</li>}
+			</ul>
+		</section>
 
-				<figure class="shot shot--house">
-					<img
-						src={img("1605276374104-dee2a0ed3cd6", 340, 250)}
-						srcset={img2x("1605276374104-dee2a0ed3cd6", 340, 250)}
-						width="340"
-						height="250"
-						alt="A brick house with a double garage on a quiet suburban street"
-						loading="lazy"
-						decoding="async"
-					/>
-				</figure>
-
-				<div class="pin">
-					<p class="pin__when">This Sunday, 7am</p>
-					<p class="pin__what">
-						“Eleven sales on Bessborough, and one of them makes no sense. Plus: the variable moved.”
-					</p>
-				</div>
+		<!-- ------------------------------------------------- Popular, TickPick row -->
+		<section class="wrap rail">
+			<div class="rail__head">
+				<h2>Popular neighbourhoods</h2>
+				<a class="rail__all" href="#areas">See all</a>
+			</div>
+			<div class="rail__row">
+				{
+					AREAS.slice(0, 4).map((a) => (
+						<a class="mini" href="#directory">
+							<img
+								class="mini__thumb"
+								src={img(a.photo, 96, 96)}
+								srcset={img2x(a.photo, 96, 96)}
+								width="96"
+								height="96"
+								alt=""
+								loading="lazy"
+								decoding="async"
+							/>
+							<span class="mini__body">
+								<span class="mini__name">{a.name}</span>
+								<span class="mini__meta">
+									{a.open ? (
+										<span class="tag tag--open">Open</span>
+									) : (
+										<span class="tag">1 realtor · 1 broker</span>
+									)}
+								</span>
+							</span>
+							<span class="go" aria-hidden="true">
+								<svg viewBox="0 0 24 24">
+									<path
+										d="M9 5l7 7-7 7"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2.6"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+									/>
+								</svg>
+							</span>
+						</a>
+					))
+				}
 			</div>
 		</section>
 
-		<!-- ------------------------------------------------------------- Strip -->
-		<div class="strip">
-			<p>
-				<strong>Written by people who live here.</strong> Not scraped, not syndicated, and not a portal
-				trying to sell your address to four agents at once.
-			</p>
-		</div>
+		<!-- ------------------------------------------------------- Bold black box -->
+		<section class="wrap">
+			<div class="slab">
+				<p>
+					<strong>Written by people who live here.</strong> Not scraped, not syndicated, and not a portal
+					trying to sell your address to four agents at once.
+				</p>
+			</div>
+		</section>
 
 		<!-- ---------------------------------------------------------- Dispatch -->
 		<section class="wrap sec" id="dispatch">
 			<div class="sechead">
-				<p class="eyebrow"><span class="eyebrow__pip" aria-hidden="true"></span>What’s in it</p>
 				<h2>Four things, every Sunday, in about {DISPATCH.read}.</h2>
-				<p class="sechead__sub">
-					The same four sections in the same order every week, so you can read the one you came for and
-					close it.
-				</p>
+				<p>The same four sections in the same order every week, so you can read the one you came for and close it.</p>
 			</div>
 
 			<div class="sections">
@@ -473,18 +517,20 @@ const INCLUDES = [
 						<article class="sect">
 							<div class="sect__photo">
 								<img
-									src={img(s.photo, 560, 360)}
-									srcset={img2x(s.photo, 560, 360)}
+									src={img(s.photo, 560, 380)}
+									srcset={img2x(s.photo, 560, 380)}
 									width="560"
-									height="360"
+									height="380"
 									alt={s.alt}
 									loading="lazy"
 									decoding="async"
 								/>
 								<span class="sect__num">{s.tag}</span>
 							</div>
-							<h3>{s.title}</h3>
-							<p>{s.body}</p>
+							<div class="sect__body">
+								<h3>{s.title}</h3>
+								<p>{s.body}</p>
+							</div>
 						</article>
 					))
 				}
@@ -502,9 +548,8 @@ const INCLUDES = [
 
 			<div class="wrap">
 				<div class="sechead">
-					<p class="eyebrow"><span class="eyebrow__pip" aria-hidden="true"></span>The directory</p>
 					<h2>{MEMBERS.length} people, and their actual phone numbers.</h2>
-					<p class="sechead__sub">
+					<p>
 						One realtor and one mortgage broker per neighbourhood. Calling them calls them — nothing on
 						this page goes through us, and no enquiry is ever sold on.
 					</p>
@@ -535,20 +580,8 @@ const INCLUDES = [
 								<div class="mem__id">
 									<h3>{m.name}</h3>
 									<p class="mem__firm">{m.firm}</p>
-									<p class="mem__check">
-										<svg viewBox="0 0 16 16" aria-hidden="true">
-											<path
-												fill="currentColor"
-												d="M8 .8l1.9 1.4 2.3-.3.9 2.2 2 1.2-.7 2.2.7 2.2-2 1.2-.9 2.2-2.3-.3L8 15.2l-1.9-1.4-2.3.3-.9-2.2-2-1.2.7-2.2-.7-2.2 2-1.2.9-2.2 2.3.3z"
-											/>
-											<path
-												fill="#fffaf3"
-												d="M7.1 10.9L4.5 8.3l1.1-1.1 1.5 1.5 3.4-3.4 1.1 1.1z"
-											/>
-										</svg>
-										{m.checked}
-									</p>
 								</div>
+								<span class="mem__kind">{m.kind === "agent" ? "Realtor" : "Broker"}</span>
 							</div>
 
 							<ul class="chips">
@@ -565,8 +598,17 @@ const INCLUDES = [
 									<dd>{m.langs}</dd>
 								</div>
 								<div>
-									<dt>Listed</dt>
-									<dd>{m.since.replace("Member since ", "")}</dd>
+									<dt>Checked</dt>
+									<dd class="mem__check">
+										<svg viewBox="0 0 16 16" aria-hidden="true">
+											<path
+												fill="currentColor"
+												d="M8 .8l1.9 1.4 2.3-.3.9 2.2 2 1.2-.7 2.2.7 2.2-2 1.2-.9 2.2-2.3-.3L8 15.2l-1.9-1.4-2.3.3-.9-2.2-2-1.2.7-2.2-.7-2.2 2-1.2.9-2.2 2.3.3z"
+											/>
+											<path fill="#fff" d="M7.1 10.9L4.5 8.3l1.1-1.1 1.5 1.5 3.4-3.4 1.1 1.1z" />
+										</svg>
+										{m.checked}
+									</dd>
 								</div>
 							</dl>
 
@@ -574,8 +616,20 @@ const INCLUDES = [
 								<a class="btn btn--ink" href={`tel:+1${m.phone.replace(/\D/g, "")}`}>
 									{m.phone}
 								</a>
-								<a class="btn btn--quiet" href={`https://${m.site}`} rel="noopener">
+								<a class="mem__site" href={`https://${m.site}`} rel="noopener">
 									{m.site}
+									<span class="go go--sm" aria-hidden="true">
+										<svg viewBox="0 0 24 24">
+											<path
+												d="M9 5l7 7-7 7"
+												fill="none"
+												stroke="currentColor"
+												stroke-width="2.6"
+												stroke-linecap="round"
+												stroke-linejoin="round"
+											/>
+										</svg>
+									</span>
 								</a>
 							</div>
 						</article>
@@ -595,9 +649,8 @@ const INCLUDES = [
 		<!-- ------------------------------------------------------------- Areas -->
 		<section class="wrap sec" id="areas">
 			<div class="sechead">
-				<p class="eyebrow"><span class="eyebrow__pip" aria-hidden="true"></span>Neighbourhoods</p>
 				<h2>Browse by where you actually live.</h2>
-				<p class="sechead__sub">
+				<p>
 					{
 						NUMBERS.areasCovered
 							? `${NUMBERS.areasCovered} areas covered so far. The open ones have nobody in them yet.`
@@ -610,20 +663,36 @@ const INCLUDES = [
 				{
 					AREAS.map((a) => (
 						<a class="area" href="#directory">
-							<img
-								src={img(a.photo, 420, 300)}
-								srcset={img2x(a.photo, 420, 300)}
-								width="420"
-								height="300"
-								alt={a.alt}
-								loading="lazy"
-								decoding="async"
-							/>
-							<div class="area__body">
-								<h3>{a.name}</h3>
-								<p>{a.open ? "Open — no member yet" : "1 realtor · 1 broker"}</p>
+							<div class="area__pic">
+								<img
+									src={img(a.photo, 420, 300)}
+									srcset={img2x(a.photo, 420, 300)}
+									width="420"
+									height="300"
+									alt={a.alt}
+									loading="lazy"
+									decoding="async"
+								/>
+								{a.open && <span class="area__flag">Open</span>}
 							</div>
-							{a.open && <span class="area__flag">Open</span>}
+							<div class="area__body">
+								<div>
+									<h3>{a.name}</h3>
+									<p>{a.open ? "No member yet" : "1 realtor · 1 broker"}</p>
+								</div>
+								<span class="go" aria-hidden="true">
+									<svg viewBox="0 0 24 24">
+										<path
+											d="M9 5l7 7-7 7"
+											fill="none"
+											stroke="currentColor"
+											stroke-width="2.6"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										/>
+									</svg>
+								</span>
+							</div>
 						</a>
 					))
 				}
@@ -631,16 +700,14 @@ const INCLUDES = [
 		</section>
 
 		<!-- ------------------------------------------------------------ Listed -->
-		<section class="listed sec" id="listed">
-			<div class="wrap listed__grid">
-				<div class="listed__copy">
-					<p class="eyebrow">
-						<span class="eyebrow__pip" aria-hidden="true"></span>For realtors and mortgage brokers
-					</p>
+		<section class="wrap sec" id="listed">
+			<div class="offer">
+				<div class="offer__copy">
+					<p class="chip chip--onblue">For realtors and mortgage brokers</p>
 					<h2>
 						{PLACEMENT.price} <span>{PLACEMENT.period}</span>
 					</h2>
-					<p class="listed__lede">
+					<p class="offer__lede">
 						Month to month. No setup fee, no contract, no referral cut, and no annual anything. Cancel by
 						email and the last month is the last month.
 					</p>
@@ -656,8 +723,8 @@ const INCLUDES = [
 						}
 					</ul>
 
-					<div class="listed__act">
-						<a class="btn btn--flame" href="mailto:hello@hellogta.ca?subject=Placement%20enquiry"
+					<div class="offer__act">
+						<a class="btn btn--white" href="mailto:hello@hellogta.ca?subject=Placement%20enquiry"
 							>Ask about your neighbourhood</a
 						>
 						<p>
@@ -667,12 +734,12 @@ const INCLUDES = [
 					</div>
 				</div>
 
-				<figure class="listed__art">
+				<figure class="offer__art">
 					<img
-						src={img("1590650153855-d9e808231d41", 620, 760)}
-						srcset={img2x("1590650153855-d9e808231d41", 620, 760)}
+						src={img("1590650153855-d9e808231d41", 620, 700)}
+						srcset={img2x("1590650153855-d9e808231d41", 620, 700)}
 						width="620"
-						height="760"
+						height="700"
 						alt="An agent standing at a laptop in a bright office"
 						loading="lazy"
 						decoding="async"
@@ -686,43 +753,54 @@ const INCLUDES = [
 		</section>
 
 		<!-- --------------------------------------------------------- Big close -->
-		<section class="close">
-			<img
-				class="close__bg"
-				src={img("1517935706615-2717063c2225", 1600, 900)}
-				width="1600"
-				height="900"
-				alt=""
-				loading="lazy"
-				decoding="async"
-			/>
-			<div class="close__inner">
-				<p class="eyebrow eyebrow--dark">
-					<span class="eyebrow__pip" aria-hidden="true"></span>{DISPATCH.name}
-				</p>
-				<h2>Sunday, 7am. Then it leaves you alone for a week.</h2>
-				<p>
-					What sold and for how much, where rates landed, the open houses worth the trip, and one
-					neighbourhood walked properly.
-				</p>
+		<section class="wrap sec sec--tight">
+			<div class="close">
+				<img
+					class="close__bg"
+					src={img("1517935706615-2717063c2225", 1400, 800)}
+					width="1400"
+					height="800"
+					alt=""
+					loading="lazy"
+					decoding="async"
+				/>
+				<div class="close__inner">
+					<p class="chip chip--onblack">{DISPATCH.name}</p>
+					<h2>Sunday, 7am. Then it leaves you alone for a week.</h2>
+					<p class="close__sub">
+						What sold and for how much, where rates landed, the open houses worth the trip, and one
+						neighbourhood walked properly.
+					</p>
 
-				<div class="signup__slot">
-					<form class="signup signup--dark" data-signup novalidate>
-						<label class="sr-only" for="email-close">Email address</label>
-						<input
-							id="email-close"
-							type="email"
-							inputmode="email"
-							autocomplete="email"
-							placeholder="you@example.com"
-							required
-						/>
-						<button type="submit">Subscribe free</button>
-					</form>
-					<p class="signup__msg" data-msg role="status" hidden></p>
+					<div class="signup__slot">
+						<form class="signup signup--dark" data-signup novalidate>
+							<label class="sr-only" for="email-close">Email address</label>
+							<input
+								id="email-close"
+								type="email"
+								inputmode="email"
+								autocomplete="email"
+								placeholder="Your email"
+								required
+							/>
+							<button type="submit">
+								<span class="sr-only">Subscribe free</span>
+								<svg viewBox="0 0 24 24" aria-hidden="true">
+									<path
+										d="M4 12h15M13 6l6 6-6 6"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2.4"
+										stroke-linecap="round"
+										stroke-linejoin="round"></path>
+								</svg>
+							</button>
+						</form>
+						<p class="signup__msg" data-msg role="status" hidden></p>
+					</div>
+
+					<p class="close__fine">Free. One click to unsubscribe. We do not sell the list.</p>
 				</div>
-
-				<p class="close__fine">Free. One click to unsubscribe. We do not sell the list.</p>
 			</div>
 		</section>
 
@@ -731,12 +809,17 @@ const INCLUDES = [
 			<div class="wrap foot__grid">
 				<div>
 					<a class="wordmark" href="#top">
-						<span class="wordmark__dot" aria-hidden="true"></span>
+						<span class="wordmark__mark" aria-hidden="true">
+							<svg viewBox="0 0 32 32">
+								<rect width="32" height="32" rx="9" fill="currentColor"></rect>
+								<path d="M10 22V10h3.2v4.4h5.6V10H22v12h-3.2v-4.7h-5.6V22z" fill="#fff"></path>
+							</svg>
+						</span>
 						<span>Hello<em>GTA</em></span>
 					</a>
 					<p class="foot__blurb">
-						A small directory of people worth calling in the Greater Toronto Area, and an email about
-						what is happening on your street.
+						A small directory of people worth calling in the Greater Toronto Area, and an email about what
+						is happening on your street.
 					</p>
 				</div>
 				<nav aria-label="Footer">
@@ -760,78 +843,70 @@ const INCLUDES = [
 
 	<style>
 		@font-face {
-			font-family: "Gabarito";
-			src: url("/fonts/gabarito-400-900.woff2") format("woff2");
-			font-weight: 400 900;
-			font-display: swap;
-		}
-		@font-face {
-			font-family: "DM Sans";
-			src: url("/fonts/dmsans.woff2") format("woff2");
-			font-weight: 400 700;
+			font-family: "Outfit";
+			src: url("/fonts/outfit-300-900.woff2") format("woff2");
+			font-weight: 300 900;
 			font-display: swap;
 		}
 
 		/* --- Palette --------------------------------------------------------
-		   Warm cream and near-black, with one hot accent doing all the pointing.
-		   Every pair below was measured:
-		     ink on paper        17.6:1
-		     muted on paper       5.8:1
-		     ink on flame         4.7:1   (so flame carries INK text, never white)
-		     white on flame-dk    5.2:1   (so buttons darken the flame first)
-		     ink on butter       14.7:1
-		     flame-lt on ink      7.1:1
-		     dim on ink           8.1:1
-		   The photographs are almost all blue, green and grey, which is the whole
-		   reason the accent is orange: it never has to compete with them. */
+		   White page, near-black text, one saturated blue. Measured:
+		     ink on white         17.4:1
+		     muted on white        5.8:1
+		     white on blue-dk      6.1:1   (every button and link)
+		     ink on blue          5.9:1   (so the bright blue carries INK, not white)
+		     white on blue-lt-end  4.6:1   (the light end of the offer gradient)
+		     blue-lt on ink        7.8:1
+		   The bright --blue is the one the reference is known for, but white on it
+		   is only 2.9:1. So it is used at scale — gradients, chips behind dark
+		   text, the mark — and anything carrying white text steps down to
+		   --blue-dk. The page still reads blue; it just does not fail. */
 		.gta {
-			--paper: #fffaf3;
-			--card: #ffffff;
-			--ink: #191410;
-			--muted: #6b6259;
-			--line: #ece2d4;
-			--flame: #e0512f;
-			--flame-dk: #c2401d;
-			--flame-lt: #ff7a52;
-			--butter: #fbe4b8;
-			--mint: #e2eee4;
-			--dim: #b8ab9c;
-			--r: 18px;
-			--shadow: 0 1px 2px rgb(25 20 16 / 0.05), 0 18px 40px -18px rgb(25 20 16 / 0.22);
-			--shadow-lg: 0 2px 4px rgb(25 20 16 / 0.06), 0 34px 70px -24px rgb(25 20 16 / 0.3);
+			--paper: #ffffff;
+			--wash: #f4f6f9;
+			--ink: #1a1a1a;
+			--muted: #5f6672;
+			--line: #e6e9ef;
+			--line-dk: #d7dce5;
+			--blue: #3399ff;
+			--blue-dk: #0f5ec9;
+			--blue-dkr: #0b52b8;
+			--blue-mid: #1273e0;
+			--blue-wash: #e8f2ff;
+			--blue-lt: #66b2ff;
+			--dim: #a9b0bb;
+			--r: 16px;
+			--r-lg: 24px;
+			--shadow: 0 1px 2px rgb(16 24 40 / 0.04), 0 8px 24px -12px rgb(16 24 40 / 0.18);
+			--shadow-lg: 0 2px 6px rgb(16 24 40 / 0.06), 0 28px 60px -28px rgb(16 24 40 / 0.35);
 
 			background: var(--paper);
 			color: var(--ink);
-			font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
-			font-size: 1.0625rem;
-			line-height: 1.62;
-			/* Warm light falling in from the top left, so the page is brightest
-			   exactly where the headline is. */
-			background-image:
-				radial-gradient(70rem 40rem at 8% -8%, #fff2dd 0%, transparent 62%),
-				radial-gradient(52rem 34rem at 96% 4%, #ffe9e0 0%, transparent 60%);
-			background-repeat: no-repeat;
+			font-family: "Outfit", ui-sans-serif, system-ui, sans-serif;
+			font-size: 1rem;
+			line-height: 1.6;
+			font-weight: 400;
 			overflow-x: clip;
 		}
 
 		.wrap {
-			max-width: 74rem;
+			max-width: 76rem;
 			margin-inline: auto;
-			padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+			padding-inline: clamp(1rem, 3.5vw, 2rem);
 		}
 
 		.sec {
-			padding-block: clamp(4rem, 9vw, 7rem);
+			padding-block: clamp(3rem, 6vw, 4.5rem);
+		}
+		.sec--tight {
+			padding-block: 0 clamp(3rem, 6vw, 4.5rem);
 		}
 
 		h1,
 		h2,
-		h3,
-		.wordmark {
-			font-family: "Gabarito", ui-sans-serif, system-ui, sans-serif;
-			font-weight: 700;
-			letter-spacing: -0.025em;
-			line-height: 1.05;
+		h3 {
+			letter-spacing: -0.02em;
+			line-height: 1.1;
 			text-wrap: balance;
 		}
 
@@ -844,42 +919,50 @@ const INCLUDES = [
 			white-space: nowrap;
 		}
 
-		/* --- Eyebrow --------------------------------------------------------- */
-		.eyebrow {
+		/* --- Chips ----------------------------------------------------------- */
+		.chip {
 			display: inline-flex;
 			align-items: center;
-			gap: 0.5rem;
-			font-size: 0.75rem;
+			gap: 0.45rem;
+			font-size: 0.8125rem;
 			font-weight: 700;
-			letter-spacing: 0.1em;
-			text-transform: uppercase;
-			color: var(--flame-dk);
+			padding: 0.35rem 0.8rem;
+			border-radius: 999px;
 		}
-		.eyebrow--dark {
-			color: var(--flame-lt);
+		.chip--blue {
+			background: var(--blue-wash);
+			color: var(--blue-dk);
 		}
-		.eyebrow__pip {
+		.chip--onblue {
+			background: rgb(255 255 255 / 0.16);
+			color: #fff;
+		}
+		.chip--onblack {
+			background: rgb(255 255 255 / 0.14);
+			color: #fff;
+		}
+		.chip__pip {
 			width: 7px;
 			height: 7px;
 			border-radius: 50%;
-			background: currentColor;
-			/* A slow pulse on one 7px dot. It is the only thing on the page that
-			   moves by itself, which is why it reads as "live" rather than as noise. */
+			background: var(--blue);
+			/* The only thing on the page that moves by itself. That scarcity is why
+			   it reads as "live" rather than as noise. */
 			animation: pip 2.6s ease-in-out infinite;
 		}
 		@keyframes pip {
 			0%,
 			100% {
-				box-shadow: 0 0 0 0 currentColor;
+				box-shadow: 0 0 0 0 var(--blue);
 				opacity: 1;
 			}
 			70% {
 				box-shadow: 0 0 0 6px transparent;
-				opacity: 0.75;
+				opacity: 0.7;
 			}
 		}
 		@media (prefers-reduced-motion: reduce) {
-			.eyebrow__pip {
+			.chip__pip {
 				animation: none;
 			}
 		}
@@ -890,47 +973,74 @@ const INCLUDES = [
 			align-items: center;
 			justify-content: center;
 			gap: 0.4rem;
-			font-family: "Gabarito", sans-serif;
-			font-weight: 600;
+			font-family: inherit;
+			font-weight: 700;
 			font-size: 0.9375rem;
-			letter-spacing: -0.01em;
 			text-decoration: none;
-			padding: 0.7rem 1.25rem;
-			border-radius: 100px;
-			border: 1px solid transparent;
+			padding: 0.7rem 1.35rem;
+			border-radius: 999px;
+			border: 0;
 			background: var(--ink);
-			color: var(--paper);
+			color: #fff;
+			cursor: pointer;
 			transition:
-				transform 140ms ease,
-				background-color 140ms ease,
-				box-shadow 140ms ease;
+				transform 130ms ease,
+				background-color 130ms ease,
+				box-shadow 130ms ease;
 		}
 		.btn:hover {
 			transform: translateY(-1px);
 		}
 		.btn--sm {
-			padding: 0.5rem 1rem;
+			padding: 0.5rem 1.1rem;
 			font-size: 0.875rem;
 		}
-		.btn--flame {
-			background: var(--flame-dk);
-			color: #fff;
-			box-shadow: 0 10px 24px -10px rgb(194 64 29 / 0.7);
+		.btn--blue {
+			background: var(--blue-dk);
+			box-shadow: 0 8px 20px -10px rgb(15 94 201 / 0.8);
 		}
-		.btn--flame:hover {
-			background: #ab3616;
+		.btn--blue:hover {
+			background: var(--blue-dkr);
 		}
-		.btn--ink {
-			background: var(--ink);
-			color: var(--paper);
+		.btn--ink:hover {
+			background: #000;
 		}
-		.btn--quiet {
+		.btn--white {
+			background: #fff;
+			color: var(--blue-dkr);
+		}
+		.btn--white:hover {
+			background: var(--blue-wash);
+		}
+
+		/* Circular arrow affordance. Straight from the reference — every card on
+		   it ends in one, which is most of why the cards read as tappable. */
+		.go {
+			flex: none;
+			display: grid;
+			place-items: center;
+			width: 30px;
+			height: 30px;
+			border-radius: 50%;
+			background: var(--blue-wash);
+			color: var(--blue-dk);
+			transition:
+				background-color 140ms ease,
+				color 140ms ease,
+				transform 140ms ease;
+		}
+		.go svg {
+			width: 15px;
+			height: 15px;
+		}
+		.go--sm {
+			width: 22px;
+			height: 22px;
 			background: transparent;
-			color: var(--ink);
-			border-color: var(--line);
 		}
-		.btn--quiet:hover {
-			border-color: var(--ink);
+		.go--sm svg {
+			width: 13px;
+			height: 13px;
 		}
 
 		/* --- Top bar --------------------------------------------------------- */
@@ -940,19 +1050,17 @@ const INCLUDES = [
 			z-index: 20;
 			display: flex;
 			align-items: center;
-			gap: 1.5rem;
-			max-width: 74rem;
+			gap: 1rem;
+			max-width: 76rem;
 			margin-inline: auto;
-			padding: 0.9rem clamp(1.25rem, 4vw, 2.5rem);
+			padding: 0.85rem clamp(1rem, 3.5vw, 2rem);
 		}
-		/* Blur only the bar's own strip, so the photography behind it stays sharp
-		   and the bar never reads as a grey slab over a bright page. */
 		.topbar::before {
 			content: "";
 			position: absolute;
 			inset: 0;
 			z-index: -1;
-			background: rgb(255 250 243 / 0.82);
+			background: rgb(255 255 255 / 0.86);
 			backdrop-filter: blur(12px);
 			-webkit-backdrop-filter: blur(12px);
 			border-bottom: 1px solid var(--line);
@@ -961,84 +1069,138 @@ const INCLUDES = [
 		.wordmark {
 			display: inline-flex;
 			align-items: center;
-			gap: 0.5rem;
-			font-size: 1.25rem;
+			gap: 0.55rem;
+			font-size: 1.3125rem;
 			font-weight: 800;
+			letter-spacing: -0.035em;
 			color: var(--ink);
 			text-decoration: none;
-			letter-spacing: -0.03em;
+		}
+		.wordmark__mark {
+			flex: none;
+			width: 30px;
+			height: 30px;
+			color: var(--blue-dk);
+		}
+		.wordmark__mark svg {
+			width: 100%;
+			height: 100%;
 		}
 		.wordmark em {
 			font-style: normal;
-			color: var(--flame-dk);
-		}
-		.wordmark__dot {
-			width: 0.7em;
-			height: 0.7em;
-			border-radius: 50% 50% 50% 2px;
-			background: var(--flame);
-			transform: rotate(-8deg);
+			color: var(--blue-dk);
 		}
 
-		.topnav {
+		/* The segmented dark pill. */
+		.pillnav {
 			display: none;
-			gap: 1.5rem;
-			margin-left: auto;
-			font-size: 0.9375rem;
+			gap: 0.15rem;
+			margin-inline: auto;
+			padding: 0.25rem;
+			background: var(--ink);
+			border-radius: 999px;
 		}
-		.topnav a {
-			color: var(--muted);
+		.pillnav a {
+			font-size: 0.875rem;
+			font-weight: 600;
+			color: #d5d8de;
 			text-decoration: none;
-			padding-block: 0.25rem;
-			border-bottom: 2px solid transparent;
+			padding: 0.4rem 0.95rem;
+			border-radius: 999px;
+			transition:
+				background-color 140ms ease,
+				color 140ms ease;
 		}
-		.topnav a:hover {
+		.pillnav a:hover {
+			background: #fff;
 			color: var(--ink);
-			border-color: var(--flame);
 		}
-		@media (min-width: 60rem) {
-			.topnav {
+		@media (min-width: 62rem) {
+			.pillnav {
 				display: flex;
 			}
 		}
-		.topbar .btn {
+		.topbar > .btn {
 			margin-left: auto;
 		}
-		@media (min-width: 60rem) {
-			.topbar .btn {
+		@media (min-width: 62rem) {
+			.topbar > .btn {
 				margin-left: 0;
 			}
 		}
 
 		/* --- Hero ------------------------------------------------------------
-		   Two columns that deliberately do not line up: the copy sits high, the
-		   photography runs past the bottom of it. On narrow screens the art
-		   stacks under and keeps its overlap. */
+		   Centred, like the reference: one enormous heavy headline and one input.
+		   Everything the page sells sits below the fold on purpose — the ask is
+		   the email address, so nothing competes with it above the line. */
 		.hero {
-			max-width: 74rem;
-			margin-inline: auto;
-			padding: clamp(2.5rem, 6vw, 4.5rem) clamp(1.25rem, 4vw, 2.5rem) clamp(3rem, 7vw, 5rem);
-			display: grid;
-			gap: clamp(2.5rem, 6vw, 4rem);
-			align-items: start;
+			position: relative;
+			isolation: isolate;
+			text-align: center;
+			padding: clamp(3rem, 7vw, 5rem) clamp(1rem, 3.5vw, 2rem) clamp(3rem, 6vw, 4.5rem);
+			background:
+				radial-gradient(38rem 20rem at 50% -10%, #e8f2ff 0%, transparent 68%),
+				linear-gradient(180deg, var(--wash) 0%, #fff 100%);
 		}
-		@media (min-width: 62rem) {
-			.hero {
-				grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-				gap: 3.5rem;
-			}
+		/* The photograph is knocked back hard and then covered by a near-opaque
+		   white scrim. Behind the headline the effective background never drops
+		   below #eef1f5, so the ink stays above 15:1 wherever the type lands. */
+		.hero__bg {
+			position: absolute;
+			inset: 0;
+			z-index: -2;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			opacity: 0.55;
+		}
+		.hero::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			z-index: -1;
+			background: linear-gradient(
+				180deg,
+				rgb(255 255 255 / 0.7) 0%,
+				rgb(255 255 255 / 0.88) 45%,
+				rgb(255 255 255 / 0.99) 100%
+			);
+		}
+		/* A faint grid, so the pale band behind the headline has a texture rather
+		   than being an empty grey rectangle. */
+		.hero::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			z-index: 0;
+			background-image:
+				linear-gradient(rgb(15 94 201 / 0.05) 1px, transparent 1px),
+				linear-gradient(90deg, rgb(15 94 201 / 0.05) 1px, transparent 1px);
+			background-size: 46px 46px;
+			mask-image: radial-gradient(38rem 22rem at 50% 30%, #000 0%, transparent 75%);
+			-webkit-mask-image: radial-gradient(38rem 22rem at 50% 30%, #000 0%, transparent 75%);
+		}
+		/* :not(img) matters — this rule has the same specificity as .hero__bg and
+		   comes after it, so without the exclusion it would win, drop the backdrop
+		   back into flow and push the whole hero down by the height of a
+		   full-width photograph. */
+		.hero > :not(img) {
+			position: relative;
+			z-index: 1;
 		}
 
 		h1 {
-			margin-top: 1rem;
-			font-size: clamp(2.5rem, 6.2vw, 4.25rem);
-			font-weight: 800;
+			margin: 1.25rem auto 0;
+			max-width: 20ch;
+			font-size: clamp(2.5rem, 6.2vw, 4.5rem);
+			font-weight: 900;
+			letter-spacing: -0.035em;
 		}
 
 		.lede {
-			margin-top: 1.25rem;
-			max-width: 34rem;
-			font-size: 1.125rem;
+			margin: 1.125rem auto 0;
+			max-width: 38rem;
+			font-size: 1.0625rem;
 			color: var(--muted);
 			text-wrap: pretty;
 		}
@@ -1046,11 +1208,13 @@ const INCLUDES = [
 		.ticks {
 			display: flex;
 			flex-wrap: wrap;
-			gap: 0.4rem 1.25rem;
+			justify-content: center;
+			gap: 0.35rem 1.25rem;
 			list-style: none;
 			padding: 0;
-			margin-top: 1.125rem;
+			margin-top: 1.25rem;
 			font-size: 0.875rem;
+			font-weight: 500;
 			color: var(--muted);
 		}
 		.ticks li {
@@ -1063,21 +1227,22 @@ const INCLUDES = [
 			width: 6px;
 			height: 6px;
 			border-radius: 50%;
-			background: var(--flame);
+			background: var(--blue);
 		}
 
 		/* --- Signup ---------------------------------------------------------- */
 		.signup__slot {
-			margin-top: 1.75rem;
-			max-width: 29rem;
+			margin: 2rem auto 0;
+			max-width: 30rem;
 		}
 		.signup {
 			display: flex;
-			gap: 0.4rem;
-			background: var(--card);
-			border: 1px solid var(--line);
-			border-radius: 100px;
-			padding: 0.35rem 0.35rem 0.35rem 0.4rem;
+			align-items: center;
+			gap: 0.5rem;
+			background: #fff;
+			border: 1px solid var(--line-dk);
+			border-radius: 999px;
+			padding: 0.4rem 0.4rem 0.4rem 0.5rem;
 			box-shadow: var(--shadow);
 		}
 		.signup input {
@@ -1085,38 +1250,45 @@ const INCLUDES = [
 			min-width: 0;
 			font: inherit;
 			font-size: 1rem;
-			padding: 0.65rem 0.9rem;
+			padding: 0.7rem 0.9rem;
 			border: 0;
 			background: transparent;
 			color: var(--ink);
-			border-radius: 100px;
+			border-radius: 999px;
 		}
 		.signup input::placeholder {
-			color: #948a7f;
+			color: #8b929e;
 		}
 		.signup input:focus-visible {
-			outline: 2px solid var(--flame-dk);
+			outline: 2px solid var(--blue-dk);
 			outline-offset: -1px;
 		}
 		.signup button {
 			flex: none;
-			font-family: "Gabarito", sans-serif;
-			font-weight: 600;
-			font-size: 0.9375rem;
-			padding: 0.7rem 1.25rem;
+			display: grid;
+			place-items: center;
+			width: 44px;
+			height: 44px;
 			border: 0;
-			border-radius: 100px;
-			background: var(--flame-dk);
+			border-radius: 50%;
+			background: var(--blue-dk);
 			color: #fff;
 			cursor: pointer;
-			transition: background-color 140ms ease;
+			transition:
+				background-color 140ms ease,
+				transform 140ms ease;
+		}
+		.signup button svg {
+			width: 20px;
+			height: 20px;
 		}
 		.signup button:hover {
-			background: #ab3616;
+			background: var(--blue-dkr);
+			transform: scale(1.05);
 		}
 		.signup--dark {
 			background: rgb(255 255 255 / 0.1);
-			border-color: rgb(255 255 255 / 0.28);
+			border-color: rgb(255 255 255 / 0.3);
 			backdrop-filter: blur(6px);
 			-webkit-backdrop-filter: blur(6px);
 			box-shadow: none;
@@ -1125,129 +1297,143 @@ const INCLUDES = [
 			color: #fff;
 		}
 		.signup--dark input::placeholder {
-			color: #d6cec6;
+			color: #cfd4dc;
 		}
 		.signup--dark input:focus-visible {
 			outline-color: #fff;
 		}
+		.signup--dark button {
+			background: #fff;
+			color: var(--ink);
+		}
+		.signup--dark button:hover {
+			background: var(--blue-wash);
+		}
 		.signup__msg {
 			margin-top: 0.75rem;
-			font-size: 0.9375rem;
+			font-size: 0.875rem;
 			font-weight: 600;
+			text-align: center;
 		}
 
-		/* --- Hero art -------------------------------------------------------- */
-		.hero__art {
-			position: relative;
-			padding-bottom: 3rem;
+		/* --- Popular rail ---------------------------------------------------- */
+		.rail {
+			padding-top: clamp(2rem, 4vw, 2.75rem);
 		}
-		.shot {
-			margin: 0;
-			border-radius: 24px;
-			overflow: hidden;
-			background: var(--line);
+		.rail__head {
+			display: flex;
+			align-items: baseline;
+			justify-content: space-between;
+			gap: 1rem;
+			margin-bottom: 0.875rem;
 		}
-		.shot img {
-			width: 100%;
-			height: auto;
-			object-fit: cover;
-		}
-		.shot--main {
-			box-shadow: var(--shadow-lg);
-			/* A degree and a half. Enough to look pinned up rather than laid out,
-			   not enough to read as a mistake. */
-			rotate: -1.5deg;
-		}
-		.shot--house {
-			position: absolute;
-			right: -0.5rem;
-			bottom: 0;
-			width: min(52%, 15rem);
-			border: 6px solid var(--paper);
-			border-radius: 20px;
-			box-shadow: var(--shadow-lg);
-			rotate: 3deg;
-		}
-		.pin {
-			position: absolute;
-			left: -0.5rem;
-			bottom: 2.5rem;
-			width: min(66%, 17.5rem);
-			background: var(--butter);
-			border-radius: 14px;
-			padding: 0.9rem 1.05rem;
-			box-shadow: var(--shadow);
-			rotate: -2.5deg;
-		}
-		.pin__when {
-			font-family: "Gabarito", sans-serif;
-			font-size: 0.6875rem;
+		.rail__head h2 {
+			font-size: 1.125rem;
 			font-weight: 700;
-			letter-spacing: 0.1em;
-			text-transform: uppercase;
-			color: var(--flame-dk);
 		}
-		.pin__what {
-			margin-top: 0.35rem;
-			font-size: 0.9375rem;
-			line-height: 1.4;
-			text-wrap: pretty;
+		.rail__all {
+			font-size: 0.875rem;
+			font-weight: 600;
+			color: var(--blue-dk);
+			text-decoration: none;
 		}
-		/* Below this the three pieces stop overlapping and stack. Overlap needs
-		   room to overlap into; on a phone the pin was simply covering the house.
-		   They keep their tilts, inset a little so the corners never touch the
-		   edge of the screen. */
-		@media (max-width: 34rem) {
-			.hero__art {
-				display: grid;
-				gap: 0.9rem;
-				padding-bottom: 0;
-			}
-			.shot--house {
-				position: static;
-				width: calc(100% - 1.25rem);
-				margin-inline: auto;
-				rotate: 1.5deg;
-			}
-			.shot--house img {
-				width: 100%;
-			}
-			.pin {
-				position: static;
-				width: calc(100% - 1.25rem);
-				margin-inline: auto;
-				rotate: -1.5deg;
-			}
+		.rail__all:hover {
+			text-decoration: underline;
+		}
+		.rail__row {
+			display: grid;
+			gap: 0.75rem;
+			grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
 		}
 
-		/* --- Strip ----------------------------------------------------------- */
-		.strip {
+		.mini {
+			display: flex;
+			align-items: center;
+			gap: 0.75rem;
+			background: #fff;
+			border: 1px solid var(--line);
+			border-radius: 14px;
+			padding: 0.6rem 0.75rem;
+			text-decoration: none;
+			color: inherit;
+			box-shadow: 0 1px 2px rgb(16 24 40 / 0.04);
+			transition:
+				border-color 140ms ease,
+				box-shadow 140ms ease,
+				transform 140ms ease;
+		}
+		.mini:hover {
+			border-color: var(--blue);
+			box-shadow: var(--shadow);
+			transform: translateY(-2px);
+		}
+		.mini:hover .go {
+			background: var(--blue-dk);
+			color: #fff;
+		}
+		.mini__thumb {
+			flex: none;
+			width: 44px;
+			height: 44px;
+			border-radius: 10px;
+			object-fit: cover;
+			background: var(--wash);
+		}
+		.mini__body {
+			min-width: 0;
+			flex: 1 1 auto;
+		}
+		.mini__name {
+			display: block;
+			font-weight: 700;
+			font-size: 0.9375rem;
+			line-height: 1.25;
+		}
+		.mini__meta {
+			display: block;
+			margin-top: 0.15rem;
+		}
+		.tag {
+			font-size: 0.75rem;
+			font-weight: 600;
+			color: var(--muted);
+		}
+		.tag--open {
+			background: var(--blue);
+			color: var(--ink);
+			padding: 0.1rem 0.45rem;
+			border-radius: 999px;
+		}
+
+		/* --- Bold black box -------------------------------------------------- */
+		.slab {
+			margin-top: clamp(1rem, 2.5vw, 1.75rem);
 			background: var(--ink);
 			color: var(--dim);
+			border-radius: var(--r-lg);
+			padding: clamp(1.25rem, 3vw, 1.75rem) clamp(1.25rem, 3vw, 2rem);
 		}
-		.strip p {
-			max-width: 74rem;
-			margin-inline: auto;
-			padding: 1.1rem clamp(1.25rem, 4vw, 2.5rem);
-			font-size: 0.9375rem;
-			text-wrap: pretty;
-		}
-		.strip strong {
+		.slab strong {
 			color: #fff;
-			font-weight: 600;
+			font-weight: 700;
+		}
+		.slab p {
+			max-width: 52rem;
+			font-size: 1rem;
+			text-wrap: pretty;
 		}
 
 		/* --- Section heads --------------------------------------------------- */
 		.sechead {
-			max-width: 40rem;
-			margin-bottom: clamp(2rem, 4vw, 3rem);
+			max-width: 44rem;
+			margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
 		}
 		.sechead h2 {
-			margin-top: 0.875rem;
-			font-size: clamp(1.9rem, 4.2vw, 2.9rem);
+			font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+			font-weight: 800;
 		}
-		.sechead__sub {
-			margin-top: 0.875rem;
+		.sechead p {
+			margin-top: 0.75rem;
 			color: var(--muted);
 			text-wrap: pretty;
 		}
@@ -1255,58 +1441,56 @@ const INCLUDES = [
 		/* --- What's in it ---------------------------------------------------- */
 		.sections {
 			display: grid;
-			gap: clamp(1.5rem, 3vw, 2rem);
+			gap: 1rem;
+			grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
 		}
-		@media (min-width: 40rem) {
-			.sections {
-				grid-template-columns: repeat(2, 1fr);
-			}
+		.sect {
+			display: flex;
+			flex-direction: column;
+			background: #fff;
+			border: 1px solid var(--line);
+			border-radius: var(--r);
+			overflow: hidden;
+			transition:
+				border-color 140ms ease,
+				box-shadow 140ms ease,
+				transform 140ms ease;
 		}
-		@media (min-width: 68rem) {
-			.sections {
-				grid-template-columns: repeat(4, 1fr);
-			}
-			/* Drop every other card half a step. The row reads as a hand of cards
-			   rather than a bar chart. */
-			.sect:nth-child(even) {
-				margin-top: 2.25rem;
-			}
+		.sect:hover {
+			border-color: var(--blue);
+			box-shadow: var(--shadow);
+			transform: translateY(-2px);
 		}
 		.sect__photo {
 			position: relative;
-			border-radius: var(--r);
-			overflow: hidden;
-			background: var(--line);
 			aspect-ratio: 14 / 9;
+			background: var(--wash);
 		}
 		.sect__photo img {
 			width: 100%;
 			height: 100%;
 			object-fit: cover;
-			transition: transform 400ms cubic-bezier(0.2, 0.7, 0.3, 1);
-		}
-		.sect:hover .sect__photo img {
-			transform: scale(1.04);
 		}
 		.sect__num {
 			position: absolute;
-			left: 0.75rem;
-			bottom: 0.75rem;
-			font-family: "Gabarito", sans-serif;
+			left: 0.7rem;
+			top: 0.7rem;
 			font-size: 0.75rem;
-			font-weight: 700;
-			letter-spacing: 0.06em;
-			background: var(--butter);
+			font-weight: 800;
+			background: var(--blue);
 			color: var(--ink);
-			padding: 0.2rem 0.55rem;
-			border-radius: 100px;
+			padding: 0.15rem 0.5rem;
+			border-radius: 999px;
+		}
+		.sect__body {
+			padding: 1rem 1.1rem 1.25rem;
 		}
 		.sect h3 {
-			margin-top: 1.125rem;
-			font-size: 1.25rem;
+			font-size: 1.0625rem;
+			font-weight: 700;
 		}
 		.sect p {
-			margin-top: 0.5rem;
+			margin-top: 0.45rem;
 			font-size: 0.9375rem;
 			color: var(--muted);
 			text-wrap: pretty;
@@ -1314,32 +1498,26 @@ const INCLUDES = [
 
 		/* --- Directory ------------------------------------------------------- */
 		.dir {
-			position: relative;
-			background: linear-gradient(180deg, transparent 0 3rem, var(--mint) 3rem 100%);
-		}
-		@media (min-width: 48rem) {
-			.dir {
-				background: linear-gradient(180deg, transparent 0 5rem, var(--mint) 5rem 100%);
-			}
+			background: var(--wash);
+			border-block: 1px solid var(--line);
 		}
 
 		.filter {
 			display: flex;
 			flex-wrap: wrap;
 			gap: 0.5rem;
-			margin-bottom: 2rem;
+			margin-bottom: 1.5rem;
 		}
 		.filter label {
 			display: inline-flex;
 			align-items: center;
 			gap: 0.45rem;
-			font-family: "Gabarito", sans-serif;
-			font-weight: 600;
+			font-weight: 700;
 			font-size: 0.9375rem;
-			padding: 0.5rem 0.95rem;
-			border: 1px solid var(--line);
-			border-radius: 100px;
-			background: var(--card);
+			padding: 0.5rem 1rem;
+			border: 1px solid var(--line-dk);
+			border-radius: 999px;
+			background: #fff;
 			cursor: pointer;
 			user-select: none;
 			transition:
@@ -1351,8 +1529,8 @@ const INCLUDES = [
 			font-size: 0.75rem;
 			font-weight: 700;
 			color: var(--muted);
-			background: var(--paper);
-			border-radius: 100px;
+			background: var(--wash);
+			border-radius: 999px;
 			padding: 0.05rem 0.4rem;
 		}
 		.filter label:hover {
@@ -1363,13 +1541,13 @@ const INCLUDES = [
 		#f-agent:checked ~ .wrap .filter label[data-on="agent"],
 		#f-broker:checked ~ .wrap .filter label[data-on="broker"] {
 			background: var(--ink);
-			color: var(--paper);
+			color: #fff;
 			border-color: var(--ink);
 		}
 		#f-all:checked ~ .wrap .filter label[data-on="all"] span,
 		#f-agent:checked ~ .wrap .filter label[data-on="agent"] span,
 		#f-broker:checked ~ .wrap .filter label[data-on="broker"] span {
-			background: rgb(255 255 255 / 0.16);
+			background: rgb(255 255 255 / 0.18);
 			color: #fff;
 		}
 		/* The real input is off-screen, so its focus ring has to be drawn on the
@@ -1377,7 +1555,7 @@ const INCLUDES = [
 		#f-all:focus-visible ~ .wrap .filter label[data-on="all"],
 		#f-agent:focus-visible ~ .wrap .filter label[data-on="agent"],
 		#f-broker:focus-visible ~ .wrap .filter label[data-on="broker"] {
-			outline: 3px solid var(--flame-dk);
+			outline: 3px solid var(--blue-dk);
 			outline-offset: 2px;
 		}
 
@@ -1388,70 +1566,64 @@ const INCLUDES = [
 
 		.dir__grid {
 			display: grid;
-			gap: 1.125rem;
-		}
-		@media (min-width: 44rem) {
-			.dir__grid {
-				grid-template-columns: repeat(2, 1fr);
-			}
-		}
-		@media (min-width: 70rem) {
-			.dir__grid {
-				grid-template-columns: repeat(3, 1fr);
-			}
+			gap: 1rem;
+			grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
 		}
 
 		.mem {
 			display: flex;
 			flex-direction: column;
-			background: var(--card);
-			border: 1px solid #d9e5db;
+			background: #fff;
+			border: 1px solid var(--line);
 			border-radius: var(--r);
-			padding: 1.25rem;
-			box-shadow: 0 1px 2px rgb(25 20 16 / 0.04);
+			padding: 1.15rem;
 			transition:
-				transform 160ms ease,
-				box-shadow 160ms ease;
+				border-color 140ms ease,
+				box-shadow 140ms ease,
+				transform 140ms ease;
 		}
 		.mem:hover {
-			transform: translateY(-3px);
+			border-color: var(--blue);
 			box-shadow: var(--shadow);
+			transform: translateY(-2px);
 		}
 
 		.mem__top {
 			display: flex;
-			gap: 0.875rem;
+			gap: 0.8rem;
 			align-items: flex-start;
 		}
 		.mem__face {
 			flex: none;
-			width: 64px;
-			height: 64px;
-			border-radius: 50%;
+			width: 56px;
+			height: 56px;
+			border-radius: 12px;
 			object-fit: cover;
-			background: var(--line);
+			background: var(--wash);
+		}
+		.mem__id {
+			min-width: 0;
+			flex: 1 1 auto;
 		}
 		.mem__id h3 {
-			font-size: 1.1875rem;
+			font-size: 1.0625rem;
+			font-weight: 700;
 		}
 		.mem__firm {
 			margin-top: 0.1rem;
 			font-size: 0.8125rem;
 			color: var(--muted);
 		}
-		.mem__check {
-			display: flex;
-			align-items: center;
-			gap: 0.3rem;
-			margin-top: 0.4rem;
-			font-size: 0.75rem;
-			font-weight: 600;
-			color: #1d6a4f;
-		}
-		.mem__check svg {
-			width: 14px;
-			height: 14px;
+		.mem__kind {
 			flex: none;
+			font-size: 0.6875rem;
+			font-weight: 800;
+			letter-spacing: 0.04em;
+			text-transform: uppercase;
+			background: var(--blue-wash);
+			color: var(--blue-dk);
+			padding: 0.2rem 0.5rem;
+			border-radius: 999px;
 		}
 
 		.chips {
@@ -1460,29 +1632,32 @@ const INCLUDES = [
 			gap: 0.35rem;
 			list-style: none;
 			padding: 0;
-			margin: 1rem 0 0;
+			margin: 0.9rem 0 0;
 		}
 		.chips li {
 			font-size: 0.75rem;
 			font-weight: 600;
-			background: var(--butter);
+			background: var(--wash);
+			border: 1px solid var(--line);
 			color: var(--ink);
-			padding: 0.2rem 0.55rem;
-			border-radius: 100px;
+			padding: 0.15rem 0.55rem;
+			border-radius: 999px;
 		}
 
 		.mem__line {
-			margin-top: 0.875rem;
+			margin-top: 0.8rem;
 			font-size: 0.9375rem;
-			line-height: 1.55;
+			line-height: 1.5;
+			color: var(--muted);
 			text-wrap: pretty;
 		}
 
 		.mem__meta {
 			display: flex;
-			gap: 1.5rem;
-			margin: 1rem 0 0;
-			padding-top: 0.875rem;
+			flex-wrap: wrap;
+			gap: 0.75rem 1.5rem;
+			margin: 0.9rem 0 0;
+			padding-top: 0.8rem;
 			border-top: 1px solid var(--line);
 			font-size: 0.8125rem;
 		}
@@ -1490,35 +1665,61 @@ const INCLUDES = [
 			color: var(--muted);
 			font-size: 0.6875rem;
 			text-transform: uppercase;
-			letter-spacing: 0.07em;
+			letter-spacing: 0.05em;
 			font-weight: 700;
 		}
 		.mem__meta dd {
-			margin: 0.15rem 0 0;
+			margin: 0.1rem 0 0;
 			font-weight: 600;
+		}
+		.mem__check {
+			display: flex;
+			align-items: center;
+			gap: 0.3rem;
+			color: #12724f;
+		}
+		.mem__check svg {
+			width: 14px;
+			height: 14px;
+			flex: none;
 		}
 
 		.mem__act {
 			display: flex;
 			flex-wrap: wrap;
+			align-items: center;
+			justify-content: space-between;
 			gap: 0.5rem;
 			margin-top: auto;
-			padding-top: 1.125rem;
+			padding-top: 1rem;
 		}
 		.mem__act .btn {
 			font-size: 0.875rem;
-			padding: 0.55rem 1rem;
+			padding: 0.55rem 1.1rem;
+		}
+		.mem__site {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.1rem;
+			font-size: 0.875rem;
+			font-weight: 600;
+			color: var(--blue-dk);
+			text-decoration: none;
+		}
+		.mem__site:hover {
+			text-decoration: underline;
 		}
 
 		.dir__note {
-			margin-top: 2rem;
-			max-width: 42rem;
+			margin-top: 1.75rem;
+			max-width: 44rem;
 			font-size: 0.9375rem;
-			color: #4f5c52;
+			color: var(--muted);
 			text-wrap: pretty;
 		}
 		.dir__note a {
-			color: var(--flame-dk);
+			color: var(--blue-dk);
+			font-weight: 600;
 		}
 
 		/* --- Neighbourhoods -------------------------------------------------- */
@@ -1528,177 +1729,181 @@ const INCLUDES = [
 			grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
 		}
 		.area {
-			position: relative;
-			display: block;
+			display: flex;
+			flex-direction: column;
+			background: #fff;
+			border: 1px solid var(--line);
 			border-radius: var(--r);
 			overflow: hidden;
-			background: var(--ink);
 			text-decoration: none;
-			color: #fff;
-			box-shadow: var(--shadow);
-			isolation: isolate;
-		}
-		.area img {
-			width: 100%;
-			aspect-ratio: 7 / 5;
-			object-fit: cover;
+			color: inherit;
 			transition:
-				transform 500ms cubic-bezier(0.2, 0.7, 0.3, 1),
-				opacity 300ms ease;
-			opacity: 0.92;
+				border-color 140ms ease,
+				box-shadow 140ms ease,
+				transform 140ms ease;
 		}
-		.area:hover img {
-			transform: scale(1.05);
-			opacity: 1;
+		.area:hover {
+			border-color: var(--blue);
+			box-shadow: var(--shadow);
+			transform: translateY(-2px);
+		}
+		.area:hover .go {
+			background: var(--blue-dk);
+			color: #fff;
+		}
+		.area:focus-visible {
+			outline: 3px solid var(--blue-dk);
+			outline-offset: 2px;
+		}
+		.area__pic {
+			position: relative;
+			aspect-ratio: 7 / 5;
+			background: var(--wash);
+		}
+		.area__pic img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			transition: transform 500ms cubic-bezier(0.2, 0.7, 0.3, 1);
+		}
+		.area:hover .area__pic img {
+			transform: scale(1.04);
+		}
+		.area__flag {
+			position: absolute;
+			top: 0.6rem;
+			right: 0.6rem;
+			font-size: 0.6875rem;
+			font-weight: 800;
+			letter-spacing: 0.04em;
+			text-transform: uppercase;
+			background: var(--blue);
+			color: var(--ink);
+			padding: 0.2rem 0.55rem;
+			border-radius: 999px;
 		}
 		.area__body {
-			position: absolute;
-			inset: auto 0 0 0;
-			padding: 2.5rem 1rem 0.9rem;
-			background: linear-gradient(transparent, rgb(20 14 10 / 0.82) 62%);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 0.75rem;
+			padding: 0.85rem 0.95rem 0.95rem;
 		}
 		.area__body h3 {
-			font-size: 1.125rem;
+			font-size: 1rem;
+			font-weight: 700;
 		}
 		.area__body p {
 			margin-top: 0.1rem;
 			font-size: 0.8125rem;
-			color: #e6ddd3;
-		}
-		.area__flag {
-			position: absolute;
-			top: 0.7rem;
-			right: 0.7rem;
-			font-family: "Gabarito", sans-serif;
-			font-size: 0.6875rem;
-			font-weight: 700;
-			letter-spacing: 0.06em;
-			text-transform: uppercase;
-			background: var(--flame);
-			color: var(--ink);
-			padding: 0.22rem 0.55rem;
-			border-radius: 100px;
-		}
-		.area:focus-visible {
-			outline: 3px solid var(--flame-dk);
-			outline-offset: 3px;
+			color: var(--muted);
 		}
 
-		/* --- Get listed ------------------------------------------------------
-		   The offer band is the warmest thing on the page, not the darkest. An ink
-		   panel here would run straight into the ink closing CTA below it and the
-		   two would read as one long dark basement. Butter keeps the page bright
-		   and leaves the single dark moment at the end, where the ask is.
-		     ink on butter        15.4:1
-		     muted on butter       5.0:1
-		     flame-dk on butter    4.4:1  */
-		.listed {
-			background: linear-gradient(180deg, #fdf3e2 0%, #fbe9cd 100%);
-			color: var(--ink);
-			border-block: 1px solid #f2e0bf;
-		}
-		.listed__grid {
+		/* --- Offer, the bold blue box ---------------------------------------
+		   The gradient's light end is #1273e0, which is the lightest blue that
+		   still carries white body text at 4.6:1. Lighten it and the paragraphs
+		   inside stop passing. All text in here is white; the hierarchy is size
+		   and weight, because every mid-blue tint that reads as "secondary"
+		   fails against the light end. */
+		.offer {
 			display: grid;
-			gap: clamp(2.5rem, 6vw, 4rem);
-			align-items: start;
+			gap: clamp(2rem, 4vw, 3rem);
+			align-items: center;
+			background: linear-gradient(135deg, var(--blue-dkr) 0%, var(--blue-mid) 100%);
+			color: #fff;
+			border-radius: var(--r-lg);
+			padding: clamp(1.75rem, 4vw, 3rem);
 		}
-		@media (min-width: 64rem) {
-			.listed__grid {
-				grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
-				/* The list of what you get is much taller than the photograph.
-				   Centring the shorter column stops it hanging from the top with a
-				   pool of empty butter underneath it. */
-				align-items: center;
+		@media (min-width: 62rem) {
+			.offer {
+				grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
 			}
 		}
-		.listed h2 {
+		.offer h2 {
 			margin-top: 0.875rem;
-			font-size: clamp(3rem, 8vw, 4.75rem);
-			font-weight: 800;
+			font-size: clamp(2.75rem, 7vw, 4.5rem);
+			font-weight: 900;
+			letter-spacing: -0.04em;
 		}
-		.listed h2 span {
-			font-size: 0.3em;
+		.offer h2 span {
+			font-size: 0.28em;
 			font-weight: 600;
-			color: var(--muted);
 			letter-spacing: -0.01em;
 		}
-		.listed__lede {
-			margin-top: 0.75rem;
+		.offer__lede {
+			margin-top: 0.5rem;
 			max-width: 32rem;
-			color: var(--muted);
 			text-wrap: pretty;
 		}
 
 		.includes {
 			display: grid;
-			gap: 1.25rem;
+			gap: 1.1rem;
 			list-style: none;
 			padding: 0;
-			margin: 2rem 0 0;
+			margin: 1.75rem 0 0;
 		}
 		@media (min-width: 34rem) {
 			.includes {
 				grid-template-columns: repeat(2, 1fr);
-				gap: 1.5rem 2rem;
+				gap: 1.25rem 2rem;
 			}
 		}
 		.includes li {
-			padding-top: 0.875rem;
-			border-top: 2px solid var(--flame);
+			padding-top: 0.75rem;
+			border-top: 2px solid rgb(255 255 255 / 0.35);
 		}
 		.includes h3 {
-			font-size: 1rem;
-			line-height: 1.25;
+			font-size: 0.9375rem;
+			font-weight: 700;
+			line-height: 1.3;
 		}
 		.includes p {
-			margin-top: 0.4rem;
+			margin-top: 0.35rem;
 			font-size: 0.875rem;
-			color: var(--muted);
 			text-wrap: pretty;
 		}
 
-		.listed__act {
-			margin-top: 2.25rem;
+		.offer__act {
+			margin-top: 2rem;
 		}
-		.listed__act p {
+		.offer__act p {
 			margin-top: 0.875rem;
 			max-width: 26rem;
 			font-size: 0.875rem;
-			color: var(--muted);
 		}
 
-		.listed__art {
+		.offer__art {
 			margin: 0;
 		}
-		.listed__art img {
+		.offer__art img {
 			width: 100%;
 			height: auto;
-			border-radius: 24px;
-			rotate: 1.5deg;
+			border-radius: var(--r);
 			box-shadow: var(--shadow-lg);
 		}
-		.listed__art figcaption {
-			margin-top: 1.75rem;
+		.offer__art figcaption {
+			margin-top: 1.25rem;
 			font-size: 0.9375rem;
-			color: var(--muted);
 			text-wrap: pretty;
 		}
-		.listed__art strong {
+		.offer__art strong {
 			display: block;
-			font-family: "Gabarito", sans-serif;
-			font-size: 1.0625rem;
-			color: var(--ink);
-			margin-bottom: 0.2rem;
+			font-size: 1rem;
+			font-weight: 700;
+			margin-bottom: 0.15rem;
 		}
 
-		/* --- Big close ------------------------------------------------------- */
+		/* --- Big close, the bold black box ----------------------------------- */
 		.close {
 			position: relative;
 			isolation: isolate;
-			padding: clamp(4rem, 10vw, 7.5rem) clamp(1.25rem, 4vw, 2.5rem);
+			overflow: hidden;
+			border-radius: var(--r-lg);
+			background: var(--ink);
 			text-align: center;
 			color: #fff;
-			background: var(--ink);
+			padding: clamp(3rem, 7vw, 5rem) clamp(1.25rem, 4vw, 3rem);
 		}
 		.close__bg {
 			position: absolute;
@@ -1708,16 +1913,14 @@ const INCLUDES = [
 			height: 100%;
 			object-fit: cover;
 		}
-		/* Two stops, not one: the middle stays dark enough for the form, the edges
-		   keep enough of the photograph to still be a photograph. */
 		.close::after {
 			content: "";
 			position: absolute;
 			inset: 0;
 			z-index: -1;
 			background:
-				linear-gradient(180deg, rgb(20 14 10 / 0.42), rgb(20 14 10 / 0.74)),
-				radial-gradient(58% 58% at 50% 50%, rgb(20 14 10 / 0.42), transparent);
+				linear-gradient(180deg, rgb(10 12 16 / 0.5), rgb(10 12 16 / 0.78)),
+				radial-gradient(58% 58% at 50% 50%, rgb(10 12 16 / 0.42), transparent);
 		}
 		.close__inner {
 			max-width: 40rem;
@@ -1725,29 +1928,25 @@ const INCLUDES = [
 		}
 		.close h2 {
 			margin-top: 0.875rem;
-			font-size: clamp(2rem, 5.2vw, 3.25rem);
+			font-size: clamp(1.9rem, 4.6vw, 3rem);
+			font-weight: 800;
 		}
-		/* :not(.eyebrow) matters — this rule is more specific than .eyebrow--dark
-		   and would otherwise repaint the eyebrow grey and push it down a line. */
-		.close__inner > p:not(.eyebrow) {
-			margin-top: 1rem;
-			color: #e6ddd3;
+		.close__sub {
+			margin-top: 0.875rem;
+			color: #e3e6ea;
 			text-wrap: pretty;
-		}
-		.close .signup__slot {
-			margin-inline: auto;
 		}
 		.close__fine {
 			margin-top: 1rem;
 			font-size: 0.8125rem;
-			color: #cdc2b7;
+			color: #cbd0d8;
 		}
 
 		/* --- Footer ---------------------------------------------------------- */
 		.foot {
-			background: var(--paper);
+			background: var(--wash);
 			border-top: 1px solid var(--line);
-			padding-block: clamp(2.5rem, 6vw, 4rem);
+			padding-block: clamp(2.5rem, 5vw, 3.5rem);
 		}
 		.foot__grid {
 			display: grid;
@@ -1761,10 +1960,11 @@ const INCLUDES = [
 		}
 		.foot h3 {
 			font-size: 0.75rem;
-			letter-spacing: 0.1em;
+			letter-spacing: 0.08em;
 			text-transform: uppercase;
 			color: var(--muted);
-			margin-bottom: 0.75rem;
+			font-weight: 700;
+			margin-bottom: 0.7rem;
 		}
 		.foot nav {
 			display: flex;
@@ -1776,10 +1976,11 @@ const INCLUDES = [
 			color: var(--ink);
 			text-decoration: none;
 			font-size: 0.9375rem;
-			border-bottom: 1px solid transparent;
+			font-weight: 500;
 		}
 		.foot a:not(.wordmark):hover {
-			border-color: var(--flame);
+			color: var(--blue-dk);
+			text-decoration: underline;
 		}
 		.foot__blurb {
 			margin-top: 0.75rem;
