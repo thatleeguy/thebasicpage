@@ -1,0 +1,688 @@
+---
+import Demo from "../../layouts/Demo.astro";
+import Icon from "../../components/ClinicIcon.astro";
+
+// A distinct layout from the /demo/service engine: full-bleed alternating
+// bands rather than floating shadow cards, a serif headline, and the phone
+// number itself as the hero's centrepiece rather than a button. Modeled on
+// the register of small-town professional-service sites (the kind a dentist
+// or a plumber's cousin actually built them), adapted to our own voice: no
+// multi-page nav, no "read more" links to pages that don't exist, since the
+// entire premise of what we sell is that one page is enough.
+const BIZ = "Fielding Dental Care";
+const PHONE = "(519) 555-0138";
+const TEL = `tel:+1${PHONE.replace(/\D/g, "")}`;
+const TOWN = "Meaford, Ontario";
+
+const SERVICES = [
+	{
+		icon: "tooth",
+		name: "Cleanings & exams",
+		blurb: "Regular check-ups, x-rays, and a cleaning that does not feel like a lecture.",
+	},
+	{
+		icon: "shield",
+		name: "Fillings",
+		blurb: "Caught early, a cavity is a twenty-minute job. We show you the x-ray either way.",
+		tag: "Same day",
+	},
+	{
+		icon: "spark",
+		name: "Crowns, one visit",
+		blurb:
+			"Our own mill designs and fits most crowns in a single appointment. No temporary, no second freeze.",
+		tag: "In-office mill",
+	},
+	{
+		icon: "tooth",
+		name: "Extractions",
+		blurb: "Wisdom teeth, broken roots, teeth past saving. We say so if there is another option first.",
+	},
+	{
+		icon: "shield",
+		name: "Root canals",
+		blurb: "We do the straightforward ones ourselves. Anything complex, we refer out and tell you why.",
+	},
+	{
+		icon: "spark",
+		name: "Emergency care",
+		blurb: "Swelling, a knocked-out tooth, pain that kept you up. Call first, we will tell you what to do.",
+		tag: "Same day",
+	},
+];
+---
+
+<Demo
+	title={`${BIZ} · dentist demo site`}
+	description={`Sample one-page website for a family dental practice, built by The Basic Page. ${BIZ} is a fictional business used to demonstrate the design.`}
+	business={BIZ}
+	theme="realestate"
+>
+	<Fragment slot="head">
+		<link rel="preload" href="/fonts/fraunces.woff2" as="font" type="font/woff2" crossorigin />
+		<link rel="preload" href="/fonts/dmsans.woff2" as="font" type="font/woff2" crossorigin />
+	</Fragment>
+
+	<div class="cl">
+		<header class="topbar">
+			<span class="topbar__brand">
+				<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+					<path d="M12 4.2c-1.4 0-2.1.6-3.5.6-1.7 0-3.1 1.2-3.1 3.5 0 3 1.1 4.7 1.8 7.2.4 1.8.5 5.1 2.3 5.1 1.5 0 1.4-3.8 2.5-3.8s1 3.8 2.5 3.8c1.8 0 1.9-3.3 2.3-5.1.7-2.5 1.8-4.2 1.8-7.2 0-2.3-1.4-3.5-3.1-3.5-1.4 0-2.1-.6-3.5-.6Z" />
+				</svg>
+				{BIZ}
+			</span>
+			<a class="topbar__call" href={TEL}>
+				<svg viewBox="0 0 24 24" aria-hidden="true">
+					<path
+						fill="currentColor"
+						d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.5 21 3 13.5 3 4c0-.6.4-1 1-1h3.4c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.4 0 .8-.2 1L6.6 10.8Z"
+					/>
+				</svg>
+				{PHONE}
+			</a>
+		</header>
+
+		<main>
+			<section class="hero">
+				<p class="eyebrow">Accepting new patients · in {TOWN} since 2007</p>
+				<h1>A dentist who tells you the price before your mouth is even open.</h1>
+				<p class="lede">
+					General and family dentistry: cleanings, fillings, crowns, extractions, and the odd
+					emergency on a Saturday. We quote the job before we start it, and if the plan changes
+					partway through, we stop and tell you before doing another thing.
+				</p>
+
+				<div class="callblock">
+					<p class="callblock__label">Call us. It is faster than a form.</p>
+					<a class="callblock__number" href={TEL}>{PHONE}</a>
+				</div>
+
+				<ul class="pills">
+					<li><Icon name="clock" /> Same-day emergencies</li>
+					<li><Icon name="tag" /> Price before we start</li>
+					<li><Icon name="tooth" /> In-office crown mill</li>
+				</ul>
+			</section>
+
+			<section class="band band--dark">
+				<div class="info">
+					<div>
+						<p class="info__label">Where we are</p>
+						<p class="info__big">118 Sykes Street<br />{TOWN}</p>
+						<p class="info__note">Above the old hardware store. Park around back.</p>
+					</div>
+					<div>
+						<p class="info__label">Hours</p>
+						<dl class="hours">
+							<div><dt>Mon to Thu</dt><dd>8:00 am to 5:00 pm</dd></div>
+							<div><dt>Friday</dt><dd>8:00 am to 1:00 pm</dd></div>
+							<div><dt>Sat to Sun</dt><dd>Closed</dd></div>
+						</dl>
+						<p class="info__note">Call Friday morning if you need in before the weekend.</p>
+					</div>
+					<div>
+						<p class="info__label">Emergencies</p>
+						<p class="info__body">
+							A cracked tooth or a face that will not stop swelling does not wait for Monday. Call
+							the office line. After hours, it forwards straight to Dr. Fielding.
+						</p>
+						<a class="btn btn--pale" href="#quote">Get directions</a>
+					</div>
+				</div>
+			</section>
+
+			<section class="services" id="services">
+				<div class="sechead">
+					<h2>What we do</h2>
+					<p>Ask about anything you do not see here. Most of it, we handle in-house.</p>
+				</div>
+				<div class="grid">
+					{
+						SERVICES.map((s) => (
+							<article class="card">
+								<Icon name={s.icon} class="card__icon" />
+								<h3>{s.name}</h3>
+								<p>{s.blurb}</p>
+								{s.tag && <span class="tag">{s.tag}</span>}
+							</article>
+						))
+					}
+				</div>
+				<div class="sechead__cta">
+					<a class="btn btn--solid" href={TEL}>Call {PHONE}</a>
+				</div>
+			</section>
+
+			<section class="band band--light">
+				<div class="differentiator">
+					<div>
+						<h2>Ask what something costs. We will just tell you.</h2>
+						<p>
+							Most offices sit you through an exam before anyone says a number. We give you a
+							realistic range on the phone, before you have taken a morning off work to find out.
+						</p>
+						<p>
+							Insurance is welcome and we submit your claim, but the price we quote is the real
+							price, not a sticker number insurance discounts down after the fact. Dr. Fielding has
+							run the practice this way since it opened.
+						</p>
+						<a class="btn btn--outline" href={TEL}>Call {PHONE}</a>
+					</div>
+					<figure class="photo">
+						<div class="photo__frame" aria-hidden="true"></div>
+						<figcaption>
+							<strong>Dr. Fielding and the in-office crown mill</strong>
+							<span>One appointment instead of two. It runs while we finish the cleaning.</span>
+						</figcaption>
+					</figure>
+				</div>
+			</section>
+
+			<section class="band band--dark" id="quote">
+				<div class="honest">
+					<h2>We are not the cheapest option in town. We are the most honest one.</h2>
+					<p>
+						Some offices quote low and find six things wrong once you are in the chair. We would
+						rather quote it straight the first time, even when the number is bigger than you hoped.
+					</p>
+					<a class="btn btn--pale" href={TEL}>Call {PHONE}</a>
+				</div>
+			</section>
+		</main>
+
+		<footer class="foot">
+			<div class="foot__grid">
+				<div class="foot__brand">
+					<span class="topbar__brand">
+						<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+							<path d="M12 4.2c-1.4 0-2.1.6-3.5.6-1.7 0-3.1 1.2-3.1 3.5 0 3 1.1 4.7 1.8 7.2.4 1.8.5 5.1 2.3 5.1 1.5 0 1.4-3.8 2.5-3.8s1 3.8 2.5 3.8c1.8 0 1.9-3.3 2.3-5.1.7-2.5 1.8-4.2 1.8-7.2 0-2.3-1.4-3.5-3.1-3.5-1.4 0-2.1-.6-3.5-.6Z" />
+						</svg>
+						{BIZ}
+					</span>
+					<p>118 Sykes Street<br />{TOWN}</p>
+					<a class="foot__phone" href={TEL}>{PHONE}</a>
+					<dl class="hours hours--foot">
+						<div><dt>Mon to Thu</dt><dd>8 to 5</dd></div>
+						<div><dt>Friday</dt><dd>8 to 1</dd></div>
+						<div><dt>Sat to Sun</dt><dd>Closed</dd></div>
+					</dl>
+				</div>
+				<div>
+					<p class="foot__label">Services</p>
+					<a href="#services">Cleanings &amp; exams</a>
+					<a href="#services">Fillings</a>
+					<a href="#services">Crowns, one visit</a>
+					<a href="#services">Extractions</a>
+					<a href="#services">Root canals</a>
+					<a href="#services">Emergency care</a>
+				</div>
+				<div>
+					<p class="foot__label">Good to know</p>
+					<a href="#quote">How pricing works</a>
+					<a href="#top">New patients welcome</a>
+					<a href={TEL}>Emergency line</a>
+					<a href="#quote">Get directions</a>
+				</div>
+			</div>
+		</footer>
+	</div>
+
+	<style>
+		@font-face {
+			font-family: "Fraunces";
+			src: url("/fonts/fraunces.woff2") format("woff2");
+			font-weight: 500 700;
+			font-display: swap;
+		}
+		@font-face {
+			font-family: "DM Sans";
+			src: url("/fonts/dmsans.woff2") format("woff2");
+			font-weight: 400 700;
+			font-display: swap;
+		}
+
+		.cl {
+			--navy: #0f1f33;
+			--navy-deep: #0a1626;
+			--green: #19643d;
+			--green-deep: #124a2c;
+			--pale-bg: #e3f0e7;
+			--band-light: #f3f1ea;
+			--ink: #14202c;
+			--body: #4d5a67;
+			--line: #e4e1da;
+			--paper: #ffffff;
+			font-family: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+			color: var(--body);
+			background: var(--paper);
+			font-size: 1.0625rem;
+			line-height: 1.62;
+		}
+
+		h1,
+		h2,
+		h3 {
+			font-family: "Fraunces", Georgia, serif;
+			color: var(--ink);
+			font-weight: 600;
+			line-height: 1.14;
+			letter-spacing: -0.015em;
+			text-wrap: balance;
+		}
+		p {
+			text-wrap: pretty;
+		}
+
+		/* --- Top bar --- */
+		/* Stacked below ~26rem so a longer business name never wraps against
+		   the call pill and squeezes it into an odd vertical position. */
+		.topbar {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 0.75rem;
+			padding: 1rem 1.5rem;
+			border-bottom: 1px solid var(--line);
+		}
+		@media (min-width: 26rem) {
+			.topbar {
+				flex-direction: row;
+				align-items: center;
+				justify-content: space-between;
+			}
+		}
+		.topbar__brand {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.6rem;
+			font-family: "Fraunces", serif;
+			font-weight: 600;
+			font-size: 1.0625rem;
+			color: var(--ink);
+		}
+		.topbar__brand svg {
+			width: 22px;
+			height: 22px;
+			color: var(--green);
+			flex: none;
+		}
+		.topbar__call {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5rem;
+			background: var(--green);
+			color: #fff;
+			font-weight: 700;
+			font-size: 0.9375rem;
+			padding: 0.65rem 1.1rem;
+			border-radius: 100px;
+			text-decoration: none;
+			white-space: nowrap;
+		}
+		.topbar__call:hover {
+			background: var(--green-deep);
+			color: #fff;
+		}
+		.topbar__call svg {
+			width: 15px;
+			height: 15px;
+		}
+
+		/* --- Hero --- */
+		.hero {
+			max-width: 40rem;
+			margin-inline: auto;
+			text-align: center;
+			padding: clamp(3rem, 7vw, 4.5rem) 1.5rem clamp(3.5rem, 7vw, 5rem);
+		}
+		.eyebrow {
+			font-size: 0.75rem;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			font-weight: 700;
+			color: var(--green);
+			margin-bottom: 1.25rem;
+		}
+		h1 {
+			font-size: clamp(2rem, 5vw, 2.875rem);
+		}
+		.lede {
+			font-size: 1.0625rem;
+			margin-top: 1.125rem;
+			max-width: 34rem;
+			margin-inline: auto;
+		}
+
+		.callblock {
+			margin-top: 2.25rem;
+		}
+		.callblock__label {
+			font-size: 0.75rem;
+			letter-spacing: 0.1em;
+			text-transform: uppercase;
+			font-weight: 700;
+			color: var(--body);
+			opacity: 0.75;
+		}
+		.callblock__number {
+			display: block;
+			font-family: "Fraunces", serif;
+			font-weight: 700;
+			font-size: clamp(2rem, 7vw, 3rem);
+			letter-spacing: -0.01em;
+			color: var(--green);
+			text-decoration: none;
+			margin-top: 0.35rem;
+		}
+		.callblock__number:hover {
+			color: var(--green-deep);
+		}
+
+		.pills {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			gap: 0.6rem;
+			list-style: none;
+			padding: 0;
+			margin-top: 1.75rem;
+		}
+		.pills li {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.45rem;
+			background: var(--pale-bg);
+			color: var(--green-deep);
+			font-weight: 600;
+			font-size: 0.875rem;
+			padding: 0.5rem 0.95rem;
+			border-radius: 100px;
+		}
+		.pills :global(svg) {
+			width: 16px;
+			height: 16px;
+			flex: none;
+		}
+
+		/* --- Bands --- */
+		.band {
+			padding: clamp(3rem, 6vw, 4.5rem) 1.5rem;
+		}
+		.band--dark {
+			background: linear-gradient(155deg, var(--navy) 0%, var(--navy-deep) 100%);
+			color: #cdd7e2;
+		}
+		.band--light {
+			background: var(--band-light);
+		}
+
+		.info {
+			max-width: 64rem;
+			margin-inline: auto;
+			display: grid;
+			gap: 2.25rem;
+		}
+		@media (min-width: 46rem) {
+			.info {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+		.info__label {
+			font-size: 0.6875rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			font-weight: 700;
+			color: #7fb89a;
+			margin-bottom: 0.75rem;
+		}
+		.info__big {
+			font-family: "Fraunces", serif;
+			font-size: 1.1875rem;
+			color: #fff;
+			font-weight: 600;
+			line-height: 1.35;
+		}
+		.info__body {
+			font-size: 0.9375rem;
+			line-height: 1.55;
+			color: #cdd7e2;
+		}
+		.info__note {
+			margin-top: 0.75rem;
+			font-size: 0.875rem;
+			color: #93a3b5;
+		}
+
+		.hours {
+			margin: 0;
+			display: grid;
+			gap: 0.5rem;
+		}
+		.hours div {
+			display: flex;
+			justify-content: space-between;
+			gap: 1rem;
+			font-size: 0.9375rem;
+		}
+		.hours dt {
+			color: #93a3b5;
+			font-weight: 400;
+		}
+		.hours dd {
+			margin: 0;
+			color: #fff;
+			font-weight: 600;
+		}
+
+		/* --- Buttons --- */
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			font-family: "DM Sans", sans-serif;
+			font-weight: 700;
+			font-size: 0.9375rem;
+			padding: 0.8rem 1.4rem;
+			border-radius: 10px;
+			text-decoration: none;
+			margin-top: 1.25rem;
+		}
+		.btn--solid {
+			background: var(--green);
+			color: #fff;
+		}
+		.btn--solid:hover {
+			background: var(--green-deep);
+			color: #fff;
+		}
+		.btn--pale {
+			background: #a9d9bc;
+			color: var(--green-deep);
+		}
+		.btn--pale:hover {
+			background: #bde3cb;
+			color: var(--green-deep);
+		}
+		.btn--outline {
+			background: transparent;
+			color: var(--ink);
+			border: 1.5px solid #c9c3b6;
+		}
+		.btn--outline:hover {
+			background: #fff;
+			color: var(--ink);
+		}
+
+		/* --- Services --- */
+		.services {
+			max-width: 64rem;
+			margin-inline: auto;
+			padding: clamp(3.25rem, 6vw, 5rem) 1.5rem;
+			text-align: center;
+		}
+		.sechead h2 {
+			font-size: clamp(1.625rem, 3.2vw, 2.125rem);
+		}
+		.sechead p {
+			margin-top: 0.625rem;
+		}
+		.sechead__cta {
+			margin-top: 2.25rem;
+		}
+
+		.grid {
+			display: grid;
+			gap: 1rem;
+			margin-top: 2.25rem;
+			text-align: left;
+		}
+		@media (min-width: 46rem) {
+			.grid {
+				grid-template-columns: repeat(3, 1fr);
+			}
+		}
+		.card {
+			border: 1px solid var(--line);
+			border-radius: 14px;
+			padding: 1.5rem;
+		}
+		.card :global(.card__icon) {
+			width: 26px;
+			height: 26px;
+			color: var(--green);
+		}
+		.card h3 {
+			font-size: 1.0625rem;
+			margin-top: 0.875rem;
+		}
+		.card p {
+			font-size: 0.9375rem;
+			margin-top: 0.5rem;
+		}
+		.tag {
+			display: inline-block;
+			margin-top: 0.875rem;
+			background: var(--pale-bg);
+			color: var(--green-deep);
+			font-size: 0.75rem;
+			font-weight: 700;
+			padding: 0.3rem 0.65rem;
+			border-radius: 100px;
+		}
+
+		/* --- Differentiator --- */
+		.differentiator {
+			max-width: 64rem;
+			margin-inline: auto;
+			display: grid;
+			gap: 2.5rem;
+			align-items: center;
+		}
+		@media (min-width: 50rem) {
+			.differentiator {
+				grid-template-columns: 1.05fr 0.95fr;
+			}
+		}
+		.differentiator h2 {
+			font-size: clamp(1.625rem, 3.2vw, 2.125rem);
+		}
+		.differentiator p {
+			margin-top: 1rem;
+			max-width: 34rem;
+		}
+
+		.photo__frame {
+			aspect-ratio: 4 / 3;
+			border-radius: 14px;
+			border: 1.5px dashed #c9c3b6;
+			background: linear-gradient(155deg, #fff, var(--band-light));
+		}
+		.photo figcaption {
+			margin-top: 0.875rem;
+		}
+		.photo figcaption strong {
+			display: block;
+			color: var(--ink);
+			font-size: 0.9375rem;
+		}
+		.photo figcaption span {
+			display: block;
+			font-size: 0.8125rem;
+			margin-top: 0.2rem;
+		}
+
+		/* --- Honest band --- */
+		.honest {
+			max-width: 38rem;
+			margin-inline: auto;
+			text-align: center;
+		}
+		.honest h2 {
+			color: #fff;
+			font-size: clamp(1.625rem, 3.4vw, 2.125rem);
+		}
+		.honest p {
+			margin-top: 1rem;
+			color: #cdd7e2;
+		}
+
+		/* --- Footer --- */
+		.foot {
+			background: var(--navy-deep);
+			color: #93a3b5;
+			padding: clamp(3rem, 6vw, 4rem) 1.5rem 2.5rem;
+		}
+		.foot__grid {
+			max-width: 64rem;
+			margin-inline: auto;
+			display: grid;
+			gap: 2.5rem;
+		}
+		@media (min-width: 46rem) {
+			.foot__grid {
+				grid-template-columns: 1.3fr 1fr 1fr;
+			}
+		}
+		.foot .topbar__brand {
+			color: #fff;
+		}
+		.foot__brand p {
+			margin-top: 1rem;
+			font-size: 0.9375rem;
+		}
+		.foot__phone {
+			display: block;
+			margin-top: 0.75rem;
+			font-family: "Fraunces", serif;
+			font-weight: 700;
+			font-size: 1.375rem;
+			color: #7fb89a;
+			text-decoration: none;
+		}
+		.hours--foot {
+			margin-top: 1.25rem;
+			max-width: 14rem;
+		}
+		.hours--foot dd {
+			color: #cdd7e2;
+		}
+		.foot__label {
+			font-size: 0.6875rem;
+			letter-spacing: 0.14em;
+			text-transform: uppercase;
+			font-weight: 700;
+			color: #7fb89a;
+			margin-bottom: 1rem;
+		}
+		.foot a {
+			display: block;
+			color: #cdd7e2;
+			text-decoration: none;
+			font-size: 0.9375rem;
+			padding-block: 0.4rem;
+		}
+		.foot a:hover {
+			color: #fff;
+		}
+	</style>
+</Demo>
