@@ -19,16 +19,10 @@ interface Props {
 	/** Fictional business shown in the demo. */
 	business: string;
 	/** Drives the accent of the demo bar so it sits with each design. */
-	theme: "realestate" | "mortgage" | "community";
-	/**
-	 * Overrides the "isn't a real company" sentence in the bar. Pass this when
-	 * the business IS real and something else on the page is the placeholder —
-	 * the bar has to stay true or it is worse than not being there.
-	 */
-	disclaimer?: string;
+	theme: "realestate" | "mortgage";
 }
 
-const { title, description, business, theme, disclaimer } = Astro.props;
+const { title, description, business, theme } = Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -52,9 +46,8 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 		<div class="demobar">
 			<Logo size={18} class="demobar__logo" />
 			<p>
-				<strong>Demo.</strong>{" "}
-				{disclaimer ?? `${business} isn’t a real company.`} This is an example of a ${PRICE.build} page from
-				<a href="/">{SITE_TITLE}</a>.
+				<strong>Demo.</strong> {business} isn’t a real company. This is an example of a ${PRICE.build}
+				page from <a href="/">{SITE_TITLE}</a>.
 			</p>
 			<a class="demobar__cta" href={`mailto:${CONTACT.email}`}>Get one like this</a>
 		</div>
