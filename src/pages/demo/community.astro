@@ -23,6 +23,23 @@ import Demo from "../../layouts/Demo.astro";
 const BRAND = "HelloGTA";
 
 /**
+ * Which hero to build. Not visitor-facing — this is baked in at build time.
+ *
+ * "centred" — one enormous headline over one input, on a washed-back
+ *   photograph. Everything the page sells sits below the fold on purpose: the
+ *   ask is the email address, so nothing competes with it above the line.
+ *
+ * "framed" — copy on the left, a pinned-up cluster of framed photographs on
+ *   the right, with a card showing what is in this Sunday's issue. Slower to
+ *   read and it pushes the signup down, but it shows the product and the
+ *   neighbourhood in the first screen rather than describing them.
+ *
+ * Neither is better. "centred" converts a visitor who already knows what this
+ * is; "framed" is the one to run when the traffic is cold.
+ */
+const HERO: "centred" | "framed" = "centred";
+
+/**
  * Unsplash source URL. `auto=format` serves AVIF/WebP to browsers that take
  * them, so these are much smaller than the JPEG the id implies.
  */
@@ -369,33 +386,42 @@ const INCLUDES = [
 		</header>
 
 		<!-- -------------------------------------------------------------- Hero -->
-		<section class="hero" id="top">
-			<!-- The reference sits its centred hero on a washed-out photograph of a
-			     stadium. Same idea: the page is meant to be image-led, and a plain
-			     grey band under the headline would have thrown that away. -->
-			<img
-				class="hero__bg"
-				src={img("1517090504586-fde19ea6066f", 1500, 700)}
-				width="1500"
-				height="700"
-				alt=""
-				fetchpriority="high"
-				decoding="async"
-			/>
+		<!-- Two heroes, one copy block. The wording, the form and the ticks are
+		     identical in both, so they are written once and the layout is switched
+		     with CSS off data-hero. Only the imagery differs: "centred" gets a
+		     washed-back backdrop, "framed" gets the pinned-up cluster. -->
+		<section class="hero" data-hero={HERO} id="top">
+			{
+				HERO === "centred" && (
+					/* The reference sits its centred hero on a washed-out photograph of
+					   a stadium. Same idea: the page is meant to be image-led, and a
+					   plain grey band under the headline would have thrown that away. */
+					<img
+						class="hero__bg"
+						src={img("1517090504586-fde19ea6066f", 1500, 700)}
+						width="1500"
+						height="700"
+						alt=""
+						fetchpriority="high"
+						decoding="async"
+					/>
+				)
+			}
 
-			<p class="chip chip--blue">
-				<span class="chip__pip" aria-hidden="true"></span>{DISPATCH.name} · {DISPATCH.when}
-			</p>
+			<div class="hero__copy">
+				<p class="chip chip--blue">
+					<span class="chip__pip" aria-hidden="true"></span>{DISPATCH.name} · {DISPATCH.when}
+				</p>
 
-			<h1>Who to call, and what actually sold on your street.</h1>
+				<h1>Who to call, and what actually sold on your street.</h1>
 
-			<p class="lede">
-				{BRAND} lists one realtor and one mortgage broker per neighbourhood across the Greater Toronto
-				Area — no more than that — and sends a {DISPATCH.adj} email every Sunday morning about what changed
-				in yours.
-			</p>
+				<p class="lede">
+					{BRAND} lists one realtor and one mortgage broker per neighbourhood across the Greater Toronto
+					Area — no more than that — and sends a {DISPATCH.adj} email every Sunday morning about what
+					changed in yours.
+				</p>
 
-			<!--
+				<!--
 				SIGNUP.
 
 				Native form, styled to match the page. To go live with beehiiv,
@@ -410,40 +436,82 @@ const INCLUDES = [
 				The wrapper owns width and alignment so the embed inherits the layout.
 				The same slot takes ConvertKit, Buttondown or Mailchimp. There are two
 				of these on the page; both are wired by the one script at the bottom.
-			-->
-			<div class="signup__slot" id="signup">
-				<form class="signup" data-signup novalidate>
-					<label class="sr-only" for="email-hero">Email address</label>
-					<input
-						id="email-hero"
-						type="email"
-						inputmode="email"
-						autocomplete="email"
-						placeholder="Your email, for Sunday morning"
-						required
-					/>
-					<button type="submit">
-						<span class="sr-only">Subscribe free</span>
-						<svg viewBox="0 0 24 24" aria-hidden="true">
-							<path
-								d="M4 12h15M13 6l6 6-6 6"
-								fill="none"
-								stroke="currentColor"
-								stroke-width="2.4"
-								stroke-linecap="round"
-								stroke-linejoin="round"></path>
-						</svg>
-					</button>
-				</form>
-				<p class="signup__msg" data-msg role="status" hidden></p>
+				-->
+				<div class="signup__slot" id="signup">
+					<form class="signup" data-signup novalidate>
+						<label class="sr-only" for="email-hero">Email address</label>
+						<input
+							id="email-hero"
+							type="email"
+							inputmode="email"
+							autocomplete="email"
+							placeholder="Your email, for Sunday morning"
+							required
+						/>
+						<button type="submit">
+							<span class="sr-only">Subscribe free</span>
+							<svg viewBox="0 0 24 24" aria-hidden="true">
+								<path
+									d="M4 12h15M13 6l6 6-6 6"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2.4"
+									stroke-linecap="round"
+									stroke-linejoin="round"></path>
+							</svg>
+						</button>
+					</form>
+					<p class="signup__msg" data-msg role="status" hidden></p>
+				</div>
+
+				<ul class="ticks">
+					<li>Free</li>
+					<li>No spam, no pitch</li>
+					<li>One click to unsubscribe</li>
+					{NUMBERS.subscribers && <li>{NUMBERS.subscribers} neighbours reading</li>}
+				</ul>
 			</div>
 
-			<ul class="ticks">
-				<li>Free</li>
-				<li>No spam, no pitch</li>
-				<li>One click to unsubscribe</li>
-				{NUMBERS.subscribers && <li>{NUMBERS.subscribers} neighbours reading</li>}
-			</ul>
+			{
+				HERO === "framed" && (
+					<div class="hero__art">
+						<figure class="shot shot--main">
+							<img
+								src={img("1517090504586-fde19ea6066f", 760, 620)}
+								srcset={img2x("1517090504586-fde19ea6066f", 760, 620)}
+								width="760"
+								height="620"
+								alt="The CN Tower seen from a park across Toronto harbour on a clear day"
+								fetchpriority="high"
+								decoding="async"
+							/>
+						</figure>
+
+						<figure class="shot shot--house">
+							<img
+								src={img("1605276374104-dee2a0ed3cd6", 340, 250)}
+								srcset={img2x("1605276374104-dee2a0ed3cd6", 340, 250)}
+								width="340"
+								height="250"
+								alt="A brick house with a double garage on a quiet suburban street"
+								loading="lazy"
+								decoding="async"
+							/>
+						</figure>
+
+						<div class="pin">
+							<p class="pin__when">
+								<span class="chip__pip" aria-hidden="true" />
+								This Sunday, 7am
+							</p>
+							<p class="pin__what">
+								“Eleven sales on Bessborough, and one of them makes no sense. Plus: the variable
+								moved.”
+							</p>
+						</div>
+					</div>
+				)
+			}
 		</section>
 
 		<!-- ------------------------------------------------- Popular, TickPick row -->
@@ -1130,21 +1198,69 @@ const INCLUDES = [
 		}
 
 		/* --- Hero ------------------------------------------------------------
-		   Centred, like the reference: one enormous heavy headline and one input.
-		   Everything the page sells sits below the fold on purpose — the ask is
-		   the email address, so nothing competes with it above the line. */
+		   Two layouts off one copy block, switched by data-hero. Everything that
+		   is shared lives on .hero; the differences are in the two [data-hero]
+		   blocks below. */
 		.hero {
 			position: relative;
 			isolation: isolate;
-			text-align: center;
 			padding: clamp(3rem, 7vw, 5rem) clamp(1rem, 3.5vw, 2rem) clamp(3rem, 6vw, 4.5rem);
 			background:
 				radial-gradient(38rem 20rem at 50% -10%, #e8f2ff 0%, transparent 68%),
 				linear-gradient(180deg, var(--wash) 0%, #fff 100%);
 		}
-		/* The photograph is knocked back hard and then covered by a near-opaque
-		   white scrim. Behind the headline the effective background never drops
-		   below #eef1f5, so the ink stays above 15:1 wherever the type lands. */
+
+		/* "centred": one enormous heavy headline over one input. Everything the
+		   page sells sits below the fold on purpose — the ask is the email
+		   address, so nothing competes with it above the line. */
+		.hero[data-hero="centred"] {
+			text-align: center;
+		}
+		.hero[data-hero="centred"] .hero__copy {
+			max-width: 52rem;
+			margin-inline: auto;
+		}
+
+		/* "framed": copy left, a pinned-up cluster of framed photographs right.
+		   Slower to read and it pushes the signup down, but it shows the product
+		   and the neighbourhood in the first screen rather than describing them. */
+		.hero[data-hero="framed"] {
+			max-width: 76rem;
+			margin-inline: auto;
+			display: grid;
+			gap: clamp(2.5rem, 5vw, 3.5rem);
+			align-items: center;
+		}
+		@media (min-width: 62rem) {
+			.hero[data-hero="framed"] {
+				grid-template-columns: minmax(0, 1.02fr) minmax(0, 1fr);
+			}
+		}
+		.hero[data-hero="framed"] h1 {
+			margin-inline: 0;
+			max-width: 15ch;
+			font-size: clamp(2.25rem, 4.6vw, 3.5rem);
+		}
+		.hero[data-hero="framed"] .lede,
+		.hero[data-hero="framed"] .signup__slot {
+			margin-inline: 0;
+		}
+		.hero[data-hero="framed"] .lede {
+			max-width: 34rem;
+		}
+		.hero[data-hero="framed"] .ticks {
+			justify-content: flex-start;
+		}
+		/* The grid texture is aimed at the middle of a centred hero. Off-centre it
+		   just smudges one corner, so the framed layout does without it. */
+		.hero[data-hero="framed"]::before,
+		.hero[data-hero="framed"]::after {
+			content: none;
+		}
+
+		/* The backdrop photograph is knocked back and then covered by a
+		   near-opaque white scrim. Measured across the headline, the worst
+		   background the type sits on is 13.8:1. */
 		.hero__bg {
 			position: absolute;
 			inset: 0;
@@ -1189,9 +1305,94 @@ const INCLUDES = [
 			z-index: 1;
 		}
 
+		/* --- Framed hero art -------------------------------------------------
+		   Three overlapping pieces: the big shot, a small one in a white frame,
+		   and the card saying what is in this Sunday's issue. The tilts are a
+		   degree or two — enough to look pinned up rather than laid out, not
+		   enough to read as a mistake. */
+		.hero__art {
+			position: relative;
+			padding-bottom: 2.5rem;
+		}
+		.shot {
+			margin: 0;
+			border-radius: var(--r-lg);
+			overflow: hidden;
+			background: var(--wash);
+		}
+		.shot img {
+			width: 100%;
+			height: auto;
+			object-fit: cover;
+		}
+		.shot--main {
+			box-shadow: var(--shadow-lg);
+			rotate: -1.5deg;
+		}
+		.shot--house {
+			position: absolute;
+			right: -0.5rem;
+			bottom: 0;
+			width: min(52%, 15rem);
+			border: 6px solid #fff;
+			border-radius: 20px;
+			box-shadow: var(--shadow-lg);
+			rotate: 3deg;
+		}
+		.pin {
+			position: absolute;
+			left: -0.5rem;
+			bottom: 2rem;
+			width: min(66%, 17.5rem);
+			background: #fff;
+			border: 1px solid var(--line);
+			border-radius: 14px;
+			padding: 0.85rem 1rem;
+			box-shadow: var(--shadow-lg);
+			rotate: -2.5deg;
+		}
+		.pin__when {
+			display: flex;
+			align-items: center;
+			gap: 0.4rem;
+			font-size: 0.6875rem;
+			font-weight: 800;
+			letter-spacing: 0.07em;
+			text-transform: uppercase;
+			color: var(--blue-dk);
+		}
+		.pin__what {
+			margin-top: 0.35rem;
+			font-size: 0.9375rem;
+			line-height: 1.4;
+			text-wrap: pretty;
+		}
+		/* Below this the three stop overlapping and stack. Overlap needs room to
+		   overlap into; on a phone the card was simply covering the house. They
+		   keep their tilts, inset a little so no corner touches the screen edge. */
+		@media (max-width: 34rem) {
+			.hero__art {
+				display: grid;
+				gap: 0.9rem;
+				padding-bottom: 0;
+			}
+			.shot--house,
+			.pin {
+				position: static;
+				width: calc(100% - 1.25rem);
+				margin-inline: auto;
+			}
+			.shot--house {
+				rotate: 1.5deg;
+			}
+			.pin {
+				rotate: -1.5deg;
+			}
+		}
+
 		h1 {
 			margin: 1.25rem auto 0;
-			max-width: 20ch;
+			max-width: 24ch;
 			font-size: clamp(2.5rem, 6.2vw, 4.5rem);
 			font-weight: 900;
 			letter-spacing: -0.035em;
